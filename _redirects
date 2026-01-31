@@ -1,0 +1,19 @@
+# Cloudflare Pages Redirects for GCOEC Classroom
+
+# Main routes
+/                    /index.html           200
+/login               /student_login.html   200
+/dashboard           /student_dashboard.html 200
+/classroom           /student_classroom.html 200
+/admin               /admin_login.html     200
+/admin/classroom     /admin_classroom.html 200
+/admin/assignments   /admin_assignments.html 200
+
+# Student routes
+/student/*           /student_dashboard.html 200
+
+# Admin routes  
+/admin/*             /admin_classroom.html 200
+
+# Fallback - redirect to home
+/*                   /index.html           200

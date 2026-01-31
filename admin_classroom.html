@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classroom Management - GCOEC Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-2xl font-bold">🏫 GCOEC Classroom Management</h1>
+                    <p class="text-sm opacity-90">Manage classes, notes, and assignments</p>
+                </div>
+                <a href="admin_dashboard.html" class="px-4 py-2 bg-white bg-opacity-20 rounded-lg hover:bg-opacity-30 transition">
+                    ← Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Create Class Button -->
+        <div class="mb-6">
+            <button onclick="openCreateClassModal()" class="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition font-medium">
+                ➕ Create New Class
+            </button>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="text-center py-12">
+            <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+            <p class="mt-4 text-gray-600">Loading classes...</p>
+        </div>
+
+        <!-- Classes List -->
+        <div id="classesList" class="hidden space-y-6">
+            <!-- Classes will be loaded here -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="hidden text-center py-12 bg-white rounded-xl shadow-md">
+            <div class="text-6xl mb-4">📚</div>
+            <h3 class="text-xl font-bold text-gray-800 mb-2">No Classes Yet</h3>
+            <p class="text-gray-600 mb-4">Create your first class to get started</p>
+            <button onclick="openCreateClassModal()" class="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition">
+                ➕ Create Class
+            </button>
+        </div>
+    </main>
+
+    <!-- Create/Edit Class Modal -->
+    <div id="classModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-xl max-w-2xl w-full">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-2xl font-bold text-gray-800" id="classModalTitle">Create New Class</h3>
+                    <button onclick="closeClassModal()" class="text-gray-500 hover:text-gray-700 text-2xl">×</button>
+                </div>
+
+                <form id="classForm" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Class Name *</label>
+                        <input type="text" id="className" required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                            placeholder="e.g., Data Structures">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Branch *</label>
+                            <select id="classBranch" required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                                <option value="">Select Branch</option>
+                                <option value="CSE">CSE</option>
+                                <option value="ECE">ECE</option>
+                                <option value="EE">EE</option>
+                                <option value="ME">ME</option>
+                                <option value="CE">CE</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Semester *</label>
+                            <select id="classSemester" required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                                <option value="">Select Semester</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Description (Optional)</label>
+                        <textarea id="classDescription" rows="3"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                            placeholder="Brief description of the class"></textarea>
+                    </div>
+
+                    <div class="flex gap-4">
+                        <button type="button" onclick="closeClassModal()"
+                            class="flex-1 px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
+                            Cancel
+                        </button>
+                        <button type="submit" id="classSubmitBtn"
+                            class="flex-1 px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition">
+                            Create Class
+                        </button>
+                    </div>
+                </form>
+
+                <div id="classMessage" class="mt-4 p-4 rounded-lg hidden"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upload Note Modal -->
+    <div id="noteModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-xl max-w-2xl w-full">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-2xl font-bold text-gray-800">Upload Note</h3>
+                    <button onclick="closeNoteModal()" class="text-gray-500 hover:text-gray-700 text-2xl">×</button>
+                </div>
+
+                <form id="noteForm" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Note Title *</label>
+                        <input type="text" id="noteTitle" required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                            placeholder="e.g., Chapter 1: Introduction">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Description (Optional)</label>
+                        <textarea id="noteDescription" rows="2"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                            placeholder="Brief description"></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Upload File * (PDF, DOC, DOCX, PPT)</label>
+                        <input type="file" id="noteFile" required accept=".pdf,.doc,.docx,.ppt,.pptx"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                        <p class="text-sm text-gray-500 mt-1">Max file size: 10MB</p>
+                    </div>
+
+                    <div class="flex gap-4">
+                        <button type="button" onclick="closeNoteModal()"
+                            class="flex-1 px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
+                            Cancel
+                        </button>
+                        <button type="submit" id="noteSubmitBtn"
+                            class="flex-1 px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition">
+                            Upload Note
+                        </button>
+                    </div>
+                </form>
+
+                <div id="noteMessage" class="mt-4 p-4 rounded-lg hidden"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script>
+        const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:5000'
+            : 'https://pyq-automation-system.onrender.com';
+        let currentClassId = null;
+
+        // Check authentication on page load
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (!Auth.isAuthenticated()) {
+                window.location.href = `${API_BASE_URL}/internal/login`;
+                return;
+            }
+            
+            // Verify token is still valid
+            const isValid = await Auth.verifyToken();
+            if (!isValid) {
+                Auth.clearAuth();
+                window.location.href = `${API_BASE_URL}/internal/login`;
+                return;
+            }
+            
+            // Load classes if authenticated
+            loadClasses();
+        });
+
+        // Load classes
+        async function loadClasses() {
+            const token = sessionStorage.getItem('admin_token');
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/admin/classes`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                const data = await response.json();
+
+                document.getElementById('loadingState').classList.add('hidden');
+
+                if (data.success && data.classes.length > 0) {
+                    document.getElementById('classesList').classList.remove('hidden');
+                    displayClasses(data.classes);
+                } else {
+                    document.getElementById('emptyState').classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error('Error loading classes:', error);
+                document.getElementById('loadingState').classList.add('hidden');
+                document.getElementById('emptyState').classList.remove('hidden');
+            }
+        }
+
+        // Display classes
+        function displayClasses(classes) {
+            const container = document.getElementById('classesList');
+            container.innerHTML = '';
+
+            classes.forEach(cls => {
+                const classCard = document.createElement('div');
+                classCard.className = 'bg-white rounded-xl shadow-md overflow-hidden';
+
+                classCard.innerHTML = `
+                    <div class="bg-gradient-to-r from-purple-500 to-indigo-600 p-6 text-white">
+                        <h3 class="text-2xl font-bold mb-2">${cls.class_name}</h3>
+                        <p class="opacity-90">${cls.branch} - Semester ${cls.semester}</p>
+                        ${cls.description ? `<p class="mt-2 text-sm opacity-80">${cls.description}</p>` : ''}
+                    </div>
+                    
+                    <div class="p-6">
+                        <div class="grid grid-cols-4 gap-4 mb-6">
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-purple-600">${cls.students_count || 0}</div>
+                                <div class="text-sm text-gray-500">Students</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-indigo-600">${cls.notes_count || 0}</div>
+                                <div class="text-sm text-gray-500">Notes</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-blue-600">${cls.assignments_count || 0}</div>
+                                <div class="text-sm text-gray-500">Assignments</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-green-600">0</div>
+                                <div class="text-sm text-gray-500">Submissions</div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex flex-wrap gap-2">
+                            <button onclick="openNoteModal('${cls.id}')"
+                                class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition text-sm">
+                                📝 Upload Notes
+                            </button>
+                            <a href="admin_assignments.html?classId=${cls.id}"
+                                class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition text-sm">
+                                📋 Manage Assignments
+                            </a>
+                            <button onclick="viewStudents('${cls.id}')"
+                                class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm">
+                                👥 View Students
+                            </button>
+                            <button onclick="deleteClass('${cls.id}')"
+                                class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition text-sm">
+                                🗑️ Delete
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(classCard);
+            });
+        }
+
+        // Create class modal
+        function openCreateClassModal() {
+            document.getElementById('classModalTitle').textContent = 'Create New Class';
+            document.getElementById('classSubmitBtn').textContent = 'Create Class';
+            document.getElementById('classForm').reset();
+            document.getElementById('classModal').classList.remove('hidden');
+        }
+
+        function closeClassModal() {
+            document.getElementById('classModal').classList.add('hidden');
+            document.getElementById('classMessage').classList.add('hidden');
+        }
+
+        // Create class
+        document.getElementById('classForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('classSubmitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Creating...';
+            
+            const token = sessionStorage.getItem('admin_token');
+            
+            const classData = {
+                class_name: document.getElementById('className').value,
+                branch: document.getElementById('classBranch').value,
+                semester: parseInt(document.getElementById('classSemester').value),
+                description: document.getElementById('classDescription').value
+            };
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/admin/classes`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(classData)
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showClassMessage('Class created successfully!', 'success');
+                    setTimeout(() => {
+                        closeClassModal();
+                        loadClasses();
+                    }, 1500);
+                } else {
+                    showClassMessage(data.error || 'Failed to create class', 'error');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Create Class';
+                }
+            } catch (error) {
+                console.error('Error creating class:', error);
+                showClassMessage('Network error. Please try again.', 'error');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Create Class';
+            }
+        });
+
+        function showClassMessage(message, type) {
+            const messageDiv = document.getElementById('classMessage');
+            messageDiv.textContent = message;
+            messageDiv.className = `mt-4 p-4 rounded-lg ${type === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`;
+            messageDiv.classList.remove('hidden');
+        }
+
+        // Upload note modal
+        function openNoteModal(classId) {
+            currentClassId = classId;
+            document.getElementById('noteForm').reset();
+            document.getElementById('noteModal').classList.remove('hidden');
+        }
+
+        function closeNoteModal() {
+            document.getElementById('noteModal').classList.add('hidden');
+            document.getElementById('noteMessage').classList.add('hidden');
+        }
+
+        // Upload note
+        document.getElementById('noteForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('noteSubmitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Uploading...';
+            
+            const token = sessionStorage.getItem('admin_token');
+            const file = document.getElementById('noteFile').files[0];
+            
+            if (!file) {
+                showNoteMessage('Please select a file', 'error');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Upload Note';
+                return;
+            }
+            
+            // Check file size (10MB max)
+            if (file.size > 10 * 1024 * 1024) {
+                showNoteMessage('File size must be less than 10MB', 'error');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Upload Note';
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('title', document.getElementById('noteTitle').value);
+            formData.append('description', document.getElementById('noteDescription').value);
+            formData.append('file', file);
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/admin/classes/${currentClassId}/notes`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showNoteMessage('Note uploaded successfully!', 'success');
+                    setTimeout(() => {
+                        closeNoteModal();
+                        loadClasses();
+                    }, 1500);
+                } else {
+                    showNoteMessage(data.error || 'Upload failed', 'error');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Upload Note';
+                }
+            } catch (error) {
+                console.error('Upload error:', error);
+                showNoteMessage('Network error. Please try again.', 'error');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Upload Note';
+            }
+        });
+
+        function showNoteMessage(message, type) {
+            const messageDiv = document.getElementById('noteMessage');
+            messageDiv.textContent = message;
+            messageDiv.className = `mt-4 p-4 rounded-lg ${type === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`;
+            messageDiv.classList.remove('hidden');
+        }
+
+        // View students
+        function viewStudents(classId) {
+            alert('View Students feature - Coming soon!\nThis will show all enrolled students.');
+        }
+
+        // Delete class
+        async function deleteClass(classId) {
+            if (!confirm('Are you sure you want to delete this class? This action cannot be undone.')) {
+                return;
+            }
+            
+            const token = sessionStorage.getItem('admin_token');
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/admin/classes/${classId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert('Class deleted successfully');
+                    loadClasses();
+                } else {
+                    alert('Failed to delete class: ' + (data.error || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Delete error:', error);
+                alert('Network error. Please try again.');
+            }
+        }
+
+        // Check admin auth and load classes
+        async function init() {
+            const token = sessionStorage.getItem('admin_token');
+            if (!token) {
+                window.location.href = `${API_BASE_URL}/internal/login`;
+                return;
+            }
+            
+            await loadClasses();
+        }
+
+        // Removed duplicate init() call - now handled by DOMContentLoaded listener above
+    </script>
+</body>
+</html>
