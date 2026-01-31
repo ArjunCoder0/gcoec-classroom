@@ -1,6 +1,6 @@
 # 🎓 GCOEC Classroom Portal
 
-**Government College of Engineering & Ceramics - Digital Classroom Platform**
+**Government College of Engineering Chandrapur - Digital Learning Platform**
 
 ## 🌐 Live URL
 **https://gcoec.pages.dev**
@@ -15,13 +15,14 @@
 - 📝 Submit assignments online
 - 📊 View grades and feedback
 - 📱 Mobile-responsive design
+- 🔗 Quick access to PYQ Portal
 
-### **For Admins/Teachers:**
-- 👨‍🏫 Manage classes and students
-- 📄 Upload notes and materials
-- 📋 Create and manage assignments
-- ✅ Grade student submissions
-- 📈 Track student progress
+### **Platform Highlights:**
+- 🏫 Government College of Engineering Chandrapur
+- 📈 Live website statistics
+- 💡 Modern, intuitive interface
+- 🎯 Student-focused design
+- 📞 Comprehensive help & support
 
 ---
 
@@ -46,15 +47,11 @@
 
 ```
 gcoec-classroom/
-├── index.html              # Landing page
+├── index.html              # Landing page with help & support
 ├── student_login.html      # Student authentication
 ├── student_dashboard.html  # Student class overview
 ├── student_classroom.html  # Class notes & assignments
-├── admin_login.html        # Admin authentication  
-├── admin_classroom.html    # Class management
-├── admin_assignments.html  # Assignment management
 ├── student_auth.js         # Student authentication logic
-├── auth.js                 # Admin authentication logic
 ├── _redirects              # Cloudflare Pages routing
 └── README.md               # This file
 ```
@@ -64,7 +61,7 @@ gcoec-classroom/
 ## 🚀 Deployment
 
 ### **Cloudflare Pages Setup:**
-1. Connect GitHub repository
+1. Connect GitHub repository: `https://github.com/ArjunCoder0/gcoec-classroom`
 2. **Build command:** (leave empty)
 3. **Build output directory:** `/`
 4. **Custom domain:** `gcoec.pages.dev`
@@ -85,20 +82,13 @@ No frontend environment variables needed (API URL is hardcoded)
 - `GET /api/classes/{id}/assignments` - Get assignments
 - `POST /api/assignments/{id}/submit` - Submit assignment
 
-### **Admin Endpoints:**
-- `POST /api/admin/login` - Admin authentication
-- `GET /api/admin/classes` - Get all classes
-- `POST /api/admin/classes` - Create new class
-- `POST /api/admin/classes/{id}/notes` - Upload notes
-- `POST /api/admin/classes/{id}/assignments` - Create assignment
-
 ---
 
 ## 🎨 Design System
 
 ### **Colors:**
 - **Primary:** Blue (#2563eb, #1d4ed8)
-- **Secondary:** Purple (#7c3aed, #6d28d9)
+- **Secondary:** Green (#059669) for PYQ Portal links
 - **Success:** Green (#059669)
 - **Warning:** Orange (#ea580c)
 - **Error:** Red (#dc2626)
@@ -109,10 +99,11 @@ No frontend environment variables needed (API URL is hardcoded)
 
 ### **Components:**
 - Modern card-based design
-- Gradient headers
+- Gradient headers and sidebar
 - Hover animations
 - Mobile-first responsive
 - Clean form inputs
+- Live statistics display
 
 ---
 
@@ -120,7 +111,7 @@ No frontend environment variables needed (API URL is hardcoded)
 
 - JWT token authentication
 - Secure session management
-- Role-based access control
+- Student-only access (admin functionality removed)
 - File type validation
 - CORS protection
 
@@ -130,6 +121,7 @@ No frontend environment variables needed (API URL is hardcoded)
 
 - Fully responsive design
 - Touch-friendly interface
+- Collapsible sidebar navigation
 - Optimized for tablets and phones
 - Progressive Web App ready
 
@@ -146,15 +138,17 @@ npx serve .
 ```
 
 ### **Testing:**
-- Test all authentication flows
+- Test student authentication flows
 - Verify file upload/download
 - Check mobile responsiveness
 - Validate form submissions
+- Test PYQ Portal integration
 
 ---
 
 ## 📊 Analytics & Monitoring
 
+- Live website statistics in sidebar
 - Cloudflare Analytics (built-in)
 - Error tracking via browser console
 - Performance monitoring
@@ -162,10 +156,20 @@ npx serve .
 
 ---
 
+## 🏫 College Information
+
+**Government College of Engineering Chandrapur**
+- **Location:** Chandrapur, Maharashtra, India
+- **Website:** https://gcoec.ac.in
+- **Email:** info@gcoec.ac.in
+- **Support Hours:** 9:00 AM - 6:00 PM
+
+---
+
 ## 🔄 Updates & Maintenance
 
 ### **Deployment Process:**
-1. Push changes to GitHub
+1. Push changes to GitHub: `https://github.com/ArjunCoder0/gcoec-classroom`
 2. Cloudflare Pages auto-deploys
 3. Changes live in 1-2 minutes
 
@@ -179,21 +183,23 @@ npx serve .
 ## 📞 Support
 
 **Technical Issues:**
+- Contact IT Department during support hours
 - Check browser console for errors
 - Verify internet connection
 - Clear browser cache if needed
 
-**Feature Requests:**
-- Contact system administrator
-- Submit via college IT department
+**Quick Links:**
+- 📄 [PYQ Portal](https://pyq-portal.pages.dev)
+- 🏫 [College Website](https://gcoec.ac.in)
+- 🎓 [Student Login](student_login.html)
 
 ---
 
 ## 📄 License
 
-© 2026 Government College of Engineering & Ceramics. All rights reserved.
+© 2026 Government College of Engineering Chandrapur. All rights reserved.
 
 ---
 
 **Last Updated:** January 31, 2026
-**Version:** 1.0.0
+**Version:** 2.0.0 - Student-Only Platform
