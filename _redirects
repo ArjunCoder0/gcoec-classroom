@@ -10,5 +10,6 @@
 # Student routes
 /student/*           /student_dashboard.html 200
 
-# Fallback - redirect to home
-/*                   /index.html           200
+# Specific fallbacks (avoid catch-all that causes redirect loops)
+/home                /index.html           200
+/help                /support.html         200
