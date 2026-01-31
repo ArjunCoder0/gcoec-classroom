@@ -219,9 +219,9 @@
                 <div class="flex justify-between items-center">
                     <span class="text-xs text-white/80 flex items-center">
                         <i data-lucide="user-check" class="w-3.5 h-3.5 mr-1.5"></i>
-                        Active Students
+                        Unique Visitors
                     </span>
-                    <span class="font-bold text-white text-lg" id="activeStudents">-</span>
+                    <span class="font-bold text-white text-lg" id="uniqueVisitors">-</span>
                 </div>
             </div>
         </div>
@@ -391,65 +391,140 @@
 
             <!-- Help & Support Section -->
             <div id="help" class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 mb-8">
-                <div class="flex items-center gap-4 mb-6">
-                    <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                        <i data-lucide="help-circle" class="w-6 h-6 text-blue-600"></i>
+                <!-- Hero Section -->
+                <div class="text-center mb-8">
+                    <div class="inline-block bg-gradient-to-r from-blue-500 to-indigo-600 p-4 rounded-full mb-4">
+                        <i data-lucide="message-circle" class="w-16 h-16 text-white"></i>
                     </div>
-                    <div>
-                        <h3 class="text-2xl font-bold text-gray-800">Help & Support</h3>
-                        <p class="text-gray-600">Get assistance and information about GCOEC</p>
+                    <h1 class="text-4xl font-heading font-bold text-gray-800 mb-3">We're Here to Help!</h1>
+                    <p class="text-lg text-gray-600">Get instant support for any issues with GCOEC Classroom</p>
+                </div>
+
+                <!-- WhatsApp Contact Card -->
+                <div class="bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl p-8 mb-8 shadow-xl">
+                    <div class="flex items-center gap-6 mb-6">
+                        <div class="bg-white/20 p-4 rounded-full backdrop-blur-sm">
+                            <i data-lucide="smartphone" class="w-12 h-12 text-white"></i>
+                        </div>
+                        <div class="text-white flex-1">
+                            <h3 class="text-2xl font-heading font-bold mb-2">Contact Us on WhatsApp</h3>
+                            <p class="text-white/90 text-lg">Get instant help and support</p>
+                        </div>
+                    </div>
+
+                    <a href="https://wa.me/918265032018?text=Hi!%20I%20need%20help%20with%20GCOEC%20Classroom" target="_blank"
+                        class="block w-full bg-white text-green-600 py-4 rounded-xl font-bold text-lg hover:bg-gray-50 transition flex items-center justify-center gap-3 shadow-lg">
+                        <i data-lucide="message-circle" class="w-6 h-6"></i>
+                        Chat on WhatsApp
+                    </a>
+                </div>
+
+                <!-- Common Issues Grid -->
+                <div class="mb-8">
+                    <h3 class="text-2xl font-heading font-bold text-gray-800 mb-6 flex items-center">
+                        <i data-lucide="clipboard-list" class="w-6 h-6 mr-2 text-primary"></i>
+                        Common Issues We Can Help With
+                    </h3>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-white rounded-xl p-6 shadow-md border-l-4 border-red-500 hover:shadow-lg transition">
+                            <div class="flex items-start gap-4">
+                                <div class="bg-red-100 p-3 rounded-lg">
+                                    <i data-lucide="x-circle" class="w-6 h-6 text-red-600"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800 mb-1">Login Issues</h4>
+                                    <p class="text-sm text-gray-600">Can't access your student account</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-xl p-6 shadow-md border-l-4 border-orange-500 hover:shadow-lg transition">
+                            <div class="flex items-start gap-4">
+                                <div class="bg-orange-100 p-3 rounded-lg">
+                                    <i data-lucide="alert-triangle" class="w-6 h-6 text-orange-600"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800 mb-1">File Access Problems</h4>
+                                    <p class="text-sm text-gray-600">Notes or assignments won't open</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-xl p-6 shadow-md border-l-4 border-blue-500 hover:shadow-lg transition">
+                            <div class="flex items-start gap-4">
+                                <div class="bg-blue-100 p-3 rounded-lg">
+                                    <i data-lucide="upload" class="w-6 h-6 text-blue-600"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800 mb-1">Assignment Submission</h4>
+                                    <p class="text-sm text-gray-600">Help with uploading assignments</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-xl p-6 shadow-md border-l-4 border-green-500 hover:shadow-lg transition">
+                            <div class="flex items-start gap-4">
+                                <div class="bg-green-100 p-3 rounded-lg">
+                                    <i data-lucide="lightbulb" class="w-6 h-6 text-green-600"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800 mb-1">General Help</h4>
+                                    <p class="text-sm text-gray-600">Any other questions or suggestions</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="grid md:grid-cols-2 gap-6">
-                    <!-- College Information -->
-                    <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-5 border border-blue-100">
-                        <div class="flex items-center gap-3 mb-4">
-                            <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                                <i data-lucide="school" class="w-5 h-5 text-blue-600"></i>
-                            </div>
-                            <h4 class="text-lg font-bold text-gray-800">College Information</h4>
-                        </div>
-                        <div class="space-y-3 text-sm text-gray-700">
-                            <div class="flex items-start gap-2">
-                                <i data-lucide="map-pin" class="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0"></i>
-                                <div>
-                                    <p class="font-semibold">Government College of Engineering Chandrapur</p>
-                                    <p class="text-gray-600">Chandrapur, Maharashtra, India</p>
-                                </div>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <i data-lucide="globe" class="w-4 h-4 text-blue-500"></i>
-                                <a href="https://gcoec.ac.in" target="_blank" class="text-blue-600 hover:underline">www.gcoec.ac.in</a>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <i data-lucide="mail" class="w-4 h-4 text-blue-500"></i>
-                                <span>info@gcoec.ac.in</span>
-                            </div>
-                        </div>
-                    </div>
+                <!-- Quick Tips -->
+                <div class="bg-blue-50 rounded-2xl p-6 mb-8 border-2 border-blue-200">
+                    <h4 class="font-heading font-bold text-blue-900 mb-4 flex items-center text-lg">
+                        <i data-lucide="lightbulb" class="w-5 h-5 mr-2"></i>
+                        Quick Tips
+                    </h4>
+                    <ul class="space-y-2 text-blue-800">
+                        <li class="flex items-start">
+                            <i data-lucide="check-circle" class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0"></i>
+                            <span>Make sure you're using the correct student credentials</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i data-lucide="check-circle" class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0"></i>
+                            <span>Try refreshing the page if content doesn't load</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i data-lucide="check-circle" class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0"></i>
+                            <span>Check your internet connection for upload/download issues</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i data-lucide="check-circle" class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0"></i>
+                            <span>Contact us on WhatsApp for any persistent problems</span>
+                        </li>
+                    </ul>
+                </div>
 
-                    <!-- Technical Support -->
-                    <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-5 border border-green-100">
-                        <div class="flex items-center gap-3 mb-4">
-                            <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                                <i data-lucide="headphones" class="w-5 h-5 text-green-600"></i>
-                            </div>
-                            <h4 class="text-lg font-bold text-gray-800">Technical Support</h4>
+                <!-- College Information -->
+                <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-100 mb-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <i data-lucide="school" class="w-5 h-5 text-blue-600"></i>
                         </div>
-                        <div class="space-y-3 text-sm text-gray-700">
-                            <div class="flex items-center gap-2">
-                                <i data-lucide="clock" class="w-4 h-4 text-green-500"></i>
-                                <span>Support Hours: 9:00 AM - 6:00 PM</span>
+                        <h4 class="text-lg font-bold text-gray-800">College Information</h4>
+                    </div>
+                    <div class="space-y-3 text-sm text-gray-700">
+                        <div class="flex items-start gap-2">
+                            <i data-lucide="map-pin" class="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0"></i>
+                            <div>
+                                <p class="font-semibold">Government College of Engineering Chandrapur</p>
+                                <p class="text-gray-600">Chandrapur, Maharashtra, India</p>
                             </div>
-                            <div class="flex items-center gap-2">
-                                <i data-lucide="phone" class="w-4 h-4 text-green-500"></i>
-                                <span>Contact: IT Department</span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <i data-lucide="book-open" class="w-4 h-4 text-green-500"></i>
-                                <span>For login issues or technical problems</span>
-                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="globe" class="w-4 h-4 text-blue-500"></i>
+                            <a href="https://gcoec.ac.in" target="_blank" class="text-blue-600 hover:underline">www.gcoec.ac.in</a>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="mail" class="w-4 h-4 text-blue-500"></i>
+                            <span>info@gcoec.ac.in</span>
                         </div>
                     </div>
                 </div>
@@ -470,17 +545,28 @@
                             <i data-lucide="globe" class="w-4 h-4 text-purple-600"></i>
                             <span class="font-medium text-purple-700">College Website</span>
                         </a>
-                        <a href="#" class="flex items-center gap-2 p-3 bg-orange-50 rounded-lg hover:bg-orange-100 transition text-sm">
+                        <a href="#help" class="flex items-center gap-2 p-3 bg-orange-50 rounded-lg hover:bg-orange-100 transition text-sm">
                             <i data-lucide="help-circle" class="w-4 h-4 text-orange-600"></i>
                             <span class="font-medium text-orange-700">FAQ</span>
                         </a>
                     </div>
+                </div>
+
+                <!-- Response Time -->
+                <div class="text-center mt-8 bg-white rounded-xl p-6 shadow-md">
+                    <i data-lucide="clock" class="w-8 h-8 text-primary mx-auto mb-2"></i>
+                    <p class="text-gray-700 font-semibold">Response Time: We typically respond within 1-2 hours during business hours</p>
                 </div>
             </div>
         </div>
     </main>
 
     <script>
+        // API Configuration
+        const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:5000/api'
+            : 'https://pyq-automation-system.onrender.com/api';
+
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
             
@@ -492,22 +578,55 @@
                 sidebar.classList.toggle('-translate-x-full');
             });
 
-            // Website Statistics
-            function updateWebsiteStats() {
-                // Simulate website statistics (in a real app, this would come from an API)
-                const totalVisits = Math.floor(Math.random() * 5000) + 15000; // Random between 15,000-20,000
-                const activeStudents = Math.floor(Math.random() * 200) + 800; // Random between 800-1,000
-                
-                document.getElementById('totalVisits').textContent = totalVisits.toLocaleString();
-                document.getElementById('activeStudents').textContent = activeStudents.toLocaleString();
-            }
+            // Close sidebar on mobile when clicking outside
+            document.addEventListener('click', (e) => {
+                if (window.innerWidth < 768 &&
+                    !sidebar.contains(e.target) &&
+                    !menuToggle.contains(e.target) &&
+                    !sidebar.classList.contains('-translate-x-full')) {
+                    sidebar.classList.add('-translate-x-full');
+                }
+            });
 
-            // Update stats on page load
-            updateWebsiteStats();
-            
-            // Update stats every 30 seconds
-            setInterval(updateWebsiteStats, 30000);
+            // Track visit and update real website statistics
+            trackVisit();
         });
+
+        // Track visitor on page load - Real API implementation
+        async function trackVisit() {
+            try {
+                console.log('Attempting to track visit to:', `${API_BASE_URL}/visit`);
+                
+                const response = await fetch(`${API_BASE_URL}/visit`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                console.log('Response status:', response.status);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log('Response data:', data);
+
+                if (data.success && !data.is_bot) {
+                    document.getElementById('totalVisits').textContent = data.total_visits.toLocaleString();
+                    document.getElementById('uniqueVisitors').textContent = data.unique_visitors.toLocaleString();
+                    console.log('Statistics updated:', data.total_visits, data.unique_visitors);
+                } else {
+                    console.log('Bot detected or API call failed:', data);
+                }
+            } catch (error) {
+                console.error('Error tracking visit:', error);
+                // Show error in UI for debugging
+                document.getElementById('totalVisits').textContent = 'Error';
+                document.getElementById('uniqueVisitors').textContent = 'Error';
+            }
+        }
     </script>
 </body>
 </html>
