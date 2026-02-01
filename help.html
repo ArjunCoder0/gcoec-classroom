@@ -147,11 +147,26 @@
                     <span class="font-semibold text-sm">Dashboard</span>
                 </a>
 
-                <a href="student_login.html"
+                <!-- Classroom Link - Only shown when student is logged in -->
+                <a href="student_dashboard.html" id="classroomLink"
+                    class="nav-item group flex items-center space-x-3 px-4 py-3 rounded-xl text-white hover:bg-white/10 transition-all duration-200 mt-2 hidden">
+                    <i data-lucide="book-open" class="w-5 h-5"></i>
+                    <span class="font-medium text-sm">📚 My Classroom</span>
+                </a>
+                
+                <!-- Student Login Link - Only shown when NOT logged in -->
+                <a href="student_login.html" id="studentLoginLink"
                     class="nav-item group flex items-center space-x-3 px-4 py-3 rounded-xl text-white hover:bg-white/10 transition-all duration-200 mt-2">
                     <i data-lucide="user-circle" class="w-5 h-5"></i>
                     <span class="font-medium text-sm">🎓 Student Login</span>
                 </a>
+                
+                <!-- Logout Link - Only shown when logged in -->
+                <button onclick="studentLogout()" id="logoutLink"
+                    class="nav-item group flex items-center space-x-3 px-4 py-3 rounded-xl text-white hover:bg-red-500/20 transition-all duration-200 mt-2 hidden w-full text-left">
+                    <i data-lucide="log-out" class="w-5 h-5"></i>
+                    <span class="font-medium text-sm">🚪 Logout</span>
+                </button>
                 
                 <a href="https://pyq-portal.pages.dev" target="_blank"
                     class="nav-item group flex items-center space-x-3 px-4 py-3 rounded-xl text-white hover:bg-white/10 transition-all duration-200 mt-2">
@@ -535,9 +550,42 @@
                 }
             });
 
+            // Check student authentication status
+            checkStudentAuth();
+
             // Track visit and update real website statistics
             trackVisit();
         });
+
+        // Check if student is logged in
+        function checkStudentAuth() {
+            const studentToken = localStorage.getItem('studentToken');
+            const classroomLink = document.getElementById('classroomLink');
+            const studentLoginLink = document.getElementById('studentLoginLink');
+            const logoutLink = document.getElementById('logoutLink');
+            
+            if (studentToken) {
+                // Student is logged in - show classroom link and logout, hide login link
+                if (classroomLink) classroomLink.classList.remove('hidden');
+                if (logoutLink) logoutLink.classList.remove('hidden');
+                if (studentLoginLink) studentLoginLink.classList.add('hidden');
+            } else {
+                // Student is NOT logged in - hide classroom link and logout, show login link
+                if (classroomLink) classroomLink.classList.add('hidden');
+                if (logoutLink) logoutLink.classList.add('hidden');
+                if (studentLoginLink) studentLoginLink.classList.remove('hidden');
+            }
+        }
+
+        // Logout function
+        function studentLogout() {
+            localStorage.removeItem('studentToken');
+            localStorage.removeItem('studentInfo');
+            // Update UI immediately
+            checkStudentAuth();
+            // Show success message
+            alert('Logged out successfully!');
+        }
 
         // Track visitor on page load - Real API implementation
         async function trackVisit() {
