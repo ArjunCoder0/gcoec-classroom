@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help & Support - GCOEC Classroom</title>
+    <meta name="description" content="Get help with GCOEC Classroom - Contact us on WhatsApp">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+            const originalWarn = console.warn;
+            console.warn = function(...args) {
+                if (args[0]?.includes?.('Tailwind')) return;
+                originalWarn.apply(console, args);
+            };
+        }
+        
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            "50":"#eff6ff",
+                            "100":"#dbeafe",
+                            "200":"#bfdbfe",
+                            "300":"#93c5fd",
+                            "400":"#60a5fa",
+                            "500":"#3b82f6",
+                            "600":"#2563eb",
+                            "700":"#1d4ed8",
+                            "800":"#1e40af",
+                            "900":"#1e3a8a",
+                            "950":"#172554"
+                        }
+                    },
+                    fontFamily: {
+                        'body': [
+                            'Inter', 
+                            'ui-sans-serif', 
+                            'system-ui', 
+                            '-apple-system', 
+                            'system-ui', 
+                            'Segoe UI', 
+                            'Roboto', 
+                            'Helvetica Neue', 
+                            'Arial', 
+                            'Noto Sans', 
+                            'sans-serif', 
+                            'Apple Color Emoji', 
+                            'Segoe UI Emoji', 
+                            'Segoe UI Symbol', 
+                            'Noto Color Emoji'
+                        ],
+                        'sans': [
+                            'Inter', 
+                            'ui-sans-serif', 
+                            'system-ui', 
+                            '-apple-system', 
+                            'system-ui', 
+                            'Segoe UI', 
+                            'Roboto', 
+                            'Helvetica Neue', 
+                            'Arial', 
+                            'Noto Sans', 
+                            'sans-serif', 
+                            'Apple Color Emoji', 
+                            'Segoe UI Emoji', 
+                            'Segoe UI Symbol', 
+                            'Noto Color Emoji'
+                        ]
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+    <style>
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 min-h-screen font-sans">
+
+    <!-- Mobile Menu Toggle -->
+    <button id="menuToggle" class="md:hidden fixed top-4 left-4 z-50 bg-white p-2 rounded-lg shadow-lg">
+        <i data-lucide="menu" class="w-6 h-6 text-gray-700"></i>
+    </button>
+
+    <!-- Sidebar -->
+    <aside id="sidebar"
+        class="fixed inset-y-0 left-0 w-64 bg-gradient-to-b from-indigo-600 via-indigo-700 to-blue-700 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out z-[60] flex flex-col shadow-2xl">
+
+        <!-- Logo -->
+        <div class="p-6 border-b border-white/10 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="bg-white/20 p-2.5 rounded-xl backdrop-blur-sm">
+                    <i data-lucide="graduation-cap" class="w-7 h-7 text-white"></i>
+                </div>
+                <div>
+                    <h1 class="text-white font-heading font-bold text-base leading-tight">GCOEC</h1>
+                    <p class="text-white/80 text-xs">Classroom</p>
+                </div>
+            </div>
+            <!-- Mobile Close Button -->
+            <button class="md:hidden text-white/80 hover:text-white transition p-1"
+                onclick="document.getElementById('sidebar').classList.add('-translate-x-full')">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+            <div class="mb-4">
+                <p class="text-white/50 text-xs font-semibold uppercase tracking-wider px-3 mb-3">Main Menu</p>
+
+                <a href="index.html" class="nav-item group flex items-center space-x-3 px-4 py-3 rounded-xl text-white hover:bg-white/10 transition-all duration-200">
+                    <i data-lucide="layout-grid" class="w-5 h-5"></i>
+                    <span class="font-semibold text-sm">Dashboard</span>
+                </a>
+
+                <a href="student_login.html"
+                    class="nav-item group flex items-center space-x-3 px-4 py-3 rounded-xl text-white hover:bg-white/10 transition-all duration-200 mt-2">
+                    <i data-lucide="user-circle" class="w-5 h-5"></i>
+                    <span class="font-medium text-sm">🎓 Student Login</span>
+                </a>
+                
+                <a href="https://pyq-portal.pages.dev" target="_blank"
+                    class="nav-item group flex items-center space-x-3 px-4 py-3 rounded-xl text-white hover:bg-white/10 transition-all duration-200 mt-2">
+                    <i data-lucide="file-text" class="w-5 h-5"></i>
+                    <span class="font-medium text-sm">📄 PYQ Portal</span>
+                </a>
+            </div>
+
+            <div class="pt-4 border-t border-white/10">
+                <a href="help.html"
+                    class="nav-item group flex items-center space-x-3 px-4 py-3 rounded-xl text-white bg-white/20 backdrop-blur-sm transition-all duration-200 hover:bg-white/30">
+                    <i data-lucide="help-circle" class="w-5 h-5"></i>
+                    <span class="font-medium text-sm">Help & Support</span>
+                </a>
+            </div>
+        </nav>
+
+        <!-- Website Statistics -->
+        <div class="p-4 m-4 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20">
+            <p class="text-xs text-white/70 mb-3 font-semibold flex items-center uppercase tracking-wide">
+                <i data-lucide="bar-chart-3" class="w-3.5 h-3.5 mr-1.5"></i>
+                Website Statistics
+            </p>
+            <div class="space-y-3">
+                <div class="flex justify-between items-center">
+                    <span class="text-xs text-white/80 flex items-center">
+                        <i data-lucide="users" class="w-3.5 h-3.5 mr-1.5"></i>
+                        Total Visits
+                    </span>
+                    <span class="font-bold text-white text-lg" id="totalVisits">-</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-xs text-white/80 flex items-center">
+                        <i data-lucide="user-check" class="w-3.5 h-3.5 mr-1.5"></i>
+                        Unique Visitors
+                    </span>
+                    <span class="font-bold text-white text-lg" id="uniqueVisitors">-</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- College Info -->
+        <div class="p-4 m-4 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20">
+            <p class="text-xs text-white/70 mb-3 font-semibold flex items-center uppercase tracking-wide">
+                <i data-lucide="school" class="w-3.5 h-3.5 mr-1.5"></i>
+                College Info
+            </p>
+            <div class="space-y-2">
+                <div class="text-xs text-white/80">
+                    <p class="font-semibold">Government College of</p>
+                    <p class="font-semibold">Engineering Chandrapur</p>
+                </div>
+                <div class="text-xs text-white/60">
+                    Digital Learning Platform
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="md:ml-64 min-h-screen">
+
+        <!-- Header -->
+        <header class="bg-white/70 backdrop-blur-md border-b border-gray-200/50 sticky top-0 z-30">
+            <div class="px-6 py-4 pl-16 md:pl-6">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <h2 class="text-2xl font-heading font-bold text-gray-800">Help & Support</h2>
+                        <div class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-semibold">
+                            <i data-lucide="clock" class="w-3 h-3 mr-1 inline"></i>
+                            24/7 Available
+                        </div>
+                    </div>
+                    <a href="index.html"
+                        class="inline-flex items-center bg-blue-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-600 transition shadow-md">
+                        <i data-lucide="arrow-left" class="w-5 h-5 mr-2"></i>
+                        Back to Home
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Page Content -->
+        <div class="p-6 pt-8 md:pt-6 max-w-7xl mx-auto">
+
+            <!-- Hero Welcome Card -->
+            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 mb-8 shadow-lg border border-blue-100">
+                <div class="text-center">
+                    <div class="inline-block bg-gradient-to-r from-blue-500 to-indigo-600 p-4 rounded-full mb-4">
+                        <i data-lucide="message-circle" class="w-16 h-16 text-white"></i>
+                    </div>
+                    <h1 class="text-4xl font-heading font-bold text-gray-800 mb-3">We're Here to Help!</h1>
+                    <p class="text-lg text-gray-600 mb-6">Get instant support for any issues with GCOEC Classroom</p>
+                    
+                    <!-- Quick Contact Buttons -->
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <a href="https://wa.me/918265032018?text=Hi!%20I%20need%20help%20with%20GCOEC%20Classroom" target="_blank"
+                            class="inline-flex items-center bg-green-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-600 transition shadow-lg">
+                            <i data-lucide="message-circle" class="w-5 h-5 mr-2"></i>
+                            Chat on WhatsApp
+                        </a>
+                        <a href="mailto:info@gcoec.ac.in"
+                            class="inline-flex items-center bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-600 transition shadow-lg">
+                            <i data-lucide="mail" class="w-5 h-5 mr-2"></i>
+                            Send Email
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Common Issues Grid -->
+            <div class="mb-8">
+                <h3 class="text-2xl font-heading font-bold text-gray-800 mb-6 flex items-center">
+                    <i data-lucide="clipboard-list" class="w-6 h-6 mr-2 text-primary"></i>
+                    Common Issues We Can Help With
+                </h3>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-white rounded-xl p-6 shadow-md border-l-4 border-red-500 hover:shadow-lg transition">
+                        <div class="flex items-start gap-4">
+                            <div class="bg-red-100 p-3 rounded-lg">
+                                <i data-lucide="x-circle" class="w-6 h-6 text-red-600"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-800 mb-2">Login Issues</h4>
+                                <p class="text-sm text-gray-600 mb-3">Can't access your student account or forgot password</p>
+                                <div class="text-xs text-gray-500">
+                                    <p>• Check your credentials</p>
+                                    <p>• Clear browser cache</p>
+                                    <p>• Contact admin for reset</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl p-6 shadow-md border-l-4 border-orange-500 hover:shadow-lg transition">
+                        <div class="flex items-start gap-4">
+                            <div class="bg-orange-100 p-3 rounded-lg">
+                                <i data-lucide="alert-triangle" class="w-6 h-6 text-orange-600"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-800 mb-2">File Access Problems</h4>
+                                <p class="text-sm text-gray-600 mb-3">Notes or assignments won't open or download</p>
+                                <div class="text-xs text-gray-500">
+                                    <p>• Check internet connection</p>
+                                    <p>• Try different browser</p>
+                                    <p>• Update browser/PDF reader</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl p-6 shadow-md border-l-4 border-blue-500 hover:shadow-lg transition">
+                        <div class="flex items-start gap-4">
+                            <div class="bg-blue-100 p-3 rounded-lg">
+                                <i data-lucide="upload" class="w-6 h-6 text-blue-600"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-800 mb-2">Assignment Submission</h4>
+                                <p class="text-sm text-gray-600 mb-3">Help with uploading assignments or file formats</p>
+                                <div class="text-xs text-gray-500">
+                                    <p>• Supported: PDF, DOC, DOCX, ZIP</p>
+                                    <p>• Max size: 10MB</p>
+                                    <p>• Check file name format</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl p-6 shadow-md border-l-4 border-green-500 hover:shadow-lg transition">
+                        <div class="flex items-start gap-4">
+                            <div class="bg-green-100 p-3 rounded-lg">
+                                <i data-lucide="lightbulb" class="w-6 h-6 text-green-600"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-800 mb-2">General Help</h4>
+                                <p class="text-sm text-gray-600 mb-3">Any other questions, suggestions, or feedback</p>
+                                <div class="text-xs text-gray-500">
+                                    <p>• Feature requests</p>
+                                    <p>• Bug reports</p>
+                                    <p>• General inquiries</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Tips -->
+            <div class="bg-blue-50 rounded-2xl p-6 mb-8 border-2 border-blue-200">
+                <h4 class="font-heading font-bold text-blue-900 mb-4 flex items-center text-lg">
+                    <i data-lucide="lightbulb" class="w-5 h-5 mr-2"></i>
+                    Quick Tips for Better Experience
+                </h4>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <ul class="space-y-2 text-blue-800">
+                        <li class="flex items-start">
+                            <i data-lucide="check-circle" class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0"></i>
+                            <span>Use correct student credentials provided by college</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i data-lucide="check-circle" class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0"></i>
+                            <span>Refresh page if content doesn't load properly</span>
+                        </li>
+                    </ul>
+                    <ul class="space-y-2 text-blue-800">
+                        <li class="flex items-start">
+                            <i data-lucide="check-circle" class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0"></i>
+                            <span>Check internet connection for upload/download issues</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i data-lucide="check-circle" class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0"></i>
+                            <span>Contact us on WhatsApp for immediate assistance</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- FAQ Section -->
+            <div class="bg-white rounded-2xl shadow-lg p-8 mb-8">
+                <h3 class="text-2xl font-heading font-bold text-gray-800 mb-6 flex items-center">
+                    <i data-lucide="help-circle" class="w-6 h-6 mr-2 text-primary"></i>
+                    Frequently Asked Questions
+                </h3>
+
+                <div class="space-y-4">
+                    <details class="group bg-gray-50 rounded-xl p-4 cursor-pointer hover:bg-gray-100 transition">
+                        <summary class="font-semibold text-gray-800 flex items-center justify-between">
+                            How do I access my classes?
+                            <i data-lucide="chevron-down"
+                                class="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform"></i>
+                        </summary>
+                        <p class="mt-3 text-gray-600 pl-2">Login with your student credentials, then navigate to your dashboard to see all enrolled classes with notes and assignments.</p>
+                    </details>
+
+                    <details class="group bg-gray-50 rounded-xl p-4 cursor-pointer hover:bg-gray-100 transition">
+                        <summary class="font-semibold text-gray-800 flex items-center justify-between">
+                            How do I submit assignments?
+                            <i data-lucide="chevron-down"
+                                class="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform"></i>
+                        </summary>
+                        <p class="mt-3 text-gray-600 pl-2">Go to your class, click on the Assignments tab, select the assignment, and upload your file. Supported formats: PDF, DOC, DOCX, ZIP, RAR (Max 10MB).</p>
+                    </details>
+
+                    <details class="group bg-gray-50 rounded-xl p-4 cursor-pointer hover:bg-gray-100 transition">
+                        <summary class="font-semibold text-gray-800 flex items-center justify-between">
+                            Are the classroom features free?
+                            <i data-lucide="chevron-down"
+                                class="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform"></i>
+                        </summary>
+                        <p class="mt-3 text-gray-600 pl-2">Yes! All GCOEC Classroom features including notes access, assignment submission, and grade tracking are completely free for students.</p>
+                    </details>
+
+                    <details class="group bg-gray-50 rounded-xl p-4 cursor-pointer hover:bg-gray-100 transition">
+                        <summary class="font-semibold text-gray-800 flex items-center justify-between">
+                            What if I can't login?
+                            <i data-lucide="chevron-down"
+                                class="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform"></i>
+                        </summary>
+                        <p class="mt-3 text-gray-600 pl-2">Contact us on WhatsApp with your student details. Make sure you're using the correct credentials provided by your college. Try clearing browser cache or using incognito mode.</p>
+                    </details>
+
+                    <details class="group bg-gray-50 rounded-xl p-4 cursor-pointer hover:bg-gray-100 transition">
+                        <summary class="font-semibold text-gray-800 flex items-center justify-between">
+                            How do I view my grades?
+                            <i data-lucide="chevron-down"
+                                class="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform"></i>
+                        </summary>
+                        <p class="mt-3 text-gray-600 pl-2">After submitting assignments, grades will appear in the same assignments section. You'll see your score, feedback from teachers, and submission status.</p>
+                    </details>
+                </div>
+            </div>
+
+            <!-- College Information -->
+            <div class="grid md:grid-cols-2 gap-6 mb-8">
+                <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-100">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <i data-lucide="school" class="w-5 h-5 text-blue-600"></i>
+                        </div>
+                        <h4 class="text-lg font-bold text-gray-800">College Information</h4>
+                    </div>
+                    <div class="space-y-3 text-sm text-gray-700">
+                        <div class="flex items-start gap-2">
+                            <i data-lucide="map-pin" class="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0"></i>
+                            <div>
+                                <p class="font-semibold">Government College of Engineering Chandrapur</p>
+                                <p class="text-gray-600">Chandrapur, Maharashtra, India</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="globe" class="w-4 h-4 text-blue-500"></i>
+                            <a href="https://gcoec.ac.in" target="_blank" class="text-blue-600 hover:underline">www.gcoec.ac.in</a>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="mail" class="w-4 h-4 text-blue-500"></i>
+                            <span>info@gcoec.ac.in</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 border border-green-100">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                            <i data-lucide="headphones" class="w-5 h-5 text-green-600"></i>
+                        </div>
+                        <h4 class="text-lg font-bold text-gray-800">Technical Support</h4>
+                    </div>
+                    <div class="space-y-3 text-sm text-gray-700">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="clock" class="w-4 h-4 text-green-500"></i>
+                            <span>Support Hours: 9:00 AM - 6:00 PM</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="phone" class="w-4 h-4 text-green-500"></i>
+                            <span>WhatsApp: +91 8265032018</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="book-open" class="w-4 h-4 text-green-500"></i>
+                            <span>For login issues or technical problems</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 mb-8">
+                <h4 class="text-lg font-bold text-gray-800 mb-4">Quick Links</h4>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <a href="https://pyq-portal.pages.dev" target="_blank" class="flex items-center gap-2 p-3 bg-blue-50 rounded-lg hover:bg-blue-100 transition text-sm">
+                        <i data-lucide="file-text" class="w-4 h-4 text-blue-600"></i>
+                        <span class="font-medium text-blue-700">PYQ Portal</span>
+                    </a>
+                    <a href="student_login.html" class="flex items-center gap-2 p-3 bg-green-50 rounded-lg hover:bg-green-100 transition text-sm">
+                        <i data-lucide="user-circle" class="w-4 h-4 text-green-600"></i>
+                        <span class="font-medium text-green-700">Student Login</span>
+                    </a>
+                    <a href="https://gcoec.ac.in" target="_blank" class="flex items-center gap-2 p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition text-sm">
+                        <i data-lucide="globe" class="w-4 h-4 text-purple-600"></i>
+                        <span class="font-medium text-purple-700">College Website</span>
+                    </a>
+                    <a href="index.html" class="flex items-center gap-2 p-3 bg-orange-50 rounded-lg hover:bg-orange-100 transition text-sm">
+                        <i data-lucide="home" class="w-4 h-4 text-orange-600"></i>
+                        <span class="font-medium text-orange-700">Home</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Response Time -->
+            <div class="text-center bg-white rounded-xl p-6 shadow-md">
+                <i data-lucide="clock" class="w-8 h-8 text-primary mx-auto mb-2"></i>
+                <p class="text-gray-700 font-semibold">Response Time: We typically respond within 1-2 hours during business hours</p>
+                <p class="text-sm text-gray-500 mt-2">For urgent issues, contact us directly on WhatsApp</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // API Configuration
+        const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:5000/api'
+            : 'https://pyq-automation-system.onrender.com/api';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            
+            // Mobile menu toggle
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.getElementById('sidebar');
+            
+            menuToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('-translate-x-full');
+            });
+
+            // Close sidebar on mobile when clicking outside
+            document.addEventListener('click', (e) => {
+                if (window.innerWidth < 768 &&
+                    !sidebar.contains(e.target) &&
+                    !menuToggle.contains(e.target) &&
+                    !sidebar.classList.contains('-translate-x-full')) {
+                    sidebar.classList.add('-translate-x-full');
+                }
+            });
+
+            // Track visit and update real website statistics
+            trackVisit();
+        });
+
+        // Track visitor on page load - Real API implementation
+        async function trackVisit() {
+            try {
+                console.log('Attempting to track visit to:', `${API_BASE_URL}/visit`);
+                
+                const response = await fetch(`${API_BASE_URL}/visit`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                console.log('Response status:', response.status);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log('Response data:', data);
+
+                if (data.success && !data.is_bot) {
+                    document.getElementById('totalVisits').textContent = data.total_visits.toLocaleString();
+                    document.getElementById('uniqueVisitors').textContent = data.unique_visitors.toLocaleString();
+                    console.log('Statistics updated:', data.total_visits, data.unique_visitors);
+                } else {
+                    console.log('Bot detected or API call failed:', data);
+                }
+            } catch (error) {
+                console.error('Error tracking visit:', error);
+                // Show error in UI for debugging
+                document.getElementById('totalVisits').textContent = 'Error';
+                document.getElementById('uniqueVisitors').textContent = 'Error';
+            }
+        }
+    </script>
+</body>
+
+</html>
