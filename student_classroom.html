@@ -109,9 +109,19 @@
                 <p class="text-gray-600">Your instructor hasn't uploaded any notes yet</p>
             </div>
 
-            <!-- Notes List -->
-            <div id="notesList" class="hidden space-y-4">
-                <!-- Notes will be loaded here -->
+            <!-- Day-wise Notes View -->
+            <div id="daysView" class="hidden space-y-4">
+                <!-- Days tabs will be loaded here -->
+            </div>
+
+            <!-- General Notes (No Day Organization) -->
+            <div id="generalNotes" class="hidden">
+                <div class="bg-white rounded-xl shadow-sm p-6 mb-4">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">📚 General Notes</h3>
+                    <div id="generalNotesList" class="space-y-4">
+                        <!-- General notes will be loaded here -->
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -190,35 +200,72 @@
         // Load notes
         async function loadNotes() {
             try {
-                const response = await fetch(`${API_BASE_URL}/api/classes/${classId}/notes`);
-                const data = await response.json();
+                // Load days first
+                const daysResponse = await fetch(`${API_BASE_URL}/api/classes/${classId}/days`);
+                const daysData = await daysResponse.json();
+                
+                console.log('Days data:', daysData);
+                
+                // Load all notes
+                const notesResponse = await fetch(`${API_BASE_URL}/api/classes/${classId}/notes`);
+                const notesData = await notesResponse.json();
+                
+                console.log('Notes data:', notesData);
 
                 document.getElementById('notesLoading').classList.add('hidden');
 
-                if (data.success && data.notes.length > 0) {
-                    document.getElementById('notesList').classList.remove('hidden');
-                    displayNotes(data.notes);
+                if (!notesData.success || notesData.notes.length === 0) {
+                    document.getElementById('notesEmpty').classList.remove('hidden');
+                    return;
+                }
+
+                // Check if days exist for this class
+                const hasDays = daysData.success && daysData.days.length > 0;
+                
+                console.log('Has days:', hasDays);
+
+                if (hasDays) {
+                    // Show day-wise view with ALL days (even empty ones)
+                    document.getElementById('daysView').classList.remove('hidden');
                     
-                    // Set class name
-                    const token = localStorage.getItem('studentToken');
-                    if (token) {
-                        try {
-                            const classResponse = await fetch(`${API_BASE_URL}/api/student/classes`, {
-                                headers: { 'Authorization': `Bearer ${token}` }
-                            });
-                            const classData = await classResponse.json();
-                            if (classData.success && classData.classes) {
-                                const currentClass = classData.classes.find(c => c.id === classId);
-                                if (currentClass) {
-                                    document.getElementById('className').textContent = currentClass.class_name;
-                                }
-                            }
-                        } catch (err) {
-                            console.error('Error loading class name:', err);
-                        }
+                    // Separate notes by day organization
+                    const dayNotes = notesData.notes.filter(n => n.day_number && n.day_number > 0);
+                    const generalNotes = notesData.notes.filter(n => !n.day_number || n.day_number === 0);
+                    
+                    console.log('Day notes:', dayNotes.length, 'General notes:', generalNotes.length);
+                    
+                    // Display all days with their notes
+                    displayDayWiseNotes(daysData.days, dayNotes);
+                    
+                    // Show general notes if any
+                    if (generalNotes.length > 0) {
+                        document.getElementById('generalNotes').classList.remove('hidden');
+                        displayGeneralNotes(generalNotes);
                     }
                 } else {
-                    document.getElementById('notesEmpty').classList.remove('hidden');
+                    // No days created - show all notes as general notes
+                    console.log('No days found - showing all as general notes');
+                    document.getElementById('generalNotes').classList.remove('hidden');
+                    displayGeneralNotes(notesData.notes);
+                }
+                
+                // Set class name
+                const token = localStorage.getItem('studentToken');
+                if (token) {
+                    try {
+                        const classResponse = await fetch(`${API_BASE_URL}/api/student/classes`, {
+                            headers: { 'Authorization': `Bearer ${token}` }
+                        });
+                        const classData = await classResponse.json();
+                        if (classData.success && classData.classes) {
+                            const currentClass = classData.classes.find(c => c.id === classId);
+                            if (currentClass) {
+                                document.getElementById('className').textContent = currentClass.class_name;
+                            }
+                        }
+                    } catch (err) {
+                        console.error('Error loading class name:', err);
+                    }
                 }
             } catch (error) {
                 console.error('Error loading notes:', error);
@@ -227,64 +274,228 @@
             }
         }
 
-        // Display notes
-        function displayNotes(notes) {
-            const container = document.getElementById('notesList');
+        // Display day-wise notes
+        function displayDayWiseNotes(days, notes) {
+            const container = document.getElementById('daysView');
             container.innerHTML = '';
 
+            // Group notes by day
+            const notesByDay = {};
             notes.forEach(note => {
-                const noteCard = document.createElement('div');
-                noteCard.className = 'bg-white rounded-xl shadow-sm p-6 card-hover';
+                if (!notesByDay[note.day_number]) {
+                    notesByDay[note.day_number] = [];
+                }
+                notesByDay[note.day_number].push(note);
+            });
 
-                const fileSize = (note.file_size / 1024 / 1024).toFixed(2);
-                const uploadDate = new Date(note.uploaded_at).toLocaleDateString('en-US', { 
-                    year: 'numeric', month: 'short', day: 'numeric' 
-                });
+            // Create accordion for EVERY day (even if empty)
+            days.forEach(day => {
+                const dayNotes = notesByDay[day.day_number] || [];
+                
+                const dayCard = document.createElement('div');
+                dayCard.className = 'bg-white rounded-xl shadow-sm overflow-hidden';
 
-                noteCard.innerHTML = `
-                    <div class="flex flex-col sm:flex-row gap-4">
-                        <div class="flex-shrink-0">
-                            <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
-                                <i data-lucide="file-text" class="w-8 h-8 text-white"></i>
-                            </div>
+                const dayHeader = document.createElement('button');
+                dayHeader.className = 'w-full p-6 flex items-center justify-between hover:bg-gray-50 transition';
+                dayHeader.onclick = () => toggleDay(day.day_number);
+
+                // Show different message for empty vs filled folders
+                const folderStatus = dayNotes.length > 0 
+                    ? `${dayNotes.length} file${dayNotes.length !== 1 ? 's' : ''} • Click to open`
+                    : 'Empty folder';
+
+                dayHeader.innerHTML = `
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center text-white font-bold text-lg">
+                            ${day.day_number}
                         </div>
-                        <div class="flex-1 min-w-0">
-                            <h3 class="text-xl font-bold text-gray-900 mb-2">${note.title}</h3>
-                            <p class="text-gray-600 mb-4">${note.description || 'No description available'}</p>
-                            <div class="flex flex-wrap gap-3 text-sm text-gray-500">
-                                <span class="flex items-center gap-1">
-                                    <i data-lucide="calendar" class="w-4 h-4"></i>
-                                    ${uploadDate}
-                                </span>
-                                <span class="flex items-center gap-1">
-                                    <i data-lucide="download" class="w-4 h-4"></i>
-                                    ${note.download_count || 0} downloads
-                                </span>
-                                <span class="flex items-center gap-1">
-                                    <i data-lucide="hard-drive" class="w-4 h-4"></i>
-                                    ${fileSize} MB
-                                </span>
-                            </div>
+                        <div class="text-left">
+                            <h3 class="text-xl font-bold text-gray-900">${day.title}</h3>
+                            <p class="text-sm ${dayNotes.length > 0 ? 'text-gray-600' : 'text-gray-400'}">${folderStatus}</p>
                         </div>
-                        <div class="flex sm:flex-col gap-2">
-                            <button onclick="viewNote('${note.file_url}', '${note.id}')" 
-                                class="flex-1 sm:flex-none px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold flex items-center justify-center gap-2">
-                                <i data-lucide="eye" class="w-4 h-4"></i>
-                                View
-                            </button>
-                            <button onclick="downloadNote('${note.id}', '${note.file_url}')" 
-                                class="flex-1 sm:flex-none px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-semibold flex items-center justify-center gap-2">
-                                <i data-lucide="download" class="w-4 h-4"></i>
-                                Download
-                            </button>
-                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="folder" class="w-6 h-6 ${dayNotes.length > 0 ? 'text-blue-600' : 'text-gray-400'}" id="folder-icon-${day.day_number}"></i>
+                        ${dayNotes.length > 0 ? `<i data-lucide="chevron-down" class="w-6 h-6 text-gray-400 transition-transform" id="chevron-${day.day_number}"></i>` : ''}
                     </div>
                 `;
 
+                // Only create content section if there are notes
+                if (dayNotes.length > 0) {
+                    const dayContent = document.createElement('div');
+                    dayContent.id = `day-content-${day.day_number}`;
+                    dayContent.className = 'hidden border-t border-gray-200 bg-gray-50';
+
+                    // Add a header inside the content
+                    const contentHeader = document.createElement('div');
+                    contentHeader.className = 'px-6 py-4 bg-blue-50 border-b border-blue-100';
+                    contentHeader.innerHTML = `
+                        <div class="flex items-center gap-2 text-blue-800">
+                            <i data-lucide="folder-open" class="w-5 h-5"></i>
+                            <span class="font-semibold">${day.title} - Files</span>
+                        </div>
+                    `;
+                    dayContent.appendChild(contentHeader);
+
+                    // Add notes container
+                    const notesContainer = document.createElement('div');
+                    notesContainer.className = 'p-6 space-y-4';
+
+                    // Sort notes by note_number
+                    dayNotes.sort((a, b) => (a.note_number || 0) - (b.note_number || 0));
+
+                    dayNotes.forEach(note => {
+                        const noteCard = createNoteCard(note);
+                        notesContainer.appendChild(noteCard);
+                    });
+
+                    dayContent.appendChild(notesContainer);
+                    dayCard.appendChild(dayHeader);
+                    dayCard.appendChild(dayContent);
+                } else {
+                    // Just add the header for empty folders
+                    dayCard.appendChild(dayHeader);
+                }
+
+                container.appendChild(dayCard);
+            });
+
+            lucide.createIcons();
+        }
+
+        function toggleDay(dayNumber) {
+            const content = document.getElementById(`day-content-${dayNumber}`);
+            const chevron = document.getElementById(`chevron-${dayNumber}`);
+            const folderIcon = document.getElementById(`folder-icon-${dayNumber}`);
+            
+            // Only toggle if content exists (folder has files)
+            if (!content) return;
+            
+            if (content.classList.contains('hidden')) {
+                // Open folder
+                content.classList.remove('hidden');
+                if (chevron) chevron.style.transform = 'rotate(180deg)';
+                folderIcon.setAttribute('data-lucide', 'folder-open');
+                lucide.createIcons();
+            } else {
+                // Close folder
+                content.classList.add('hidden');
+                if (chevron) chevron.style.transform = 'rotate(0deg)';
+                folderIcon.setAttribute('data-lucide', 'folder');
+                lucide.createIcons();
+            }
+        }
+
+        // Display general notes
+        function displayGeneralNotes(notes) {
+            const container = document.getElementById('generalNotesList');
+            container.innerHTML = '';
+
+            notes.forEach(note => {
+                const noteCard = createNoteCard(note);
                 container.appendChild(noteCard);
             });
 
             lucide.createIcons();
+        }
+
+        // Create note card (reusable)
+        function createNoteCard(note) {
+            const noteCard = document.createElement('div');
+            noteCard.className = 'bg-white rounded-lg shadow-sm p-4 card-hover';
+
+            const fileSize = (note.file_size / 1024 / 1024).toFixed(2);
+            const uploadDate = new Date(note.uploaded_at).toLocaleDateString('en-US', { 
+                year: 'numeric', month: 'short', day: 'numeric' 
+            });
+
+            // Determine file icon based on type
+            const fileType = note.file_type ? note.file_type.toLowerCase() : '';
+            let iconClass = 'file-text';
+            let iconColor = 'from-purple-500 to-purple-600';
+            
+            // Code files
+            if (['c', 'cpp', 'h', 'hpp', 'java', 'py', 'js', 'html', 'css', 'php', 'cs', 'go', 'rs', 'swift', 'kt', 'rb', 'pl', 'sh', 'bat'].includes(fileType)) {
+                iconClass = 'code';
+                iconColor = 'from-green-500 to-green-600';
+            }
+            // Archives
+            else if (['zip', 'rar', '7z'].includes(fileType)) {
+                iconClass = 'archive';
+                iconColor = 'from-orange-500 to-orange-600';
+            }
+            // Documents
+            else if (['pdf'].includes(fileType)) {
+                iconClass = 'file-text';
+                iconColor = 'from-red-500 to-red-600';
+            }
+            else if (['doc', 'docx'].includes(fileType)) {
+                iconClass = 'file-text';
+                iconColor = 'from-blue-500 to-blue-600';
+            }
+            else if (['ppt', 'pptx'].includes(fileType)) {
+                iconClass = 'presentation';
+                iconColor = 'from-yellow-500 to-yellow-600';
+            }
+            // Data files
+            else if (['json', 'xml', 'csv', 'sql'].includes(fileType)) {
+                iconClass = 'database';
+                iconColor = 'from-indigo-500 to-indigo-600';
+            }
+            else if (['md'].includes(fileType)) {
+                iconClass = 'file-text';
+                iconColor = 'from-gray-500 to-gray-600';
+            }
+
+            noteCard.innerHTML = `
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <div class="flex-shrink-0">
+                        <div class="w-12 h-12 bg-gradient-to-br ${iconColor} rounded-lg flex items-center justify-center">
+                            <i data-lucide="${iconClass}" class="w-6 h-6 text-white"></i>
+                        </div>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h4 class="text-lg font-bold text-gray-900 mb-1">
+                            ${note.note_number ? `${note.note_number}. ` : ''}${note.title}
+                            <span class="text-xs font-normal text-gray-500 ml-2">.${fileType}</span>
+                        </h4>
+                        <p class="text-sm text-gray-600 mb-2">${note.description || 'No description available'}</p>
+                        <div class="flex flex-wrap gap-2 text-xs text-gray-500">
+                            <span class="flex items-center gap-1">
+                                <i data-lucide="calendar" class="w-3 h-3"></i>
+                                ${uploadDate}
+                            </span>
+                            <span class="flex items-center gap-1">
+                                <i data-lucide="download" class="w-3 h-3"></i>
+                                ${note.download_count || 0} downloads
+                            </span>
+                            <span class="flex items-center gap-1">
+                                <i data-lucide="hard-drive" class="w-3 h-3"></i>
+                                ${fileSize} MB
+                            </span>
+                        </div>
+                    </div>
+                    <div class="flex sm:flex-col gap-2">
+                        <button onclick="viewNote('${note.file_url}', '${note.id}')" 
+                            class="flex-1 sm:flex-none px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm font-semibold flex items-center justify-center gap-1">
+                            <i data-lucide="eye" class="w-4 h-4"></i>
+                            View
+                        </button>
+                        <button onclick="downloadNote('${note.id}', '${note.file_url}')" 
+                            class="flex-1 sm:flex-none px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm font-semibold flex items-center justify-center gap-1">
+                            <i data-lucide="download" class="w-4 h-4"></i>
+                            Download
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            return noteCard;
+        }
+
+        // Display notes (old function - kept for backward compatibility)
+        function displayNotes(notes) {
+            displayGeneralNotes(notes);
         }
 
 
