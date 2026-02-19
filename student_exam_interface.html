@@ -460,8 +460,8 @@
         const urlParams = new URLSearchParams(window.location.search);
         const examId = urlParams.get('exam_id');
 
-        document.addEventListener('DOMContentLoaded', () => {
-            checkStudentAuth();
+        document.addEventListener('DOMContentLoaded', async () => {
+            await verifyStudentAuth();
             startExam();
             setupAntiCheating();
             requestFullscreen();
@@ -469,7 +469,11 @@
 
         async function startExam() {
             try {
-                const response = await fetch(`/api/student/exams/${examId}/start`, {
+                const API_BASE_URL = window.location.hostname === 'localhost' 
+                    ? 'http://localhost:5000' 
+                    : 'https://pyq-automation-system.onrender.com';
+                
+                const response = await fetch(`${API_BASE_URL}/api/student/exams/${examId}/start`, {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('studentToken')}`
@@ -594,7 +598,11 @@
 
         async function saveAnswer(questionId, selectedAnswer) {
             try {
-                await fetch(`/api/student/attempts/${attemptId}/answer`, {
+                const API_BASE_URL = window.location.hostname === 'localhost' 
+                    ? 'http://localhost:5000' 
+                    : 'https://pyq-automation-system.onrender.com';
+                
+                await fetch(`${API_BASE_URL}/api/student/attempts/${attemptId}/answer`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -656,7 +664,11 @@
             try {
                 clearInterval(timerInterval);
                 
-                const response = await fetch(`/api/student/attempts/${attemptId}/submit`, {
+                const API_BASE_URL = window.location.hostname === 'localhost' 
+                    ? 'http://localhost:5000' 
+                    : 'https://pyq-automation-system.onrender.com';
+                
+                const response = await fetch(`${API_BASE_URL}/api/student/attempts/${attemptId}/submit`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -725,7 +737,11 @@
 
         async function trackActivity(type) {
             try {
-                await fetch(`/api/student/attempts/${attemptId}/track`, {
+                const API_BASE_URL = window.location.hostname === 'localhost' 
+                    ? 'http://localhost:5000' 
+                    : 'https://pyq-automation-system.onrender.com';
+                
+                await fetch(`${API_BASE_URL}/api/student/attempts/${attemptId}/track`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
