@@ -91,6 +91,10 @@
                     <i data-lucide="clipboard-list" class="w-5 h-5"></i>
                     <span>Assignments</span>
                 </button>
+                <button id="examsTab" onclick="switchTab('exams')" class="flex-1 py-4 px-6 font-semibold text-gray-600 hover:text-gray-900 transition flex items-center justify-center gap-2">
+                    <i data-lucide="graduation-cap" class="w-5 h-5"></i>
+                    <span>Exams</span>
+                </button>
             </div>
         </div>
 
@@ -146,6 +150,30 @@
                 <!-- Assignments will be loaded here -->
             </div>
         </div>
+
+        <!-- Exams Section -->
+        <div id="examsSection" class="hidden">
+            <div class="bg-gradient-to-r from-green-500 to-green-600 rounded-xl shadow-lg p-6 text-white mb-6">
+                <div class="flex items-center gap-3">
+                    <i data-lucide="graduation-cap" class="w-8 h-8"></i>
+                    <div>
+                        <h2 class="text-2xl font-bold">Online Exams</h2>
+                        <p class="text-white/90">Take semester-wise MCQ exams</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm p-8 text-center">
+                <i data-lucide="external-link" class="w-16 h-16 text-green-600 mx-auto mb-4"></i>
+                <h3 class="text-xl font-bold text-gray-800 mb-2">Access Exam Portal</h3>
+                <p class="text-gray-600 mb-6">View and take your semester exams in the dedicated exam portal</p>
+                <a href="student_exams.html" 
+                   class="inline-flex items-center gap-2 px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition">
+                    <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    Go to Exam Portal
+                </a>
+            </div>
+        </div>
     </main>
 
     <script src="student_auth.js"></script>
@@ -169,23 +197,37 @@
         function switchTab(tab) {
             const notesTab = document.getElementById('notesTab');
             const assignmentsTab = document.getElementById('assignmentsTab');
+            const examsTab = document.getElementById('examsTab');
             const notesSection = document.getElementById('notesSection');
             const assignmentsSection = document.getElementById('assignmentsSection');
+            const examsSection = document.getElementById('examsSection');
 
+            // Remove active class from all tabs
+            notesTab.classList.remove('tab-active');
+            assignmentsTab.classList.remove('tab-active');
+            examsTab.classList.remove('tab-active');
+            notesTab.classList.add('text-gray-600');
+            assignmentsTab.classList.add('text-gray-600');
+            examsTab.classList.add('text-gray-600');
+
+            // Hide all sections
+            notesSection.classList.add('hidden');
+            assignmentsSection.classList.add('hidden');
+            examsSection.classList.add('hidden');
+
+            // Show selected tab
             if (tab === 'notes') {
                 notesTab.classList.add('tab-active');
                 notesTab.classList.remove('text-gray-600');
-                assignmentsTab.classList.remove('tab-active');
-                assignmentsTab.classList.add('text-gray-600');
                 notesSection.classList.remove('hidden');
-                assignmentsSection.classList.add('hidden');
-            } else {
+            } else if (tab === 'assignments') {
                 assignmentsTab.classList.add('tab-active');
                 assignmentsTab.classList.remove('text-gray-600');
-                notesTab.classList.remove('tab-active');
-                notesTab.classList.add('text-gray-600');
                 assignmentsSection.classList.remove('hidden');
-                notesSection.classList.add('hidden');
+            } else if (tab === 'exams') {
+                examsTab.classList.add('tab-active');
+                examsTab.classList.remove('text-gray-600');
+                examsSection.classList.remove('hidden');
             }
             
             lucide.createIcons();

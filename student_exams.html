@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Exams - GCOEC Student Portal</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .exam-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+        
+        .exam-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .exam-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0,0,0,0.15);
+        }
+        
+        .exam-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .badge-available {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .badge-completed {
+            background: #cce5ff;
+            color: #004085;
+        }
+        
+        .badge-upcoming {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .exam-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            padding-right: 80px;
+        }
+        
+        .exam-subject {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        
+        .exam-info {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: #7f8c8d;
+        }
+        
+        .info-value {
+            color: #2c3e50;
+        }
+        
+        .exam-actions {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .btn-info {
+            background: #3498db;
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .btn:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .no-exams {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 12px;
+        }
+        
+        .no-exams-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+        
+        .filter-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .filter-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .filter-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📝 My Exams</h1>
+            <p>View and attempt your semester exams</p>
+        </div>
+
+        <div class="filter-section">
+            <div class="filter-group">
+                <label>Filter by Status</label>
+                <select id="statusFilter" onchange="filterExams()">
+                    <option value="all">All Exams</option>
+                    <option value="available">Available</option>
+                    <option value="completed">Completed</option>
+                    <option value="upcoming">Upcoming</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label>Filter by Subject</label>
+                <select id="subjectFilter" onchange="filterExams()">
+                    <option value="all">All Subjects</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="exam-grid" id="examGrid">
+            <!-- Exams will be loaded here -->
+        </div>
+    </div>
+
+    <script src="student_auth.js"></script>
+    <script>
+        let allExams = [];
+        let studentInfo = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            checkStudentAuth();
+            loadStudentInfo();
+            loadExams();
+        });
+
+        function loadStudentInfo() {
+            // Get student info from localStorage or session
+            const user = JSON.parse(localStorage.getItem('student') || '{}');
+            studentInfo = {
+                semester: user.semester || '1',
+                branch: user.branch || 'CSE'
+            };
+        }
+
+        async function loadExams() {
+            try {
+                const response = await fetch(`/api/student/exams?semester=${studentInfo.semester}&branch=${studentInfo.branch}`, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('studentToken')}`
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    allExams = data.exams;
+                    populateSubjectFilter();
+                    displayExams(allExams);
+                } else {
+                    showError('Failed to load exams');
+                }
+            } catch (error) {
+                console.error('Error loading exams:', error);
+                showError('Failed to load exams');
+            }
+        }
+
+        function populateSubjectFilter() {
+            const subjects = [...new Set(allExams.map(e => e.subject))];
+            const select = document.getElementById('subjectFilter');
+            
+            subjects.forEach(subject => {
+                const option = document.createElement('option');
+                option.value = subject;
+                option.textContent = subject;
+                select.appendChild(option);
+            });
+        }
+
+        function filterExams() {
+            const statusFilter = document.getElementById('statusFilter').value;
+            const subjectFilter = document.getElementById('subjectFilter').value;
+            
+            let filtered = allExams;
+            
+            if (statusFilter !== 'all') {
+                filtered = filtered.filter(exam => getExamStatus(exam) === statusFilter);
+            }
+            
+            if (subjectFilter !== 'all') {
+                filtered = filtered.filter(exam => exam.subject === subjectFilter);
+            }
+            
+            displayExams(filtered);
+        }
+
+        function getExamStatus(exam) {
+            const now = new Date();
+            const startTime = new Date(exam.start_time);
+            const endTime = new Date(exam.end_time);
+            
+            if (exam.attempted) {
+                return 'completed';
+            } else if (now < startTime) {
+                return 'upcoming';
+            } else if (now >= startTime && now <= endTime) {
+                return 'available';
+            } else {
+                return 'expired';
+            }
+        }
+
+        function displayExams(exams) {
+            const grid = document.getElementById('examGrid');
+            
+            if (exams.length === 0) {
+                grid.innerHTML = `
+                    <div class="no-exams">
+                        <div class="no-exams-icon">📚</div>
+                        <h2>No Exams Available</h2>
+                        <p>There are no exams scheduled for your semester at the moment.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            grid.innerHTML = exams.map(exam => {
+                const status = getExamStatus(exam);
+                const badgeClass = status === 'available' ? 'badge-available' : 
+                                  status === 'completed' ? 'badge-completed' : 'badge-upcoming';
+                const badgeText = status === 'available' ? 'Available' : 
+                                 status === 'completed' ? 'Completed' : 'Upcoming';
+                
+                const startDate = new Date(exam.start_time).toLocaleString();
+                const endDate = new Date(exam.end_time).toLocaleString();
+                
+                return `
+                    <div class="exam-card">
+                        <div class="exam-badge ${badgeClass}">${badgeText}</div>
+                        
+                        <div class="exam-title">${exam.title}</div>
+                        <div class="exam-subject">${exam.subject} - Semester ${exam.semester}</div>
+                        
+                        <div class="exam-info">
+                            <div class="info-row">
+                                <span class="info-label">Duration</span>
+                                <span class="info-value">${exam.duration_minutes} minutes</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Total Marks</span>
+                                <span class="info-value">${exam.total_marks}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Passing Marks</span>
+                                <span class="info-value">${exam.passing_marks}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Questions</span>
+                                <span class="info-value">${exam.question_count}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Start Time</span>
+                                <span class="info-value">${startDate}</span>
+                            </div>
+                            ${exam.attempted ? `
+                                <div class="info-row">
+                                    <span class="info-label">Your Score</span>
+                                    <span class="info-value" style="color: #27ae60; font-weight: bold;">
+                                        ${exam.marks_obtained}/${exam.total_marks}
+                                    </span>
+                                </div>
+                            ` : ''}
+                        </div>
+                        
+                        <div class="exam-actions">
+                            ${status === 'available' && !exam.attempted ? `
+                                <button class="btn btn-primary" onclick="startExam(${exam.id})">
+                                    🚀 Start Exam
+                                </button>
+                            ` : ''}
+                            
+                            ${exam.attempted ? `
+                                <button class="btn btn-info" onclick="viewResult(${exam.id})">
+                                    📊 View Result
+                                </button>
+                            ` : ''}
+                            
+                            ${status === 'upcoming' ? `
+                                <button class="btn" disabled>
+                                    ⏰ Starts Soon
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function startExam(examId) {
+            if (confirm('Are you ready to start the exam? Once started, the timer will begin and you cannot pause.')) {
+                window.location.href = `student_exam_interface.html?exam_id=${examId}`;
+            }
+        }
+
+        function viewResult(examId) {
+            window.location.href = `student_exam_result.html?exam_id=${examId}`;
+        }
+
+        function showError(message) {
+            document.getElementById('examGrid').innerHTML = `
+                <div class="no-exams">
+                    <div class="no-exams-icon">⚠️</div>
+                    <h2>Error</h2>
+                    <p>${message}</p>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

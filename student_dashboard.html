@@ -77,6 +77,10 @@
                     </div>
                 </div>
                 <div class="flex gap-2">
+                    <a href="student_exams.html" class="px-3 sm:px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg transition flex items-center gap-2">
+                        <i data-lucide="file-text" class="w-4 h-4"></i>
+                        <span class="hidden sm:inline">Exams</span>
+                    </a>
                     <a href="index.html" class="px-3 sm:px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg transition flex items-center gap-2">
                         <i data-lucide="home" class="w-4 h-4"></i>
                         <span class="hidden sm:inline">Portal</span>
@@ -98,6 +102,48 @@
                 Welcome back, <span id="studentName">Student</span>! 👋
             </h2>
             <p class="text-white/90">Here are your classes and assignments</p>
+        </div>
+
+        <!-- Quick Access Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+            <!-- Classroom Card -->
+            <a href="student_classroom.html" class="card-hover bg-white rounded-xl shadow-md p-6 border-2 border-transparent hover:border-blue-500 transition">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <i data-lucide="book-open" class="w-6 h-6 text-blue-600"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-900">Classroom</h3>
+                        <p class="text-sm text-gray-600">View Classes</p>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Exams Card -->
+            <a href="student_exams.html" class="card-hover bg-white rounded-xl shadow-md p-6 border-2 border-transparent hover:border-green-500 transition">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                        <i data-lucide="file-text" class="w-6 h-6 text-green-600"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-900">Exams</h3>
+                        <p class="text-sm text-gray-600">Take Tests</p>
+                    </div>
+                </div>
+            </a>
+
+            <!-- PYQ Portal Card -->
+            <a href="index.html" class="card-hover bg-white rounded-xl shadow-md p-6 border-2 border-transparent hover:border-orange-500 transition">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+                        <i data-lucide="archive" class="w-6 h-6 text-orange-600"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-900">PYQ Portal</h3>
+                        <p class="text-sm text-gray-600">Past Papers</p>
+                    </div>
+                </div>
+            </a>
         </div>
 
         <!-- Loading State -->
