@@ -473,11 +473,19 @@
                     ? 'http://localhost:5000' 
                     : 'https://pyq-automation-system.onrender.com';
                 
+                // Get student info from localStorage
+                const studentInfo = JSON.parse(localStorage.getItem('studentInfo') || '{}');
+                
                 const response = await fetch(`${API_BASE_URL}/api/student/exams/${examId}/start`, {
                     method: 'POST',
                     headers: {
+                        'Content-Type': 'application/json',
                         'Authorization': `Bearer ${localStorage.getItem('studentToken')}`
-                    }
+                    },
+                    body: JSON.stringify({
+                        email: studentInfo.email || 'student@example.com',
+                        name: studentInfo.name || 'Student'
+                    })
                 });
                 
                 const data = await response.json();
@@ -730,7 +738,8 @@
             const elem = document.documentElement;
             if (elem.requestFullscreen) {
                 elem.requestFullscreen().catch(err => {
-                    console.log('Fullscreen request failed:', err);
+                    console.log('Fullscreen not available or denied:', err);
+                    // Continue without fullscreen - it's optional
                 });
             }
         }
