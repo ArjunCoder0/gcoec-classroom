@@ -3,225 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Exams - GCOEC Student Portal</title>
+    <title>My Exams - GCOEC Portal</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            "500":"#3b82f6",
+                            "600":"#2563eb",
+                            "700":"#1d4ed8",
+                        }
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'sans-serif'],
+                        'heading': ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    
     <style>
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #888; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+        
+        .card-hover {
+            transition: all 0.3s ease;
         }
         
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .header {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        
-        .exam-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 20px;
-        }
-        
-        .exam-card {
-            background: white;
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .exam-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 12px rgba(0,0,0,0.15);
-        }
-        
-        .exam-badge {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-        
-        .badge-available {
-            background: #d4edda;
-            color: #155724;
-        }
-        
-        .badge-completed {
-            background: #cce5ff;
-            color: #004085;
-        }
-        
-        .badge-upcoming {
-            background: #fff3cd;
-            color: #856404;
-        }
-        
-        .exam-title {
-            font-size: 1.4em;
-            font-weight: bold;
-            color: #2c3e50;
-            margin-bottom: 10px;
-            padding-right: 80px;
-        }
-        
-        .exam-subject {
-            color: #7f8c8d;
-            font-size: 0.9em;
-            margin-bottom: 15px;
-        }
-        
-        .exam-info {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin: 20px 0;
-        }
-        
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid #ecf0f1;
-        }
-        
-        .info-label {
-            font-weight: 600;
-            color: #7f8c8d;
-        }
-        
-        .info-value {
-            color: #2c3e50;
-        }
-        
-        .exam-actions {
-            margin-top: 20px;
-            display: flex;
-            gap: 10px;
-        }
-        
-        .btn {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
-            text-align: center;
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-        
-        .btn-success {
-            background: #27ae60;
-            color: white;
-        }
-        
-        .btn-info {
-            background: #3498db;
-            color: white;
-        }
-        
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
-        
-        .btn:disabled {
-            background: #95a5a6;
-            cursor: not-allowed;
-            transform: none;
-        }
-        
-        .no-exams {
-            text-align: center;
-            padding: 60px 20px;
-            background: white;
-            border-radius: 12px;
-        }
-        
-        .no-exams-icon {
-            font-size: 4em;
-            margin-bottom: 20px;
-        }
-        
-        .filter-section {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-        
-        .filter-group {
-            flex: 1;
-            min-width: 200px;
-        }
-        
-        .filter-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-            color: #2c3e50;
-        }
-        
-        .filter-group select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.1);
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>📝 My Exams</h1>
-            <p>View and attempt your semester exams</p>
-        </div>
+<body class="bg-gray-50 font-sans">
 
-        <div class="filter-section">
-            <div class="filter-group">
-                <label>Filter by Status</label>
-                <select id="statusFilter" onchange="filterExams()">
-                    <option value="all">All Exams</option>
-                    <option value="available">Available</option>
-                    <option value="completed">Completed</option>
-                    <option value="upcoming">Upcoming</option>
-                </select>
-            </div>
-            
-            <div class="filter-group">
-                <label>Filter by Subject</label>
-                <select id="subjectFilter" onchange="filterExams()">
-                    <option value="all">All Subjects</option>
-                </select>
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-primary-600 to-primary-700 text-white shadow-lg">
+        <div class="container mx-auto px-4 sm:px-6 py-4 sm:py-6">
+            <div class="flex justify-between items-center">
+                <div class="flex-1 min-w-0">
+                    <a href="student_dashboard.html" class="inline-flex items-center text-sm text-white/80 hover:text-white transition mb-2">
+                        <i data-lucide="arrow-left" class="w-4 h-4 mr-1"></i>
+                        Back to Dashboard
+                    </a>
+                    <h1 class="text-2xl sm:text-3xl font-heading font-bold">📝 My Exams</h1>
+                    <p class="text-sm text-white/80 mt-1">View and attempt your semester exams</p>
+                </div>
+                <button onclick="studentLogout()" class="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg transition flex items-center gap-2">
+                    <i data-lucide="log-out" class="w-4 h-4"></i>
+                    <span class="hidden sm:inline">Logout</span>
+                </button>
             </div>
         </div>
+    </header>
 
-        <div class="exam-grid" id="examGrid">
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 sm:px-6 py-6 sm:py-8">
+        
+        <!-- Filters -->
+        <div class="bg-white rounded-xl shadow-sm p-4 sm:p-6 mb-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Filter by Status</label>
+                    <select id="statusFilter" onchange="filterExams()" 
+                            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                        <option value="all">All Exams</option>
+                        <option value="available">Available</option>
+                        <option value="completed">Completed</option>
+                        <option value="upcoming">Upcoming</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Filter by Subject</label>
+                    <select id="subjectFilter" onchange="filterExams()"
+                            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                        <option value="all">All Subjects</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="text-center py-16">
+            <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+            <p class="mt-4 text-gray-600 font-medium">Loading exams...</p>
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="hidden text-center py-16 bg-white rounded-xl shadow-sm">
+            <i data-lucide="file-x" class="w-16 h-16 text-gray-400 mx-auto mb-4"></i>
+            <h3 class="text-xl font-bold text-gray-800 mb-2">No Exams Available</h3>
+            <p class="text-gray-600">There are no exams scheduled for your semester at the moment</p>
+        </div>
+
+        <!-- Exams Grid -->
+        <div id="examGrid" class="hidden grid grid-cols-1 lg:grid-cols-2 gap-6">
             <!-- Exams will be loaded here -->
         </div>
-    </div>
+    </main>
 
     <script src="student_auth.js"></script>
     <script>
@@ -229,6 +125,8 @@
         let studentInfo = null;
 
         document.addEventListener('DOMContentLoaded', async () => {
+            lucide.createIcons();
+            
             // Verify authentication
             const student = await verifyStudentAuth();
             if (!student) return;
@@ -238,23 +136,23 @@
         });
 
         function loadStudentInfo() {
-            // Get student info from localStorage
             const storedInfo = localStorage.getItem('studentInfo');
             if (storedInfo) {
                 const user = JSON.parse(storedInfo);
                 studentInfo = {
                     semester: user.semester || '1',
                     branch: user.branch || 'CSE',
-                    email: user.email || 'student@example.com'
+                    email: user.email || 'student@example.com',
+                    name: user.name || 'Student'
                 };
             } else {
                 studentInfo = {
                     semester: '1',
                     branch: 'CSE',
-                    email: 'student@example.com'
+                    email: 'student@example.com',
+                    name: 'Student'
                 };
             }
-            console.log('Student info loaded:', studentInfo);
         }
 
         async function loadExams() {
@@ -263,22 +161,21 @@
                     ? 'http://localhost:5000' 
                     : 'https://pyq-automation-system.onrender.com';
                 
-                console.log('Loading exams for:', studentInfo);
-                console.log('API URL:', `${API_BASE_URL}/api/student/exams?semester=${studentInfo.semester}&branch=${studentInfo.branch}&email=${studentInfo.email}`);
-                
                 const response = await fetch(`${API_BASE_URL}/api/student/exams?semester=${studentInfo.semester}&branch=${studentInfo.branch}&email=${studentInfo.email}`);
                 
                 const data = await response.json();
-                console.log('API Response:', data);
                 
                 if (data.success) {
                     allExams = data.exams;
-                    console.log('Loaded exams:', allExams);
                     populateSubjectFilter();
                     displayExams(allExams);
                     
+                    document.getElementById('loadingState').classList.add('hidden');
+                    
                     if (allExams.length === 0) {
-                        showError('No exams available for your semester and branch at this time.');
+                        document.getElementById('emptyState').classList.remove('hidden');
+                    } else {
+                        document.getElementById('examGrid').classList.remove('hidden');
                     }
                 } else {
                     showError('Failed to load exams: ' + (data.error || 'Unknown error'));
@@ -339,93 +236,116 @@
             
             if (exams.length === 0) {
                 grid.innerHTML = `
-                    <div class="no-exams">
-                        <div class="no-exams-icon">📚</div>
-                        <h2>No Exams Available</h2>
-                        <p>There are no exams scheduled for your semester at the moment.</p>
+                    <div class="col-span-full text-center py-12 bg-white rounded-xl shadow-sm">
+                        <i data-lucide="search-x" class="w-12 h-12 text-gray-400 mx-auto mb-3"></i>
+                        <p class="text-gray-600">No exams match your filters</p>
                     </div>
                 `;
+                lucide.createIcons();
                 return;
             }
             
             grid.innerHTML = exams.map(exam => {
                 const status = getExamStatus(exam);
-                const badgeClass = status === 'available' ? 'badge-available' : 
-                                  status === 'completed' ? 'badge-completed' : 'badge-upcoming';
-                const badgeText = status === 'available' ? 'Available' : 
-                                 status === 'completed' ? 'Completed' : 'Upcoming';
+                const statusConfig = {
+                    available: { color: 'green', icon: 'play-circle', text: 'Available' },
+                    completed: { color: 'blue', icon: 'check-circle', text: 'Completed' },
+                    upcoming: { color: 'yellow', icon: 'clock', text: 'Upcoming' },
+                    expired: { color: 'gray', icon: 'x-circle', text: 'Expired' }
+                };
+                
+                const config = statusConfig[status] || statusConfig.expired;
                 
                 const startDate = new Date(exam.start_time).toLocaleString('en-IN', { 
                     timeZone: 'Asia/Kolkata',
-                    dateStyle: 'short',
-                    timeStyle: 'short'
-                });
-                const endDate = new Date(exam.end_time).toLocaleString('en-IN', { 
-                    timeZone: 'Asia/Kolkata',
-                    dateStyle: 'short',
+                    dateStyle: 'medium',
                     timeStyle: 'short'
                 });
                 
                 return `
-                    <div class="exam-card">
-                        <div class="exam-badge ${badgeClass}">${badgeText}</div>
-                        
-                        <div class="exam-title">${exam.title}</div>
-                        <div class="exam-subject">${exam.subject} - Semester ${exam.semester}</div>
-                        
-                        <div class="exam-info">
-                            <div class="info-row">
-                                <span class="info-label">Duration</span>
-                                <span class="info-value">${exam.duration_minutes} minutes</span>
+                    <div class="bg-white rounded-xl shadow-sm overflow-hidden card-hover">
+                        <!-- Header -->
+                        <div class="bg-gradient-to-r from-${config.color}-500 to-${config.color}-600 p-4 text-white">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-xl font-bold font-heading">${exam.title}</h3>
+                                <span class="px-3 py-1 bg-white/20 rounded-full text-xs font-semibold flex items-center gap-1">
+                                    <i data-lucide="${config.icon}" class="w-3 h-3"></i>
+                                    ${config.text}
+                                </span>
                             </div>
-                            <div class="info-row">
-                                <span class="info-label">Total Marks</span>
-                                <span class="info-value">${exam.total_marks}</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">Passing Marks</span>
-                                <span class="info-value">${exam.passing_marks}</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">Questions</span>
-                                <span class="info-value">${exam.question_count}</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">Start Time</span>
-                                <span class="info-value">${startDate}</span>
-                            </div>
-                            ${exam.attempted ? `
-                                <div class="info-row">
-                                    <span class="info-label">Your Score</span>
-                                    <span class="info-value" style="color: #27ae60; font-weight: bold;">
-                                        ${exam.marks_obtained}/${exam.total_marks}
-                                    </span>
-                                </div>
-                            ` : ''}
+                            <p class="text-white/90 text-sm">${exam.subject} • Semester ${exam.semester}</p>
                         </div>
                         
-                        <div class="exam-actions">
+                        <!-- Body -->
+                        <div class="p-6">
+                            <div class="grid grid-cols-2 gap-4 mb-6">
+                                <div class="flex items-center gap-2 text-gray-600">
+                                    <i data-lucide="clock" class="w-4 h-4 text-gray-400"></i>
+                                    <span class="text-sm">${exam.duration_minutes} mins</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-gray-600">
+                                    <i data-lucide="file-text" class="w-4 h-4 text-gray-400"></i>
+                                    <span class="text-sm">${exam.question_count} questions</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-gray-600">
+                                    <i data-lucide="award" class="w-4 h-4 text-gray-400"></i>
+                                    <span class="text-sm">${exam.total_marks} marks</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-gray-600">
+                                    <i data-lucide="target" class="w-4 h-4 text-gray-400"></i>
+                                    <span class="text-sm">Pass: ${exam.passing_marks}</span>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-gray-50 rounded-lg p-3 mb-4">
+                                <div class="flex items-center gap-2 text-sm text-gray-600">
+                                    <i data-lucide="calendar" class="w-4 h-4"></i>
+                                    <span>Starts: ${startDate}</span>
+                                </div>
+                            </div>
+                            
+                            ${exam.attempted ? `
+                                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center gap-2">
+                                            <i data-lucide="check-circle-2" class="w-5 h-5 text-blue-600"></i>
+                                            <span class="font-semibold text-blue-900">Completed</span>
+                                        </div>
+                                        <span class="text-2xl font-bold text-blue-600">${exam.marks_obtained}/${exam.total_marks}</span>
+                                    </div>
+                                </div>
+                            ` : ''}
+                            
+                            <!-- Actions -->
                             ${status === 'available' && !exam.attempted ? `
-                                <button class="btn btn-primary" onclick="startExam('${exam.id}')">
-                                    🚀 Start Exam
+                                <button onclick="startExam('${exam.id}')" 
+                                        class="w-full px-6 py-3 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold rounded-lg transition flex items-center justify-center gap-2">
+                                    <i data-lucide="play-circle" class="w-5 h-5"></i>
+                                    Start Exam
                                 </button>
                             ` : ''}
                             
                             ${exam.attempted ? `
-                                <button class="btn btn-info" disabled style="cursor: not-allowed;">
-                                    ✓ Completed
+                                <button disabled
+                                        class="w-full px-6 py-3 bg-gray-100 text-gray-500 font-semibold rounded-lg cursor-not-allowed flex items-center justify-center gap-2">
+                                    <i data-lucide="check-circle" class="w-5 h-5"></i>
+                                    Exam Completed
                                 </button>
                             ` : ''}
                             
                             ${status === 'upcoming' ? `
-                                <button class="btn" disabled>
-                                    ⏰ Starts Soon
+                                <button disabled
+                                        class="w-full px-6 py-3 bg-gray-100 text-gray-500 font-semibold rounded-lg cursor-not-allowed flex items-center justify-center gap-2">
+                                    <i data-lucide="clock" class="w-5 h-5"></i>
+                                    Starts Soon
                                 </button>
                             ` : ''}
                         </div>
                     </div>
                 `;
             }).join('');
+            
+            lucide.createIcons();
         }
 
         function startExam(examId) {
@@ -435,13 +355,24 @@
         }
 
         function showError(message) {
+            document.getElementById('loadingState').classList.add('hidden');
             document.getElementById('examGrid').innerHTML = `
-                <div class="no-exams">
-                    <div class="no-exams-icon">⚠️</div>
-                    <h2>Error</h2>
-                    <p>${message}</p>
+                <div class="col-span-full text-center py-12 bg-white rounded-xl shadow-sm">
+                    <i data-lucide="alert-circle" class="w-12 h-12 text-red-500 mx-auto mb-3"></i>
+                    <h3 class="text-lg font-bold text-gray-800 mb-2">Error</h3>
+                    <p class="text-gray-600">${message}</p>
                 </div>
             `;
+            document.getElementById('examGrid').classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function studentLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('studentToken');
+                localStorage.removeItem('studentInfo');
+                window.location.href = 'student_login.html';
+            }
         }
     </script>
 </body>
