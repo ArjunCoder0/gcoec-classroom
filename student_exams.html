@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Exams - GCOEC Student Portal</title>
-    <link rel="stylesheet" href="styles.css">
     <style>
         body {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -229,19 +228,33 @@
         let allExams = [];
         let studentInfo = null;
 
-        document.addEventListener('DOMContentLoaded', () => {
-            checkStudentAuth();
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Verify authentication
+            const student = await verifyStudentAuth();
+            if (!student) return;
+            
             loadStudentInfo();
             loadExams();
         });
 
         function loadStudentInfo() {
-            // Get student info from localStorage or session
-            const user = JSON.parse(localStorage.getItem('student') || '{}');
-            studentInfo = {
-                semester: user.semester || '1',
-                branch: user.branch || 'CSE'
-            };
+            // Get student info from localStorage
+            const storedInfo = localStorage.getItem('studentInfo');
+            if (storedInfo) {
+                const user = JSON.parse(storedInfo);
+                studentInfo = {
+                    semester: user.semester || '1',
+                    branch: user.branch || 'CSE',
+                    email: user.email || 'student@example.com'
+                };
+            } else {
+                studentInfo = {
+                    semester: '1',
+                    branch: 'CSE',
+                    email: 'student@example.com'
+                };
+            }
+            console.log('Student info loaded:', studentInfo);
         }
 
         async function loadExams() {
@@ -250,24 +263,29 @@
                     ? 'http://localhost:5000' 
                     : 'https://pyq-automation-system.onrender.com';
                 
-                const response = await fetch(`${API_BASE_URL}/api/student/exams?semester=${studentInfo.semester}&branch=${studentInfo.branch}&email=student@example.com`, {
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('studentToken')}`
-                    }
-                });
+                console.log('Loading exams for:', studentInfo);
+                console.log('API URL:', `${API_BASE_URL}/api/student/exams?semester=${studentInfo.semester}&branch=${studentInfo.branch}&email=${studentInfo.email}`);
+                
+                const response = await fetch(`${API_BASE_URL}/api/student/exams?semester=${studentInfo.semester}&branch=${studentInfo.branch}&email=${studentInfo.email}`);
                 
                 const data = await response.json();
+                console.log('API Response:', data);
                 
                 if (data.success) {
                     allExams = data.exams;
+                    console.log('Loaded exams:', allExams);
                     populateSubjectFilter();
                     displayExams(allExams);
+                    
+                    if (allExams.length === 0) {
+                        showError('No exams available for your semester and branch at this time.');
+                    }
                 } else {
-                    showError('Failed to load exams');
+                    showError('Failed to load exams: ' + (data.error || 'Unknown error'));
                 }
             } catch (error) {
                 console.error('Error loading exams:', error);
-                showError('Failed to load exams');
+                showError('Failed to load exams: ' + error.message);
             }
         }
 
