@@ -561,7 +561,7 @@
                 <div class="options">
                     ${['A', 'B', 'C', 'D'].map(opt => `
                         <div class="option ${answers[question.id] === opt ? 'selected' : ''}" 
-                             onclick="selectOption(${question.id}, '${opt}')">
+                             onclick="selectOption('${question.id}', '${opt}')">
                             <div class="option-label">${opt}</div>
                             <div class="option-text">${question['option_' + opt.toLowerCase()]}</div>
                         </div>

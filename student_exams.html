@@ -355,8 +355,16 @@
                 const badgeText = status === 'available' ? 'Available' : 
                                  status === 'completed' ? 'Completed' : 'Upcoming';
                 
-                const startDate = new Date(exam.start_time).toLocaleString();
-                const endDate = new Date(exam.end_time).toLocaleString();
+                const startDate = new Date(exam.start_time).toLocaleString('en-IN', { 
+                    timeZone: 'Asia/Kolkata',
+                    dateStyle: 'short',
+                    timeStyle: 'short'
+                });
+                const endDate = new Date(exam.end_time).toLocaleString('en-IN', { 
+                    timeZone: 'Asia/Kolkata',
+                    dateStyle: 'short',
+                    timeStyle: 'short'
+                });
                 
                 return `
                     <div class="exam-card">
@@ -398,13 +406,13 @@
                         
                         <div class="exam-actions">
                             ${status === 'available' && !exam.attempted ? `
-                                <button class="btn btn-primary" onclick="startExam(${exam.id})">
+                                <button class="btn btn-primary" onclick="startExam('${exam.id}')">
                                     🚀 Start Exam
                                 </button>
                             ` : ''}
                             
                             ${exam.attempted ? `
-                                <button class="btn btn-info" onclick="viewResult(${exam.id})">
+                                <button class="btn btn-info" onclick="viewResult('${exam.id}')">
                                     📊 View Result
                                 </button>
                             ` : ''}
