@@ -246,7 +246,11 @@
 
         async function loadExams() {
             try {
-                const response = await fetch(`/api/student/exams?semester=${studentInfo.semester}&branch=${studentInfo.branch}`, {
+                const API_BASE_URL = window.location.hostname === 'localhost' 
+                    ? 'http://localhost:5000' 
+                    : 'https://pyq-automation-system.onrender.com';
+                
+                const response = await fetch(`${API_BASE_URL}/api/student/exams?semester=${studentInfo.semester}&branch=${studentInfo.branch}&email=student@example.com`, {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('studentToken')}`
                     }
