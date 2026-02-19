@@ -412,8 +412,8 @@
                             ` : ''}
                             
                             ${exam.attempted ? `
-                                <button class="btn btn-info" onclick="viewResult('${exam.id}')">
-                                    📊 View Result
+                                <button class="btn btn-info" disabled style="cursor: not-allowed;">
+                                    ✓ Completed
                                 </button>
                             ` : ''}
                             
@@ -432,10 +432,6 @@
             if (confirm('Are you ready to start the exam? Once started, the timer will begin and you cannot pause.')) {
                 window.location.href = `student_exam_interface.html?exam_id=${examId}`;
             }
-        }
-
-        function viewResult(examId) {
-            window.location.href = `student_exam_result.html?exam_id=${examId}`;
         }
 
         function showError(message) {
