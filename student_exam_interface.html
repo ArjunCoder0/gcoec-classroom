@@ -431,11 +431,24 @@
             }
             
             try {
+                // Stop timer immediately
                 clearInterval(timerInterval);
+                
+                // Disable submit button to prevent double submission
+                const submitBtn = document.querySelector('button[onclick="submitExam()"]');
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<i data-lucide="loader" class="w-4 h-4 animate-spin"></i> <span class="hidden sm:inline">Submitting...</span>';
+                    lucide.createIcons();
+                }
                 
                 const API_BASE_URL = window.location.hostname === 'localhost' 
                     ? 'http://localhost:5000' 
                     : 'https://pyq-automation-system.onrender.com';
+                
+                // Add timeout to fetch request (60 seconds for Render cold start)
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 60000);
                 
                 const response = await fetch(`${API_BASE_URL}/api/student/attempts/${attemptId}/submit`, {
                     method: 'POST',
@@ -446,20 +459,55 @@
                     body: JSON.stringify({
                         tab_switches: tabSwitches,
                         fullscreen_exits: fullscreenExits
-                    })
+                    }),
+                    signal: controller.signal
                 });
+                
+                clearTimeout(timeoutId);
                 
                 const data = await response.json();
                 
                 if (data.success) {
-                    alert('Exam submitted successfully!');
-                    window.location.href = 'student_exams.html';
+                    // Remove beforeunload warning
+                    window.onbeforeunload = null;
+                    
+                    // Show success message
+                    alert('Exam submitted successfully! Redirecting...');
+                    
+                    // Force redirect
+                    window.location.replace('student_exams.html');
                 } else {
                     alert('Error: ' + data.error);
+                    // Re-enable submit button on error
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = '<i data-lucide="check-circle" class="w-4 h-4"></i> <span class="hidden sm:inline">Submit</span>';
+                        lucide.createIcons();
+                    }
+                    // Restart timer on error
+                    startTimer();
                 }
             } catch (error) {
                 console.error('Error submitting exam:', error);
-                alert('Failed to submit exam');
+                
+                let errorMessage = 'Failed to submit exam. ';
+                if (error.name === 'AbortError') {
+                    errorMessage += 'Request timed out. The server might be starting up. Please try again in a moment.';
+                } else {
+                    errorMessage += 'Please try again.';
+                }
+                
+                alert(errorMessage);
+                
+                // Re-enable submit button on error
+                const submitBtn = document.querySelector('button[onclick="submitExam()"]');
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i data-lucide="check-circle" class="w-4 h-4"></i> <span class="hidden sm:inline">Submit</span>';
+                    lucide.createIcons();
+                }
+                // Restart timer on error
+                startTimer();
             }
         }
 
@@ -524,8 +572,11 @@
         }
 
         window.addEventListener('beforeunload', (e) => {
-            e.preventDefault();
-            e.returnValue = '';
+            // Only show warning if exam is still in progress
+            if (attemptId && timerInterval) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
         });
     </script>
 </body>
