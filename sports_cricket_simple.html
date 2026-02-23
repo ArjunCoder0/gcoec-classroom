@@ -289,6 +289,9 @@
                                 <h1 className="text-2xl font-bold text-gray-900">
                                     {match.teamA.name} vs {match.teamB.name}
                                 </h1>
+                                <p className="text-sm text-gray-600 mt-2">
+                                    <span className="font-semibold">{match.match_type || 'T20'}</span> • {match.venue} • {match.match_date}
+                                </p>
                             </div>
                             {match.match_status === "live" && <LiveBadge />}
                         </div>
@@ -323,6 +326,37 @@
                     </div>
 
                     {match.runProgress && match.runProgress.length > 0 && <RunProgressChart data={match.runProgress} />}
+                    
+                    {/* ✅ Extras Breakdown Display */}
+                    {match.extras && (
+                        <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-6 mb-6">
+                            <h3 className="text-xl font-bold text-gray-900 mb-4">Extras Breakdown</h3>
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                <div className="bg-white rounded-lg p-4 text-center shadow-sm">
+                                    <p className="text-gray-600 text-sm mb-2">Wide</p>
+                                    <p className="text-3xl font-bold text-yellow-600">{match.extras.wide || 0}</p>
+                                </div>
+                                <div className="bg-white rounded-lg p-4 text-center shadow-sm">
+                                    <p className="text-gray-600 text-sm mb-2">No Ball</p>
+                                    <p className="text-3xl font-bold text-orange-600">{match.extras.noball || 0}</p>
+                                </div>
+                                <div className="bg-white rounded-lg p-4 text-center shadow-sm">
+                                    <p className="text-gray-600 text-sm mb-2">Bye</p>
+                                    <p className="text-3xl font-bold text-blue-600">{match.extras.bye || 0}</p>
+                                </div>
+                                <div className="bg-white rounded-lg p-4 text-center shadow-sm">
+                                    <p className="text-gray-600 text-sm mb-2">Leg Bye</p>
+                                    <p className="text-3xl font-bold text-purple-600">{match.extras.legbye || 0}</p>
+                                </div>
+                            </div>
+                            <div className="mt-4 text-center bg-white rounded-lg p-3 shadow-sm">
+                                <p className="text-lg text-gray-700">
+                                    <span className="font-bold">Total Extras:</span> {(match.extras.wide || 0) + (match.extras.noball || 0) + (match.extras.bye || 0) + (match.extras.legbye || 0)} runs
+                                </p>
+                            </div>
+                        </div>
+                    )}
+                    
                     {match.batting && match.bowling && <Scorecard batting={match.batting} bowling={match.bowling} />}
                     {match.commentary && match.commentary.length > 0 && <Commentary data={match.commentary} />}
                 </div>
