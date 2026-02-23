@@ -329,8 +329,10 @@
             );
         };
 
-        // API Base URL
-        const API_URL = '/api/cricket';  // Always use absolute path from root
+        // API Base URL - Use Render backend in production
+        const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:5000/api/cricket'
+            : 'https://pyq-automation-system.onrender.com/api/cricket';
 
         // Main App
         const CricketSportsApp = () => {
@@ -339,42 +341,47 @@
             const [loading, setLoading] = useState(true);
             const [error, setError] = useState(null);
 
-            // Load matches from backend API
+            // Load matches from backend API or localStorage
             useEffect(() => {
                 const loadMatches = async () => {
                     try {
                         setError(null);
                         
-                        // Try backend API first
-                        console.log('Fetching from:', `${API_URL}/matches`);
-                        const response = await fetch(`${API_URL}/matches`);
+                        // Check if we're on localhost (backend available)
+                        const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
                         
-                        console.log('Response status:', response.status);
-                        console.log('Response headers:', response.headers.get('content-type'));
-                        
-                        if (response.ok) {
-                            const contentType = response.headers.get('content-type');
-                            if (contentType && contentType.includes('application/json')) {
-                                const result = await response.json();
-                                console.log('API Response:', result);
-                                
-                                if (result.success && result.data.length > 0) {
-                                    // Sort: live first, then upcoming, then completed
-                                    const sorted = result.data.sort((a, b) => {
-                                        const order = { live: 0, upcoming: 1, completed: 2 };
-                                        return order[a.match_status] - order[b.match_status];
-                                    });
-                                    setMatches(sorted);
-                                    setLoading(false);
-                                    return;
+                        if (isLocalhost) {
+                            // Try backend API first (only on localhost)
+                            console.log('Fetching from:', `${API_URL}/matches`);
+                            const response = await fetch(`${API_URL}/matches`);
+                            
+                            console.log('Response status:', response.status);
+                            console.log('Response headers:', response.headers.get('content-type'));
+                            
+                            if (response.ok) {
+                                const contentType = response.headers.get('content-type');
+                                if (contentType && contentType.includes('application/json')) {
+                                    const result = await response.json();
+                                    console.log('API Response:', result);
+                                    
+                                    if (result.success && result.data.length > 0) {
+                                        // Sort: live first, then upcoming, then completed
+                                        const sorted = result.data.sort((a, b) => {
+                                            const order = { live: 0, upcoming: 1, completed: 2 };
+                                            return order[a.match_status] - order[b.match_status];
+                                        });
+                                        setMatches(sorted);
+                                        setLoading(false);
+                                        return;
+                                    }
+                                } else {
+                                    console.warn('API returned non-JSON response');
                                 }
-                            } else {
-                                console.warn('API returned non-JSON response');
                             }
                         }
                         
-                        // Fallback to localStorage if API fails
-                        console.log('API failed, falling back to localStorage');
+                        // Use localStorage (production or API failed)
+                        console.log('Loading from localStorage');
                         const storedMatches = JSON.parse(localStorage.getItem('cricket_matches') || '[]');
                         
                         if (storedMatches.length > 0) {
@@ -401,7 +408,6 @@
                         } else {
                             setMatches([]);
                         }
-                        setError('Using cached data. Live updates may not be available.');
                     } finally {
                         setLoading(false);
                     }
