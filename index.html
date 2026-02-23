@@ -1,19 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GCOEC Classroom - Digital Learning Platform</title>
-
-    <!-- Google Fonts -->
+    <link rel="icon" type="image/png" href="gcoec-logo.png">
+    <title>GCOEC Digital Campus Portal - Government College of Engineering, Chandrapur</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap"
-        rel="stylesheet">
-
-    <!-- Tailwind CSS CDN -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
@@ -23,532 +17,630 @@
                 originalWarn.apply(console, args);
             };
         }
-        
         tailwind.config = {
-            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
-                        primary: {
-                            "50":"#eff6ff",
-                            "100":"#dbeafe",
-                            "200":"#bfdbfe",
-                            "300":"#93c5fd",
-                            "400":"#60a5fa",
-                            "500":"#3b82f6",
-                            "600":"#2563eb",
-                            "700":"#1d4ed8",
-                            "800":"#1e40af",
-                            "900":"#1e3a8a",
-                            "950":"#172554"
-                        }
-                    },
-                    fontFamily: {
-                        'body': [
-                            'Inter', 
-                            'ui-sans-serif', 
-                            'system-ui', 
-                            '-apple-system', 
-                            'system-ui', 
-                            'Segoe UI', 
-                            'Roboto', 
-                            'Helvetica Neue', 
-                            'Arial', 
-                            'Noto Sans', 
-                            'sans-serif', 
-                            'Apple Color Emoji', 
-                            'Segoe UI Emoji', 
-                            'Segoe UI Symbol', 
-                            'Noto Color Emoji'
-                        ],
-                        'sans': [
-                            'Inter', 
-                            'ui-sans-serif', 
-                            'system-ui', 
-                            '-apple-system', 
-                            'system-ui', 
-                            'Segoe UI', 
-                            'Roboto', 
-                            'Helvetica Neue', 
-                            'Arial', 
-                            'Noto Sans', 
-                            'sans-serif', 
-                            'Apple Color Emoji', 
-                            'Segoe UI Emoji', 
-                            'Segoe UI Symbol', 
-                            'Noto Color Emoji'
-                        ]
+                        navy: { 500: '#0B3D91', 600: '#093478', 700: '#072b5f', 800: '#052246', 900: '#03192d' },
+                        gold: { 500: '#f59e0b', 600: '#d97706' }
                     }
                 }
             }
         }
     </script>
-
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
-
     <style>
-        ::-webkit-scrollbar {
-            width: 8px;
+        body { font-family: 'Inter', sans-serif; }
+        .hero-bg { background: linear-gradient(135deg, #0B3D91 0%, #052246 100%); }
+        
+        /* Hover elevation for cards */
+        .hover-card {
+            transition: all 0.2s ease;
         }
-
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
+        .hover-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-
-        ::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #555;
-        }
-
-        /* Animations */
-        @keyframes slideInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Prevent image context menu and selection */
-        img.select-none {
-            -webkit-user-drag: none;
-            -khtml-user-drag: none;
-            -moz-user-drag: none;
-            -o-user-drag: none;
-            user-drag: none;
-        }
+        
+        /* Urgency borders */
+        .urgency-red { border-left: 4px solid #ef4444; }
+        .urgency-orange { border-left: 4px solid #f97316; }
+        .urgency-normal { border-left: 4px solid #e5e7eb; }
     </style>
 </head>
+<body class="bg-gray-50">
 
-<body class="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 min-h-screen font-sans">
+    <!-- Top Official Strip -->
+    <div class="bg-navy-900 text-white py-1.5 px-4 border-b-2 border-gold-500">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-1.5 text-[11px]">
+            <div class="flex items-center gap-3">
+                <span class="font-semibold tracking-wide">Government College of Engineering, Chandrapur</span>
+                <span class="hidden md:inline text-gray-400">|</span>
+                <span class="hidden md:inline text-gray-300">Official Campus Digital Platform</span>
+            </div>
+            <div class="flex items-center gap-3 text-gray-300">
+                <span class="hidden sm:inline">NAAC A+ Grade</span>
+                <span class="hidden sm:inline">|</span>
+                <span class="hidden sm:inline">Affiliated to DBATU</span>
+                <span>|</span>
+                <a href="tel:+917172255166" class="hover:text-white flex items-center gap-1 transition">
+                    <i data-lucide="phone" class="w-3 h-3"></i>
+                    <span>07172-255166</span>
+                </a>
+            </div>
+        </div>
+    </div>
 
-    <!-- Mobile Menu Toggle -->
-    <button id="menuToggle" class="md:hidden fixed top-4 left-4 z-50 bg-white p-2 rounded-lg shadow-lg">
-        <i data-lucide="menu" class="w-6 h-6 text-gray-700"></i>
-    </button>
-
-    <!-- Sidebar -->
-    <aside id="sidebar"
-        class="fixed inset-y-0 left-0 w-64 bg-gradient-to-b from-indigo-600 via-indigo-700 to-blue-700 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out z-[60] flex flex-col shadow-2xl">
-
-        <!-- Logo -->
-        <div class="p-6 border-b border-white/10 flex justify-between items-center">
-            <div class="flex items-center space-x-3">
-                <div class="bg-white/20 p-2.5 rounded-xl backdrop-blur-sm">
-                    <i data-lucide="graduation-cap" class="w-7 h-7 text-white"></i>
+    <!-- Main Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <!-- Logo & Portal Name -->
+                <div class="flex items-center gap-4">
+                    <img src="gcoec-logo.png" alt="GCOEC Logo" class="w-14 h-14 object-contain">
+                    <div>
+                        <h1 class="text-xl font-bold text-navy-900">GCOEC Digital Campus Portal</h1>
+                        <p class="text-xs text-gray-600">Academic & Administrative Management System</p>
+                    </div>
                 </div>
+
+                <!-- Login Buttons -->
+                <div class="flex items-center gap-3">
+                    <a href="student_login.html" class="bg-navy-600 text-white px-5 py-2 rounded font-semibold hover:bg-navy-700 transition text-sm">
+                        Student Login
+                    </a>
+                    <a href="#faculty" class="bg-gray-600 text-white px-5 py-2 rounded font-semibold hover:bg-gray-700 transition text-sm hidden md:inline-block">
+                        Faculty Login
+                    </a>
+                    <a href="help.html" class="text-gray-600 hover:text-navy-600 transition hidden lg:flex items-center gap-1">
+                        <i data-lucide="help-circle" class="w-5 h-5"></i>
+                        <span class="text-sm font-medium">Help</span>
+                    </a>
+                    <a href="#admin" class="text-gray-500 hover:text-gray-700 transition text-xs hidden xl:inline-block">
+                        Admin
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-bg text-white py-16 md:py-20">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="max-w-3xl">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 leading-tight tracking-tight">
+                    GCOEC Official Academic & Administrative Digital System
+                </h2>
+                <p class="text-lg md:text-xl text-blue-100 mb-8">
+                    Manage Academics, Examinations, Events & Campus Communication Seamlessly
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <a href="student_login.html" class="bg-white text-navy-600 px-8 py-3 rounded font-semibold hover:bg-gray-100 transition inline-flex items-center justify-center gap-2">
+                        <i data-lucide="user" class="w-5 h-5"></i>
+                        Student Login
+                    </a>
+                    <a href="#faculty" class="border-2 border-white text-white px-8 py-3 rounded font-semibold hover:bg-white/10 transition inline-flex items-center justify-center gap-2">
+                        <i data-lucide="users" class="w-5 h-5"></i>
+                        Faculty Login
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- System Status Bar -->
+    <section class="bg-green-50 border-b border-green-200 py-2">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex items-center justify-center gap-6 text-sm">
+                <div class="flex items-center gap-2 text-green-700">
+                    <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                    <span class="font-semibold">All Services Operational</span>
+                </div>
+                <span class="text-gray-400">|</span>
+                <div class="flex items-center gap-1.5 text-gray-600">
+                    <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+                    <span class="text-xs">Last Sync: <span class="font-semibold" id="lastSync">08:45 AM</span></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Announcements Section -->
+    <section class="py-12 bg-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex items-center justify-between mb-8">
+                <h2 class="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                    <i data-lucide="megaphone" class="w-6 h-6 text-navy-600"></i>
+                    Latest Official Announcements
+                </h2>
+                <a href="announcements.html" class="text-navy-600 font-semibold hover:text-navy-700 text-sm flex items-center gap-1">
+                    View All Notices
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </a>
+            </div>
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Announcement 1 -->
+                <div class="border border-gray-200 rounded p-5 hover:shadow-md transition">
+                    <div class="flex items-start justify-between mb-3">
+                        <h3 class="font-semibold text-gray-900">Mid-Semester Examination Schedule Released</h3>
+                        <span class="bg-red-100 text-red-700 text-xs font-bold px-2 py-1 rounded">New</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-3">The examination schedule for mid-semester exams has been published. Students are advised to check their timetables.</p>
+                    <div class="flex items-center justify-between text-xs text-gray-500">
+                        <span class="flex items-center gap-1">
+                            <i data-lucide="user" class="w-3 h-3"></i>
+                            Issued by: Exam Cell
+                        </span>
+                        <span class="flex items-center gap-1">
+                            <i data-lucide="calendar" class="w-3 h-3"></i>
+                            Feb 23, 2026
+                        </span>
+                    </div>
+                    <a href="announcements.html" class="text-navy-600 font-semibold text-sm mt-3 inline-block hover:text-navy-700">View Notice →</a>
+                </div>
+
+                <!-- Announcement 2 -->
+                <div class="border border-gray-200 rounded p-5 hover:shadow-md transition">
+                    <div class="flex items-start justify-between mb-3">
+                        <h3 class="font-semibold text-gray-900">Library Timings Extended for Exam Preparation</h3>
+                        <span class="bg-blue-100 text-blue-700 text-xs font-bold px-2 py-1 rounded">Important</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-3">Central library will remain open till 10 PM during examination period to facilitate student preparation.</p>
+                    <div class="flex items-center justify-between text-xs text-gray-500">
+                        <span class="flex items-center gap-1">
+                            <i data-lucide="user" class="w-3 h-3"></i>
+                            Issued by: Administration
+                        </span>
+                        <span class="flex items-center gap-1">
+                            <i data-lucide="calendar" class="w-3 h-3"></i>
+                            Feb 22, 2026
+                        </span>
+                    </div>
+                    <a href="announcements.html" class="text-navy-600 font-semibold text-sm mt-3 inline-block hover:text-navy-700">View Notice →</a>
+                </div>
+                <!-- Announcement 3 -->
+                <div class="border border-gray-200 rounded p-5 hover:shadow-md transition">
+                    <div class="flex items-start justify-between mb-3">
+                        <h3 class="font-semibold text-gray-900">Workshop on Machine Learning & AI</h3>
+                        <span class="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded">Event</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-3">Two-day workshop on ML & AI applications will be conducted by industry experts. Registration open.</p>
+                    <div class="flex items-center justify-between text-xs text-gray-500">
+                        <span class="flex items-center gap-1">
+                            <i data-lucide="user" class="w-3 h-3"></i>
+                            Issued by: CSE Department
+                        </span>
+                        <span class="flex items-center gap-1">
+                            <i data-lucide="calendar" class="w-3 h-3"></i>
+                            Feb 21, 2026
+                        </span>
+                    </div>
+                    <a href="announcements.html" class="text-navy-600 font-semibold text-sm mt-3 inline-block hover:text-navy-700">View Notice →</a>
+                </div>
+                <!-- Announcement 4 -->
+                <div class="border border-gray-200 rounded p-5 hover:shadow-md transition">
+                    <div class="flex items-start justify-between mb-3">
+                        <h3 class="font-semibold text-gray-900">Scholarship Application Deadline Extended</h3>
+                        <span class="bg-orange-100 text-orange-700 text-xs font-bold px-2 py-1 rounded">Notice</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-3">Last date for scholarship applications has been extended to March 5, 2026. Submit documents at admin office.</p>
+                    <div class="flex items-center justify-between text-xs text-gray-500">
+                        <span class="flex items-center gap-1">
+                            <i data-lucide="user" class="w-3 h-3"></i>
+                            Issued by: Scholarship Cell
+                        </span>
+                        <span class="flex items-center gap-1">
+                            <i data-lucide="calendar" class="w-3 h-3"></i>
+                            Feb 20, 2026
+                        </span>
+                    </div>
+                    <a href="announcements.html" class="text-navy-600 font-semibold text-sm mt-3 inline-block hover:text-navy-700">View Notice →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Upcoming Events & Exam Alerts -->
+    <section class="py-12 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Upcoming Campus Events -->
                 <div>
-                    <h1 class="text-white font-heading font-bold text-base leading-tight">GCOEC</h1>
-                    <p class="text-white/80 text-xs">Classroom</p>
-                </div>
-            </div>
-            <!-- Mobile Close Button -->
-            <button class="md:hidden text-white/80 hover:text-white transition p-1"
-                onclick="document.getElementById('sidebar').classList.add('-translate-x-full')">
-                <i data-lucide="x" class="w-6 h-6"></i>
-            </button>
-        </div>
-
-        <!-- Navigation -->
-        <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
-            <div class="mb-4">
-                <p class="text-white/50 text-xs font-semibold uppercase tracking-wider px-3 mb-3">Main Menu</p>
-
-                <a href="#" class="nav-item group flex items-center space-x-3 px-4 py-3 rounded-xl text-white bg-white/20 backdrop-blur-sm transition-all duration-200 hover:bg-white/30">
-                    <i data-lucide="layout-grid" class="w-5 h-5"></i>
-                    <span class="font-semibold text-sm">Dashboard</span>
-                </a>
-
-                <!-- Classroom Link - Only shown when student is logged in -->
-                <a href="student_dashboard.html" id="classroomLink"
-                    class="nav-item group flex items-center space-x-3 px-4 py-3 rounded-xl text-white hover:bg-white/10 transition-all duration-200 mt-2 hidden">
-                    <i data-lucide="book-open" class="w-5 h-5"></i>
-                    <span class="font-medium text-sm">My Classroom</span>
-                </a>
-                
-                <!-- Student Login Link - Only shown when NOT logged in -->
-                <a href="student_login.html" id="studentLoginLink"
-                    class="nav-item group flex items-center space-x-3 px-4 py-3 rounded-xl text-white hover:bg-white/10 transition-all duration-200 mt-2">
-                    <i data-lucide="user-circle" class="w-5 h-5"></i>
-                    <span class="font-medium text-sm">Student Login</span>
-                </a>
-                
-                <!-- Logout Link - Only shown when logged in -->
-                <button onclick="studentLogout()" id="logoutLink"
-                    class="nav-item group flex items-center space-x-3 px-4 py-3 rounded-xl text-white hover:bg-red-500/20 transition-all duration-200 mt-2 hidden w-full text-left">
-                    <i data-lucide="log-out" class="w-5 h-5"></i>
-                    <span class="font-medium text-sm">Logout</span>
-                </button>
-                
-                <a href="https://pyq-portal.pages.dev" target="_blank"
-                    class="nav-item group flex items-center space-x-3 px-4 py-3 rounded-xl text-white hover:bg-white/10 transition-all duration-200 mt-2">
-                    <i data-lucide="file-text" class="w-5 h-5"></i>
-                    <span class="font-medium text-sm">PYQ Portal</span>
-                </a>
-            </div>
-
-            <div class="pt-4 border-t border-white/10">
-                <a href="help.html"
-                    class="nav-item group flex items-center space-x-3 px-4 py-3 rounded-xl text-white hover:bg-white/10 transition-all duration-200">
-                    <i data-lucide="help-circle" class="w-5 h-5"></i>
-                    <span class="font-medium text-sm">Help & Support</span>
-                </a>
-            </div>
-        </nav>
-
-        <!-- Website Statistics -->
-        <div class="p-4 m-4 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20">
-            <p class="text-xs text-white/70 mb-3 font-semibold flex items-center uppercase tracking-wide">
-                <i data-lucide="bar-chart-3" class="w-3.5 h-3.5 mr-1.5"></i>
-                Website Statistics
-            </p>
-            <div class="space-y-3">
-                <div class="flex justify-between items-center">
-                    <span class="text-xs text-white/80 flex items-center">
-                        <i data-lucide="users" class="w-3.5 h-3.5 mr-1.5"></i>
-                        Total Visits
-                    </span>
-                    <span class="font-bold text-white text-lg" id="totalVisits">-</span>
-                </div>
-                <div class="flex justify-between items-center">
-                    <span class="text-xs text-white/80 flex items-center">
-                        <i data-lucide="user-check" class="w-3.5 h-3.5 mr-1.5"></i>
-                        Unique Visitors
-                    </span>
-                    <span class="font-bold text-white text-lg" id="uniqueVisitors">-</span>
-                </div>
-            </div>
-        </div>
-
-       
-    </aside>
-
-    <!-- Main Content -->
-    <main class="md:ml-64 min-h-screen">
-
-        <!-- Header -->
-        <header class="bg-white/70 backdrop-blur-md border-b border-gray-200/50 sticky top-0 z-30">
-            <div class="px-6 py-4 pl-16 md:pl-6">
-                <div class="flex items-center justify-between">
-                    <div class="flex-1 max-w-xl">
-                        <div class="relative">
-                            <i data-lucide="search"
-                                class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"></i>
-                            <input type="text" placeholder="Search classes, assignments..."
-                                class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition text-sm md:text-base">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                        <i data-lucide="calendar" class="w-6 h-6 text-green-600"></i>
+                        Upcoming Campus Events
+                    </h2>
+                    <div class="space-y-4">
+                        <div class="bg-white border border-gray-200 rounded p-4 hover:shadow-md transition">
+                            <div class="flex items-start justify-between mb-2">
+                                <h3 class="font-semibold text-gray-900">Annual Technical Fest - TechnoVision 2026</h3>
+                                <span class="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded whitespace-nowrap">5 Days Left</span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-2">Three-day technical festival with coding competitions, robotics, and project exhibitions.</p>
+                            <div class="flex items-center gap-4 text-xs text-gray-500">
+                                <span class="flex items-center gap-1">
+                                    <i data-lucide="calendar" class="w-3 h-3"></i>
+                                    Feb 28 - Mar 2, 2026
+                                </span>
+                                <span class="flex items-center gap-1">
+                                    <i data-lucide="map-pin" class="w-3 h-3"></i>
+                                    Main Campus
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="flex items-center space-x-4 ml-2 md:ml-6">
-                        <div class="text-right hidden sm:block">
-                            <p class="text-sm font-semibold text-gray-800 flex items-center gap-2">
-                                <i data-lucide="user-circle" class="w-4 h-4"></i>
-                                Hello, Student
-                            </p>
-                            <p class="text-xs text-gray-500">Welcome to GCOEC!</p>
+                        <div class="bg-white border border-gray-200 rounded p-4 hover:shadow-md transition">
+                            <div class="flex items-start justify-between mb-2">
+                                <h3 class="font-semibold text-gray-900">Guest Lecture on Cloud Computing</h3>
+                                <span class="bg-blue-100 text-blue-700 text-xs font-bold px-2 py-1 rounded whitespace-nowrap">Tomorrow</span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-2">Industry expert from Microsoft will deliver lecture on cloud architecture and DevOps.</p>
+                            <div class="flex items-center gap-4 text-xs text-gray-500">
+                                <span class="flex items-center gap-1">
+                                    <i data-lucide="calendar" class="w-3 h-3"></i>
+                                    Feb 24, 2026 | 2:00 PM
+                                </span>
+                                <span class="flex items-center gap-1">
+                                    <i data-lucide="map-pin" class="w-3 h-3"></i>
+                                    Auditorium
+                                </span>
+                            </div>
                         </div>
-                        <a href="help.html"
-                            class="inline-flex items-center bg-blue-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-600 transition shadow-md">
-                            <i data-lucide="help-circle" class="w-5 h-5 mr-2"></i>
-                            Help & Support
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </header>
-
-        <!-- Page Content -->
-        <div class="p-6 pt-8 md:pt-6 max-w-7xl mx-auto">
-
-            <!-- Hero Welcome Card -->
-            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 md:p-10 mb-6 mt-4 md:mt-0 shadow-lg border border-blue-100 relative overflow-hidden">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-                    <!-- Left Content -->
-                    <div class="order-1 lg:order-1 text-left z-10">
-                        <div class="inline-flex items-center bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-semibold mb-4">
-                            <i data-lucide="sparkles" class="w-3 h-3 mr-1"></i>
-                            Digital Classroom Platform
-                        </div>
-                        <h2 class="text-2xl md:text-3xl lg:text-4xl font-heading font-bold text-gray-800 mb-4 leading-tight">
-                            Access your classes, assignments, and study materials — all in one place.
-                        </h2>
-                        <p class="text-gray-600 text-sm md:text-base mb-6 leading-relaxed">
-                            Complete digital learning platform for GCOEC students and faculty.<br>
-                            <span class="font-semibold text-indigo-600">Classes • Assignments • Notes • Grades</span>
-                        </p>
-                        <div class="flex flex-col sm:flex-row gap-3" id="heroButtons">
-                            <!-- Student Login Button - Hidden when logged in -->
-                            <a href="student_login.html" id="heroStudentLoginBtn"
-                                class="inline-flex items-center justify-center bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 text-sm ring-2 ring-blue-400 ring-opacity-50">
-                                <i data-lucide="user-circle" class="w-5 h-5 mr-2"></i>
-                                Student Login
-                            </a>
-                            <!-- My Classroom Button - Shown when logged in -->
-                            <a href="student_dashboard.html" id="heroClassroomBtn"
-                                class="inline-flex items-center justify-center bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 text-sm ring-2 ring-blue-400 ring-opacity-50 hidden">
-                                <i data-lucide="book-open" class="w-5 h-5 mr-2"></i>
-                                My Classroom
-                            </a>
-                            <a href="https://pyq-portal.pages.dev" target="_blank"
-                                class="inline-flex items-center justify-center bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-green-600 hover:to-green-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 text-sm">
-                                <i data-lucide="file-text" class="w-5 h-5 mr-2"></i>
-                                PYQ Portal
+                        <div class="bg-white border border-gray-200 rounded p-4 hover:shadow-md transition">
+                            <div class="flex items-start justify-between mb-2">
+                                <h3 class="font-semibold text-gray-900">Sports Week 2026</h3>
+                                <span class="bg-purple-100 text-purple-700 text-xs font-bold px-2 py-1 rounded whitespace-nowrap">Next Week</span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-2">Annual sports week with inter-department competitions in cricket, football, and athletics.</p>
+                            <div class="flex items-center gap-4 text-xs text-gray-500">
+                                <span class="flex items-center gap-1">
+                                    <i data-lucide="calendar" class="w-3 h-3"></i>
+                                    Mar 1-7, 2026
+                                </span>
+                                <span class="flex items-center gap-1">
+                                    <i data-lucide="map-pin" class="w-3 h-3"></i>
+                                    Sports Ground
+                                </span>
+                            </div>
+                            <a href="sports_cricket_simple.html" class="text-green-600 font-semibold text-sm mt-3 inline-flex items-center gap-1 hover:text-green-700">
+                                View Live Cricket Scores
+                                <i data-lucide="arrow-right" class="w-3 h-3"></i>
                             </a>
                         </div>
                     </div>
-                    
-                    <!-- Right 3D Image - Mobile: at end, Desktop: right side -->
-                    <div class="order-2 lg:order-2 flex justify-center lg:justify-end">
-                        <div class="relative w-72 h-72 md:w-80 md:h-80 lg:w-96 lg:h-96">
-                            <!-- Background glow effect -->
-                            <div class="absolute inset-0 bg-gradient-to-br from-blue-200 to-indigo-200 rounded-full blur-3xl opacity-30 scale-110"></div>
-                            <!-- 3D Image -->
-                            <img src="isometric-composition-with-cheerful-college-graduates-books-blue-cap.png" 
-                                 alt="GCOEC Students Graduation" 
-                                 class="w-full h-full object-contain relative z-10 select-none"
-                                 style="filter: drop-shadow(0 15px 35px rgba(79, 70, 229, 0.2)); user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; -webkit-touch-callout: none;"
-                                 oncontextmenu="return false;"
-                                 ondragstart="return false;"
-                                 draggable="false">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Features Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                <!-- Feature 1: Digital Classes -->
-                <div class="bg-white rounded-xl p-5 shadow-md border border-gray-100 hover:shadow-lg transition">
-                    <div class="flex items-start gap-3">
-                        <div class="bg-blue-100 p-2.5 rounded-lg">
-                            <i data-lucide="book-open" class="w-5 h-5 text-blue-600"></i>
-                        </div>
-                        <div class="flex-1">
-                            <h4 class="font-bold text-gray-800 mb-1">Digital Classes</h4>
-                            <p class="text-xs text-gray-600 leading-relaxed">Access notes, materials, and resources for all your enrolled classes</p>
-                        </div>
-                    </div>
                 </div>
 
-                <!-- Feature 2: Assignment System -->
-                <div class="bg-white rounded-xl p-5 shadow-md border border-gray-100 hover:shadow-lg transition">
-                    <div class="flex items-start gap-3">
-                        <div class="bg-green-100 p-2.5 rounded-lg">
-                            <i data-lucide="clipboard-list" class="w-5 h-5 text-green-600"></i>
+                <!-- Upcoming Examination Schedule -->
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                        <i data-lucide="file-text" class="w-6 h-6 text-red-600"></i>
+                        Upcoming Examination Schedule
+                    </h2>
+                    <div class="space-y-4">
+                        <div class="bg-white border-l-4 border-red-500 rounded p-4 shadow-sm">
+                            <div class="flex items-start justify-between mb-2">
+                                <h3 class="font-semibold text-gray-900">Mid-Semester Examinations</h3>
+                                <span class="bg-red-100 text-red-700 text-xs font-bold px-2 py-1 rounded whitespace-nowrap">12 Days Left</span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-3">Mid-semester exams for all departments. Check your individual timetable on student portal.</p>
+                            <div class="flex items-center gap-4 text-xs text-gray-500 mb-3">
+                                <span class="flex items-center gap-1">
+                                    <i data-lucide="calendar" class="w-3 h-3"></i>
+                                    Mar 7-14, 2026
+                                </span>
+                                <span class="flex items-center gap-1">
+                                    <i data-lucide="clock" class="w-3 h-3"></i>
+                                    10:00 AM - 1:00 PM
+                                </span>
+                            </div>
+                            <a href="student_exams.html" class="text-navy-600 font-semibold text-sm hover:text-navy-700">View Exam Schedule →</a>
                         </div>
-                        <div class="flex-1">
-                            <h4 class="font-bold text-gray-800 mb-1">Assignment Submission</h4>
-                            <p class="text-xs text-gray-600 leading-relaxed">Submit assignments online and track your progress with grades</p>
+                        <div class="bg-white border-l-4 border-orange-500 rounded p-4 shadow-sm">
+                            <div class="flex items-start justify-between mb-2">
+                                <h3 class="font-semibold text-gray-900">Practical Examinations - Final Year</h3>
+                                <span class="bg-orange-100 text-orange-700 text-xs font-bold px-2 py-1 rounded whitespace-nowrap">3 Days Left</span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-3">Final year practical exams for all branches. Report to respective labs 15 minutes early.</p>
+                            <div class="flex items-center gap-4 text-xs text-gray-500 mb-3">
+                                <span class="flex items-center gap-1">
+                                    <i data-lucide="calendar" class="w-3 h-3"></i>
+                                    Feb 26-28, 2026
+                                </span>
+                                <span class="flex items-center gap-1">
+                                    <i data-lucide="clock" class="w-3 h-3"></i>
+                                    9:00 AM onwards
+                                </span>
+                            </div>
+                            <a href="student_exams.html" class="text-navy-600 font-semibold text-sm hover:text-navy-700">View Exam Schedule →</a>
                         </div>
-                    </div>
-                </div>
-
-                <!-- Feature 3: Grade Tracking -->
-                <div class="bg-white rounded-xl p-5 shadow-md border border-gray-100 hover:shadow-lg transition">
-                    <div class="flex items-start gap-3">
-                        <div class="bg-purple-100 p-2.5 rounded-lg">
-                            <i data-lucide="award" class="w-5 h-5 text-purple-600"></i>
+                        <div class="bg-white border-l-4 border-yellow-500 rounded p-4 shadow-sm">
+                            <div class="flex items-start justify-between mb-2">
+                                <h3 class="font-semibold text-gray-900">End-Semester Examinations</h3>
+                                <span class="bg-yellow-100 text-yellow-700 text-xs font-bold px-2 py-1 rounded whitespace-nowrap">45 Days Left</span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-3">Final semester exams for all years. Detailed schedule will be announced soon.</p>
+                            <div class="flex items-center gap-4 text-xs text-gray-500 mb-3">
+                                <span class="flex items-center gap-1">
+                                    <i data-lucide="calendar" class="w-3 h-3"></i>
+                                    Apr 8-22, 2026
+                                </span>
+                                <span class="flex items-center gap-1">
+                                    <i data-lucide="clock" class="w-3 h-3"></i>
+                                    TBA
+                                </span>
+                            </div>
+                            <a href="student_exams.html" class="text-navy-600 font-semibold text-sm hover:text-navy-700">View Exam Schedule →</a>
                         </div>
-                        <div class="flex-1">
-                            <h4 class="font-bold text-gray-800 mb-1">Grade Management</h4>
-                            <p class="text-xs text-gray-600 leading-relaxed">View grades, feedback, and academic progress in real-time</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Quick Access Cards -->
-            <div class="grid md:grid-cols-1 gap-6 mb-8">
-                <!-- Student Access -->
-                <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6 text-white shadow-xl">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                            <i data-lucide="user-circle" class="w-6 h-6"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-bold">Student Portal</h3>
-                            <p class="text-blue-100 text-sm">Access your digital classroom</p>
-                        </div>
-                    </div>
-                    <p class="text-blue-100 mb-4 text-sm">Join classes, submit assignments, view grades, and access study materials.</p>
-                    <div class="flex flex-col sm:flex-row gap-3">
-                        <!-- Student Login Button - Hidden when logged in -->
-                        <a href="student_login.html" id="portalStudentLoginBtn" class="inline-flex items-center bg-white text-blue-600 px-4 py-2 rounded-lg font-semibold hover:bg-blue-50 transition">
-                            Login as Student
-                            <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
-                        </a>
-                        <!-- My Classroom Button - Shown when logged in -->
-                        <a href="student_dashboard.html" id="portalClassroomBtn" class="inline-flex items-center bg-white text-blue-600 px-4 py-2 rounded-lg font-semibold hover:bg-blue-50 transition hidden">
-                            My Classroom
-                            <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
-                        </a>
-                        <a href="https://pyq-portal.pages.dev" target="_blank" class="inline-flex items-center bg-white/20 text-white px-4 py-2 rounded-lg font-semibold hover:bg-white/30 transition">
-                            Visit PYQ Portal
-                            <i data-lucide="external-link" class="w-4 h-4 ml-2"></i>
-                        </a>
                     </div>
                 </div>
             </div>
         </div>
+    </section>
 
-        <!-- Footer -->
-        <footer class="mt-12 border-t border-gray-200 pt-8 pb-4">
-            <div class="flex flex-col items-center justify-center">
-                <p class="text-gray-500 text-sm mb-4 font-medium">Connect with Developer</p>
-                <div class="flex space-x-6">
-                    <a href="https://www.instagram.com/the_arjunsagar/" target="_blank"
-                        class="text-gray-400 hover:text-pink-600 transition-colors transform hover:scale-110">
-                        <i data-lucide="instagram" class="w-8 h-10"></i>
-                    </a>
-                    <a href="https://www.linkedin.com/in/arjun-sagar10/" target="_blank"
-                        class="text-gray-400 hover:text-blue-700 transition-colors transform hover:scale-110">
-                        <i data-lucide="linkedin" class="w-8 h-10"></i>
-                    </a>
-                    <a href="https://github.com/ArjunCoder0" target="_blank"
-                        class="text-gray-400 hover:text-gray-900 transition-colors transform hover:scale-110">
-                        <i data-lucide="github" class="w-8 h-10"></i>
-                    </a>
+    <!-- Portal Features Section -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-gray-900 mb-3">Portal Modules</h2>
+                <p class="text-gray-600">Comprehensive digital infrastructure for academic and administrative operations</p>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Module 1 -->
+                <div class="border border-gray-200 rounded p-6 hover-card">
+                    <div class="bg-navy-100 w-12 h-12 rounded flex items-center justify-center mb-4">
+                        <i data-lucide="book-open" class="w-6 h-6 text-navy-600"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Academic Management</h3>
+                    <p class="text-sm text-gray-600">Manage courses, class schedules, study materials, and academic resources efficiently.</p>
                 </div>
-                <div class="mt-6 text-center">
-                    <p class="text-gray-400 text-xs mb-2">Government College of Engineering Chandrapur</p>
-                    <p class="text-gray-400 text-xs">Digital Classroom Platform © 2026</p>
+                <!-- Module 2 -->
+                <div class="border border-gray-200 rounded p-6 hover-card">
+                    <div class="bg-navy-100 w-12 h-12 rounded flex items-center justify-center mb-4">
+                        <i data-lucide="clipboard-list" class="w-6 h-6 text-navy-600"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Assignment Submission</h3>
+                    <p class="text-sm text-gray-600">Online assignment submission system with deadline tracking and grade management.</p>
+                </div>
+                <!-- Module 3 -->
+                <div class="border border-gray-200 rounded p-6 hover-card">
+                    <div class="bg-navy-100 w-12 h-12 rounded flex items-center justify-center mb-4">
+                        <i data-lucide="user-check" class="w-6 h-6 text-navy-600"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Attendance Tracking</h3>
+                    <p class="text-sm text-gray-600">Real-time attendance monitoring with automated reports and notifications for students.</p>
+                </div>
+                <!-- Module 4 -->
+                <div class="border border-gray-200 rounded p-6 hover-card">
+                    <div class="bg-navy-100 w-12 h-12 rounded flex items-center justify-center mb-4">
+                        <i data-lucide="file-text" class="w-6 h-6 text-navy-600"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Examination Control</h3>
+                    <p class="text-sm text-gray-600">Complete examination management including scheduling, hall tickets, and result processing.</p>
+                </div>
+                <!-- Module 5 -->
+                <div class="border border-gray-200 rounded p-6 hover-card">
+                    <div class="bg-navy-100 w-12 h-12 rounded flex items-center justify-center mb-4">
+                        <i data-lucide="bar-chart-2" class="w-6 h-6 text-navy-600"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Results & Reports</h3>
+                    <p class="text-sm text-gray-600">Instant access to examination results, grade cards, and comprehensive academic reports.</p>
+                </div>
+                <!-- Module 6 -->
+                <div class="border border-gray-200 rounded p-6 hover-card">
+                    <div class="bg-navy-100 w-12 h-12 rounded flex items-center justify-center mb-4">
+                        <i data-lucide="archive" class="w-6 h-6 text-navy-600"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">PYQ Repository</h3>
+                    <p class="text-sm text-gray-600">Comprehensive collection of previous year question papers organized by subject and year.</p>
+                </div>
+                <!-- Module 7 - Sports Section -->
+                <a href="sports_cricket_simple.html" class="border border-gray-200 rounded p-6 hover-card block">
+                    <div className="bg-green-100 w-12 h-12 rounded flex items-center justify-center mb-4">
+                        <i data-lucide="trophy" class="w-6 h-6 text-green-600"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Cricket Sports</h3>
+                    <p class="text-sm text-gray-600">Live cricket scores, match updates, leaderboards, and tournament standings for GCOEC Premier League.</p>
+                    <div class="mt-3 flex items-center gap-1 text-green-600 font-semibold text-sm">
+                        <span>View Live Matches</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Use This Portal Section -->
+    <section class="py-20 bg-navy-900 text-white border-t-2 border-gold-500">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-3">Designed for Students, Faculty & Administration</h2>
+                <p class="text-blue-200/90">A unified platform serving the entire academic ecosystem</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- For Students -->
+                <div class="bg-white/10 backdrop-blur-sm rounded p-6 border border-white/20">
+                    <div class="bg-blue-500 w-12 h-12 rounded flex items-center justify-center mb-4">
+                        <i data-lucide="graduation-cap" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">For Students</h3>
+                    <ul class="space-y-2 text-sm text-blue-100">
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="check" class="w-4 h-4 mt-0.5 flex-shrink-0"></i>
+                            <span>Access study materials and lecture notes</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="check" class="w-4 h-4 mt-0.5 flex-shrink-0"></i>
+                            <span>Track assignment deadlines and submissions</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="check" class="w-4 h-4 mt-0.5 flex-shrink-0"></i>
+                            <span>View attendance and academic progress</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="check" class="w-4 h-4 mt-0.5 flex-shrink-0"></i>
+                            <span>Download exam schedules and results</span>
+                        </li>
+                    </ul>
+                </div>
+                <!-- For Faculty -->
+                <div class="bg-white/10 backdrop-blur-sm rounded p-6 border border-white/20">
+                    <div class="bg-green-500 w-12 h-12 rounded flex items-center justify-center mb-4">
+                        <i data-lucide="users" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">For Faculty</h3>
+                    <ul class="space-y-2 text-sm text-blue-100">
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="check" class="w-4 h-4 mt-0.5 flex-shrink-0"></i>
+                            <span>Manage courses and upload content</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="check" class="w-4 h-4 mt-0.5 flex-shrink-0"></i>
+                            <span>Create and grade assignments online</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="check" class="w-4 h-4 mt-0.5 flex-shrink-0"></i>
+                            <span>Mark attendance and generate reports</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="check" class="w-4 h-4 mt-0.5 flex-shrink-0"></i>
+                            <span>Communicate with students efficiently</span>
+                        </li>
+                    </ul>
+                </div>
+                <!-- For Administration -->
+                <div class="bg-white/10 backdrop-blur-sm rounded p-6 border border-white/20">
+                    <div class="bg-purple-500 w-12 h-12 rounded flex items-center justify-center mb-4">
+                        <i data-lucide="shield" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">For Administration</h3>
+                    <ul class="space-y-2 text-sm text-blue-100">
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="check" class="w-4 h-4 mt-0.5 flex-shrink-0"></i>
+                            <span>Control examination schedules and processes</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="check" class="w-4 h-4 mt-0.5 flex-shrink-0"></i>
+                            <span>Publish official notices and announcements</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="check" class="w-4 h-4 mt-0.5 flex-shrink-0"></i>
+                            <span>Generate comprehensive analytics reports</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="check" class="w-4 h-4 mt-0.5 flex-shrink-0"></i>
+                            <span>Manage user access and permissions</span>
+                        </li>
+                    </ul>
                 </div>
             </div>
-        </footer>
-    </main>
+        </div>
+    </section>
+
+    <!-- Security & System Info -->
+    <section class="py-6 bg-gray-100">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-700">
+                <div class="flex items-center gap-1.5">
+                    <i data-lucide="shield-check" class="w-4 h-4 text-green-600"></i>
+                    <span class="font-semibold">Secure Login</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <i data-lucide="lock" class="w-4 h-4 text-blue-600"></i>
+                    <span class="font-semibold">Data Encrypted</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <i data-lucide="user-cog" class="w-4 h-4 text-purple-600"></i>
+                    <span class="font-semibold">Role-Based Access</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <i data-lucide="server" class="w-4 h-4 text-gray-600"></i>
+                    <span class="font-semibold">Version 1.0</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <i data-lucide="clock" class="w-4 h-4 text-orange-600"></i>
+                    <span class="text-xs">Last Updated: <span class="font-semibold">Feb 23, 2026</span></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-navy-900 text-white py-10">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <!-- About GCOEC -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">About GCOEC</h3>
+                    <p class="text-sm text-gray-300 mb-3">Government College of Engineering, Chandrapur is a premier technical institution committed to academic excellence and innovation.</p>
+                    <div class="flex items-center gap-2 text-sm text-gray-300">
+                        <i data-lucide="award" class="w-4 h-4"></i>
+                        <span>NAAC A+ Accredited</span>
+                    </div>
+                </div>
+                <!-- Quick Links -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2 text-sm text-gray-300">
+                        <li><a href="student_login.html" class="hover:text-white transition">Student Login</a></li>
+                        <li><a href="#faculty" class="hover:text-white transition">Faculty Login</a></li>
+                        <li><a href="announcements.html" class="hover:text-white transition">Announcements</a></li>
+                        <li><a href="student_exams.html" class="hover:text-white transition">Exam Schedule</a></li>
+                        <li><a href="https://pyq-portal.pages.dev" target="_blank" class="hover:text-white transition">PYQ Portal</a></li>
+                    </ul>
+                </div>
+                <!-- Contact Information -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Contact Information</h3>
+                    <ul class="space-y-2 text-sm text-gray-300">
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="map-pin" class="w-4 h-4 mt-0.5 flex-shrink-0"></i>
+                            <span>Chandrapur, Maharashtra, India</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="phone" class="w-4 h-4 mt-0.5 flex-shrink-0"></i>
+                            <span>07172-255166</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="mail" class="w-4 h-4 mt-0.5 flex-shrink-0"></i>
+                            <span>info@gcoec.ac.in</span>
+                        </li>
+                    </ul>
+                </div>
+                <!-- Portal Support -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Portal Support</h3>
+                    <ul class="space-y-2 text-sm text-gray-300">
+                        <li><a href="help.html" class="hover:text-white transition">Help & FAQ</a></li>
+                        <li><a href="support.html" class="hover:text-white transition">Technical Support</a></li>
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="mail" class="w-4 h-4 mt-0.5 flex-shrink-0"></i>
+                            <span>portal.support@gcoec.ac.in</span>
+                        </li>
+                    </ul>
+                    <div class="mt-4">
+                        <p class="text-xs text-gray-400 mb-2">Connect with Developer</p>
+                        <div class="flex gap-3">
+                            <a href="https://www.linkedin.com/in/arjun-sagar10/" target="_blank" class="text-gray-400 hover:text-white transition">
+                                <i data-lucide="linkedin" class="w-5 h-5"></i>
+                            </a>
+                            <a href="https://github.com/ArjunCoder0" target="_blank" class="text-gray-400 hover:text-white transition">
+                                <i data-lucide="github" class="w-5 h-5"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Bottom Footer -->
+            <div class="border-t border-gray-700 pt-6 text-center bg-navy-950/50 -mx-4 px-4 -mb-10 pb-10 mt-8">
+                <p class="text-sm text-gray-300 mb-1">© 2026 Government College of Engineering, Chandrapur</p>
+                <p class="text-xs text-gray-400">Developed & Maintained by GCOEC IT Cell | Digital Campus Platform</p>
+            </div>
+        </div>
+    </footer>
 
     <script>
-        // API Configuration
-        const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-            ? 'http://localhost:5000/api'
-            : 'https://pyq-automation-system.onrender.com/api';
-
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
-            
-            // Mobile menu toggle
-            const menuToggle = document.getElementById('menuToggle');
-            const sidebar = document.getElementById('sidebar');
-            
-            menuToggle.addEventListener('click', () => {
-                sidebar.classList.toggle('-translate-x-full');
-            });
-
-            // Close sidebar on mobile when clicking outside
-            document.addEventListener('click', (e) => {
-                if (window.innerWidth < 768 &&
-                    !sidebar.contains(e.target) &&
-                    !menuToggle.contains(e.target) &&
-                    !sidebar.classList.contains('-translate-x-full')) {
-                    sidebar.classList.add('-translate-x-full');
-                }
-            });
-
-            // Check student authentication status
-            checkStudentAuth();
-
-            // Track visit and update real website statistics
-            trackVisit();
         });
-
-        // Check if student is logged in
-        function checkStudentAuth() {
-            const studentToken = localStorage.getItem('studentToken');
-            
-            // Sidebar elements
-            const classroomLink = document.getElementById('classroomLink');
-            const studentLoginLink = document.getElementById('studentLoginLink');
-            const logoutLink = document.getElementById('logoutLink');
-            
-            // Hero section elements
-            const heroStudentLoginBtn = document.getElementById('heroStudentLoginBtn');
-            const heroClassroomBtn = document.getElementById('heroClassroomBtn');
-            
-            // Portal section elements
-            const portalStudentLoginBtn = document.getElementById('portalStudentLoginBtn');
-            const portalClassroomBtn = document.getElementById('portalClassroomBtn');
-            
-            if (studentToken) {
-                // Student is logged in - show classroom links and logout, hide login links
-                if (classroomLink) classroomLink.classList.remove('hidden');
-                if (logoutLink) logoutLink.classList.remove('hidden');
-                if (studentLoginLink) studentLoginLink.classList.add('hidden');
-                
-                // Hero section
-                if (heroStudentLoginBtn) heroStudentLoginBtn.classList.add('hidden');
-                if (heroClassroomBtn) heroClassroomBtn.classList.remove('hidden');
-                
-                // Portal section
-                if (portalStudentLoginBtn) portalStudentLoginBtn.classList.add('hidden');
-                if (portalClassroomBtn) portalClassroomBtn.classList.remove('hidden');
-            } else {
-                // Student is NOT logged in - hide classroom links and logout, show login links
-                if (classroomLink) classroomLink.classList.add('hidden');
-                if (logoutLink) logoutLink.classList.add('hidden');
-                if (studentLoginLink) studentLoginLink.classList.remove('hidden');
-                
-                // Hero section
-                if (heroStudentLoginBtn) heroStudentLoginBtn.classList.remove('hidden');
-                if (heroClassroomBtn) heroClassroomBtn.classList.add('hidden');
-                
-                // Portal section
-                if (portalStudentLoginBtn) portalStudentLoginBtn.classList.remove('hidden');
-                if (portalClassroomBtn) portalClassroomBtn.classList.add('hidden');
-            }
-        }
-
-        // Logout function
-        function studentLogout() {
-            localStorage.removeItem('studentToken');
-            localStorage.removeItem('studentInfo');
-            // Update UI immediately
-            checkStudentAuth();
-            // Show success message
-            alert('Logged out successfully!');
-        }
-
-        // Track visitor on page load - Real API implementation
-        async function trackVisit() {
-            try {
-                console.log('Attempting to track visit to:', `${API_BASE_URL}/visit`);
-                
-                const response = await fetch(`${API_BASE_URL}/visit`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                console.log('Response status:', response.status);
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                const data = await response.json();
-                console.log('Response data:', data);
-
-                if (data.success && !data.is_bot) {
-                    document.getElementById('totalVisits').textContent = data.total_visits.toLocaleString();
-                    document.getElementById('uniqueVisitors').textContent = data.unique_visitors.toLocaleString();
-                    console.log('Statistics updated:', data.total_visits, data.unique_visitors);
-                } else {
-                    console.log('Bot detected or API call failed:', data);
-                }
-            } catch (error) {
-                console.error('Error tracking visit:', error);
-                // Show error in UI for debugging
-                document.getElementById('totalVisits').textContent = 'Error';
-                document.getElementById('uniqueVisitors').textContent = 'Error';
-            }
-        }
     </script>
 </body>
 </html>

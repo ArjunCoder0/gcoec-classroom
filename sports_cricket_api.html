@@ -1,0 +1,473 @@
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="gcoec-logo.png">
+    <title>GCOEC Sports - Cricket | Government College of Engineering, Chandrapur</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/framer-motion@10/dist/framer-motion.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/recharts@2.5.0/dist/Recharts.js"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: { 500: '#0B3D91', 600: '#093478', 700: '#072b5f', 800: '#052246', 900: '#03192d' },
+                        gold: { 500: '#f59e0b', 600: '#d97706' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.1); }
+        }
+        .live-dot { animation: pulse-dot 2s ease-in-out infinite; }
+        .tab-active { border-bottom: 3px solid #0B3D91; color: #0B3D91; }
+        .gradient-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .gradient-mvp {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        .gradient-runs {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        .gradient-wickets {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        const { motion } = Motion;
+        const { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } = Recharts;
+
+        // API Configuration
+        const API_BASE_URL = window.location.hostname === 'localhost' 
+            ? 'http://localhost:5000/api/cricket'
+            : '/api/cricket';
+
+        // API Functions
+        const fetchMatchData = async () => {
+            const response = await fetch(`${API_BASE_URL}/match/current`);
+            if (!response.ok) throw new Error('Failed to fetch match data');
+            const result = await response.json();
+            return result.data;
+        };
+
+        const fetchLeaderboard = async () => {
+            const response = await fetch(`${API_BASE_URL}/leaderboard`);
+            if (!response.ok) throw new Error('Failed to fetch leaderboard');
+            const result = await response.json();
+            return result.data;
+        };
+
+        const fetchPointsTable = async () => {
+            const response = await fetch(`${API_BASE_URL}/points-table`);
+            if (!response.ok) throw new Error('Failed to fetch points table');
+            const result = await response.json();
+            return result.data;
+        };
+
+        // Loading Skeleton Component
+        const LoadingSkeleton = () => (
+            <div className="animate-pulse space-y-6">
+                <div className="h-48 bg-gray-200 rounded-xl"></div>
+                <div className="h-32 bg-gray-200 rounded-xl"></div>
+                <div className="h-64 bg-gray-200 rounded-xl"></div>
+            </div>
+        );
+
+        // Live Badge Component
+        const LiveBadge = () => (
+            <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="flex items-center gap-2 bg-red-500 text-white px-4 py-2 rounded-full font-bold text-sm"
+            >
+                <span className="w-2 h-2 bg-white rounded-full live-dot"></span>
+                LIVE
+            </motion.div>
+        );
+
+        // Hero Match Header Component
+        const MatchHeader = ({ data }) => (
+            <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-white rounded-xl shadow-md p-8 mb-6"
+            >
+                <div className="flex items-center justify-between mb-6">
+                    <div>
+                        <p className="text-sm text-gray-500 font-medium mb-1">{data.league}</p>
+                        <h1 className="text-2xl font-bold text-gray-900">
+                            {data.teamA.name} vs {data.teamB.name}
+                        </h1>
+                    </div>
+                    {data.match_status === "live" && <LiveBadge />}
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-8">
+                    <div className="text-center md:text-left">
+                        <div className="flex items-center justify-center md:justify-start gap-3 mb-3">
+                            <span className="text-4xl">{data.teamA.logo}</span>
+                            <h2 className="text-xl font-semibold text-gray-800">{data.teamA.name}</h2>
+                        </div>
+                        <div className="text-5xl font-bold text-navy-600 mb-2">{data.teamA.score}</div>
+                        <p className="text-gray-500 font-medium">Overs: {data.teamA.overs}</p>
+                    </div>
+
+                    <div className="text-center md:text-right">
+                        <div className="flex items-center justify-center md:justify-end gap-3 mb-3">
+                            <h2 className="text-xl font-semibold text-gray-800">{data.teamB.name}</h2>
+                            <span className="text-4xl">{data.teamB.logo}</span>
+                        </div>
+                        <div className="text-5xl font-bold text-navy-600 mb-2">{data.teamB.score}</div>
+                        <p className="text-gray-500 font-medium">Overs: {data.teamB.overs}</p>
+                    </div>
+                </div>
+
+                {data.match_status === "completed" && (
+                    <div className="mt-6 text-center">
+                        <p className="text-lg font-semibold text-green-600 bg-green-50 py-3 px-6 rounded-lg inline-block">
+                            {data.result}
+                        </p>
+                    </div>
+                )}
+            </motion.div>
+        );
+
+        // Tabs Navigation Component
+        const TabsNavigation = ({ activeTab, setActiveTab }) => {
+            const tabs = ["Summary", "Scorecard", "Commentary", "Points Table"];
+            
+            return (
+                <div className="bg-white rounded-xl shadow-md mb-6 overflow-x-auto">
+                    <div className="flex border-b border-gray-200">
+                        {tabs.map((tab) => (
+                            <button
+                                key={tab}
+                                onClick={() => setActiveTab(tab)}
+                                className={`px-6 py-4 font-semibold text-sm whitespace-nowrap transition-all ${
+                                    activeTab === tab
+                                        ? "tab-active"
+                                        : "text-gray-500 hover:text-gray-700"
+                                }`}
+                            >
+                                {tab}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            );
+        };
+
+        // Scorecard Component (same as before)
+        const Scorecard = ({ batting, bowling }) => (
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="bg-white rounded-xl shadow-md p-6 mb-6"
+            >
+                <h3 className="text-xl font-bold text-gray-900 mb-4">Batting Performance</h3>
+                <div className="overflow-x-auto mb-8">
+                    <table className="w-full text-sm">
+                        <thead className="bg-gray-50">
+                            <tr>
+                                <th className="text-left py-3 px-4 font-semibold text-gray-700">Player</th>
+                                <th className="text-center py-3 px-4 font-semibold text-gray-700">R</th>
+                                <th className="text-center py-3 px-4 font-semibold text-gray-700">B</th>
+                                <th className="text-center py-3 px-4 font-semibold text-gray-700">4s</th>
+                                <th className="text-center py-3 px-4 font-semibold text-gray-700">6s</th>
+                                <th className="text-center py-3 px-4 font-semibold text-gray-700">SR</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {batting.map((player, idx) => (
+                                <tr key={idx} className="border-b border-gray-100 hover:bg-gray-50">
+                                    <td className="py-3 px-4 font-medium text-gray-900">{player.player}</td>
+                                    <td className="text-center py-3 px-4 text-gray-700">{player.r}</td>
+                                    <td className="text-center py-3 px-4 text-gray-700">{player.b}</td>
+                                    <td className="text-center py-3 px-4 text-gray-700">{player.fours}</td>
+                                    <td className="text-center py-3 px-4 text-gray-700">{player.sixes}</td>
+                                    <td className="text-center py-3 px-4 text-gray-700">{player.sr.toFixed(2)}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3 className="text-xl font-bold text-gray-900 mb-4">Bowling Performance</h3>
+                <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                        <thead className="bg-gray-50">
+                            <tr>
+                                <th className="text-left py-3 px-4 font-semibold text-gray-700">Player</th>
+                                <th className="text-center py-3 px-4 font-semibold text-gray-700">O</th>
+                                <th className="text-center py-3 px-4 font-semibold text-gray-700">R</th>
+                                <th className="text-center py-3 px-4 font-semibold text-gray-700">W</th>
+                                <th className="text-center py-3 px-4 font-semibold text-gray-700">Econ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {bowling.map((player, idx) => (
+                                <tr key={idx} className="border-b border-gray-100 hover:bg-gray-50">
+                                    <td className="py-3 px-4 font-medium text-gray-900">{player.player}</td>
+                                    <td className="text-center py-3 px-4 text-gray-700">{player.o}</td>
+                                    <td className="text-center py-3 px-4 text-gray-700">{player.r}</td>
+                                    <td className="text-center py-3 px-4 text-gray-700">{player.w}</td>
+                                    <td className="text-center py-3 px-4 text-gray-700">{player.econ.toFixed(2)}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </motion.div>
+        );
+
+        // Run Progress Graph, Leaderboard, Commentary, Points Table components (same as before)
+        const RunProgressGraph = ({ data }) => (
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-white rounded-xl shadow-md p-6 mb-6"
+            >
+                <h3 className="text-xl font-bold text-gray-900 mb-6">Run Progress</h3>
+                <ResponsiveContainer width="100%" height={300}>
+                    <LineChart data={data}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                        <XAxis dataKey="over" label={{ value: 'Overs', position: 'insideBottom', offset: -5 }} stroke="#6b7280" />
+                        <YAxis label={{ value: 'Runs', angle: -90, position: 'insideLeft' }} stroke="#6b7280" />
+                        <Tooltip contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }} />
+                        <Line type="monotone" dataKey="runs" stroke="#0B3D91" strokeWidth={3} dot={{ fill: '#0B3D91', r: 4 }} activeDot={{ r: 6 }} />
+                    </LineChart>
+                </ResponsiveContainer>
+            </motion.div>
+        );
+
+        const Leaderboard = ({ data }) => (
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
+                <h3 className="text-2xl font-bold text-gray-900 mb-6">College Leaderboard</h3>
+                <div className="grid md:grid-cols-3 gap-6">
+                    <div className="gradient-runs rounded-xl p-6 text-white shadow-lg">
+                        <div className="flex items-center gap-2 mb-4">
+                            <span className="text-3xl">🏏</span>
+                            <h4 className="text-lg font-bold">Top Run Scorer</h4>
+                        </div>
+                        <p className="text-3xl font-bold mb-2">{data.topScorer.name}</p>
+                        <p className="text-sm opacity-90 mb-1">{data.topScorer.dept}</p>
+                        <div className="flex items-baseline gap-2">
+                            <span className="text-4xl font-bold">{data.topScorer.runs}</span>
+                            <span className="text-sm opacity-90">runs in {data.topScorer.matches} matches</span>
+                        </div>
+                    </div>
+                    <div className="gradient-wickets rounded-xl p-6 text-white shadow-lg">
+                        <div className="flex items-center gap-2 mb-4">
+                            <span className="text-3xl">🎯</span>
+                            <h4 className="text-lg font-bold">Top Wicket Taker</h4>
+                        </div>
+                        <p className="text-3xl font-bold mb-2">{data.topWicket.name}</p>
+                        <p className="text-sm opacity-90 mb-1">{data.topWicket.dept}</p>
+                        <div className="flex items-baseline gap-2">
+                            <span className="text-4xl font-bold">{data.topWicket.wickets}</span>
+                            <span className="text-sm opacity-90">wickets in {data.topWicket.matches} matches</span>
+                        </div>
+                    </div>
+                    <div className="gradient-mvp rounded-xl p-6 text-white shadow-lg">
+                        <div className="flex items-center gap-2 mb-4">
+                            <span className="text-3xl">🏆</span>
+                            <h4 className="text-lg font-bold">Most Valuable Player</h4>
+                        </div>
+                        <p className="text-3xl font-bold mb-2">{data.mvp.name}</p>
+                        <p className="text-sm opacity-90 mb-1">{data.mvp.dept}</p>
+                        <div className="flex items-baseline gap-2">
+                            <span className="text-4xl font-bold">{data.mvp.points}</span>
+                            <span className="text-sm opacity-90">MVP points</span>
+                        </div>
+                    </div>
+                </div>
+            </motion.div>
+        );
+
+        const Commentary = ({ data }) => (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-white rounded-xl shadow-md p-6 mb-6">
+                <h3 className="text-xl font-bold text-gray-900 mb-4">Live Commentary</h3>
+                <div className="space-y-3">
+                    {data.map((comment, idx) => (
+                        <div key={idx} className={`p-4 rounded-lg border-l-4 ${
+                            comment.type === 'wicket' ? 'bg-red-50 border-red-500' :
+                            comment.type === 'six' ? 'bg-purple-50 border-purple-500' :
+                            comment.type === 'four' ? 'bg-blue-50 border-blue-500' :
+                            'bg-gray-50 border-gray-300'
+                        }`}>
+                            <div className="flex items-start gap-3">
+                                <span className="font-bold text-navy-600 text-sm">{comment.over}</span>
+                                <p className="text-gray-800 text-sm flex-1">{comment.text}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </motion.div>
+        );
+
+        const PointsTable = ({ data }) => (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-white rounded-xl shadow-md p-6 mb-6">
+                <h3 className="text-xl font-bold text-gray-900 mb-4">Points Table</h3>
+                <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                        <thead className="bg-gray-50">
+                            <tr>
+                                <th className="text-left py-3 px-4 font-semibold text-gray-700">Team</th>
+                                <th className="text-center py-3 px-4 font-semibold text-gray-700">Played</th>
+                                <th className="text-center py-3 px-4 font-semibold text-gray-700">Won</th>
+                                <th className="text-center py-3 px-4 font-semibold text-gray-700">Lost</th>
+                                <th className="text-center py-3 px-4 font-semibold text-gray-700">NRR</th>
+                                <th className="text-center py-3 px-4 font-semibold text-gray-700">Points</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {data.map((team, idx) => (
+                                <tr key={idx} className="border-b border-gray-100 hover:bg-gray-50">
+                                    <td className="py-3 px-4 font-medium text-gray-900">{team.team}</td>
+                                    <td className="text-center py-3 px-4 text-gray-700">{team.played}</td>
+                                    <td className="text-center py-3 px-4 text-gray-700">{team.won}</td>
+                                    <td className="text-center py-3 px-4 text-gray-700">{team.lost}</td>
+                                    <td className="text-center py-3 px-4 text-gray-700">{team.nrr}</td>
+                                    <td className="text-center py-3 px-4 font-bold text-navy-600">{team.points}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </motion.div>
+        );
+
+        // Main App Component
+        const CricketSportsApp = () => {
+            const [matchData, setMatchData] = useState(null);
+            const [leaderboard, setLeaderboard] = useState(null);
+            const [pointsTable, setPointsTable] = useState(null);
+            const [activeTab, setActiveTab] = useState("Summary");
+            const [loading, setLoading] = useState(true);
+            const [error, setError] = useState(null);
+
+            const loadData = async () => {
+                try {
+                    setLoading(true);
+                    const [match, leaders, points] = await Promise.all([
+                        fetchMatchData(),
+                        fetchLeaderboard(),
+                        fetchPointsTable()
+                    ]);
+                    setMatchData(match);
+                    setLeaderboard(leaders);
+                    setPointsTable(points);
+                    setError(null);
+                } catch (err) {
+                    setError("Failed to load data. Please try again.");
+                    console.error(err);
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            useEffect(() => {
+                loadData();
+                const interval = setInterval(() => {
+                    if (matchData?.match_status === "live") {
+                        loadData();
+                    }
+                }, 10000);
+                return () => clearInterval(interval);
+            }, [matchData?.match_status]);
+
+            if (loading) {
+                return (
+                    <div className="min-h-screen bg-gray-50 py-8">
+                        <div className="max-w-7xl mx-auto px-4">
+                            <LoadingSkeleton />
+                        </div>
+                    </div>
+                );
+            }
+
+            if (error) {
+                return (
+                    <div className="min-h-screen bg-gray-50 py-8">
+                        <div className="max-w-7xl mx-auto px-4">
+                            <div className="bg-red-50 border border-red-200 rounded-xl p-6 text-center">
+                                <p className="text-red-600 font-semibold mb-4">{error}</p>
+                                <button onClick={loadData} className="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition">
+                                    Retry
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                );
+            }
+
+            return (
+                <div className="min-h-screen bg-gray-50">
+                    <header className="bg-white shadow-sm sticky top-0 z-50">
+                        <div className="max-w-7xl mx-auto px-4 py-4">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-4">
+                                    <img src="gcoec-logo.png" alt="GCOEC Logo" className="w-12 h-12 object-contain" />
+                                    <div>
+                                        <h1 className="text-xl font-bold text-navy-900">GCOEC Sports</h1>
+                                        <p className="text-xs text-gray-600">Cricket Championship</p>
+                                    </div>
+                                </div>
+                                <a href="index.html" className="text-navy-600 hover:text-navy-700 font-semibold text-sm flex items-center gap-1">
+                                    <span>← Back to Portal</span>
+                                </a>
+                            </div>
+                        </div>
+                    </header>
+
+                    <main className="max-w-7xl mx-auto px-4 py-8">
+                        <MatchHeader data={matchData} />
+                        <TabsNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
+
+                        {activeTab === "Summary" && (
+                            <>
+                                <RunProgressGraph data={matchData.runProgress} />
+                                <Leaderboard data={leaderboard} />
+                            </>
+                        )}
+                        {activeTab === "Scorecard" && <Scorecard batting={matchData.batting} bowling={matchData.bowling} />}
+                        {activeTab === "Commentary" && <Commentary data={matchData.commentary} />}
+                        {activeTab === "Points Table" && <PointsTable data={pointsTable} />}
+                    </main>
+
+                    <footer className="bg-navy-900 text-white py-8 mt-12">
+                        <div className="max-w-7xl mx-auto px-4 text-center">
+                            <p className="text-sm text-gray-300">© 2026 Government College of Engineering, Chandrapur - Sports Department</p>
+                            <p className="text-xs text-gray-400 mt-2">Official GCOEC Premier League Platform</p>
+                        </div>
+                    </footer>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<CricketSportsApp />);
+        lucide.createIcons();
+    </script>
+</body>
+</html>

@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="gcoec-logo.png">
+    <title>Admin - Cricket Management | GCOEC Sports</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: { 500: '#0B3D91', 600: '#093478', 700: '#072b5f', 800: '#052246', 900: '#03192d' },
+                        gold: { 500: '#f59e0b', 600: '#d97706' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .tab-active { 
+            background-color: #0B3D91; 
+            color: white; 
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <img src="gcoec-logo.png" alt="GCOEC Logo" class="w-12 h-12 object-contain">
+                    <div>
+                        <h1 class="text-xl font-bold text-navy-900">Cricket Admin Panel</h1>
+                        <p class="text-xs text-gray-600">Manage Matches & Tournament</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <a href="sports_cricket_simple.html" class="text-navy-600 hover:text-navy-700 font-semibold text-sm">
+                        View Live Scores
+                    </a>
+                    <a href="index.html" class="bg-gray-600 text-white px-4 py-2 rounded font-semibold hover:bg-gray-700 transition text-sm">
+                        Back to Portal
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        <!-- Tab Navigation -->
+        <div class="bg-white rounded-xl shadow-md mb-6 overflow-x-auto">
+            <div class="flex border-b border-gray-200">
+                <button onclick="switchTab('matches')" id="tab-matches" class="tab-active px-6 py-4 font-semibold text-sm whitespace-nowrap transition-all">
+                    Manage Matches
+                </button>
+                <button onclick="switchTab('scores')" id="tab-scores" class="px-6 py-4 font-semibold text-sm whitespace-nowrap transition-all text-gray-500 hover:text-gray-700">
+                    Update Scores
+                </button>
+                <button onclick="switchTab('leaderboard')" id="tab-leaderboard" class="px-6 py-4 font-semibold text-sm whitespace-nowrap transition-all text-gray-500 hover:text-gray-700">
+                    Leaderboard
+                </button>
+                <button onclick="switchTab('points')" id="tab-points" class="px-6 py-4 font-semibold text-sm whitespace-nowrap transition-all text-gray-500 hover:text-gray-700">
+                    Points Table
+                </button>
+            </div>
+        </div>
+
+        <!-- Matches Tab -->
+        <div id="content-matches" class="tab-content">
+            <!-- Create New Match -->
+            <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+                <h2 class="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                    <i data-lucide="plus-circle" class="w-6 h-6 text-navy-600"></i>
+                    Create New Match
+                </h2>
+                <form id="createMatchForm" class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Match ID</label>
+                        <input type="text" id="matchId" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy-500 focus:border-transparent" placeholder="GPL_2026_001" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">League Name</label>
+                        <input type="text" id="leagueName" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy-500 focus:border-transparent" value="GCOEC Premier League" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Team A</label>
+                        <select id="teamA" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy-500 focus:border-transparent" required>
+                            <option value="">Select Team</option>
+                            <option value="Civil Engineering">Civil Engineering</option>
+                            <option value="Computer Science">Computer Science</option>
+                            <option value="Electrical Engineering">Electrical Engineering</option>
+                            <option value="Mechanical Engineering">Mechanical Engineering</option>
+                            <option value="Electronics Engineering">Electronics Engineering</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Team B</label>
+                        <select id="teamB" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy-500 focus:border-transparent" required>
+                            <option value="">Select Team</option>
+                            <option value="Civil Engineering">Civil Engineering</option>
+                            <option value="Computer Science">Computer Science</option>
+                            <option value="Electrical Engineering">Electrical Engineering</option>
+                            <option value="Mechanical Engineering">Mechanical Engineering</option>
+                            <option value="Electronics Engineering">Electronics Engineering</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Match Date</label>
+                        <input type="date" id="matchDate" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy-500 focus:border-transparent" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Match Time</label>
+                        <input type="time" id="matchTime" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy-500 focus:border-transparent" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Venue</label>
+                        <input type="text" id="venue" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy-500 focus:border-transparent" value="GCOEC Sports Ground" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Match Status</label>
+                        <select id="matchStatus" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy-500 focus:border-transparent" required>
+                            <option value="upcoming">Upcoming</option>
+                            <option value="live">Live</option>
+                            <option value="completed">Completed</option>
+                        </select>
+                    </div>
+                    <div class="md:col-span-2">
+                        <button type="submit" class="bg-navy-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-navy-700 transition flex items-center gap-2">
+                            <i data-lucide="plus" class="w-5 h-5"></i>
+                            Create Match
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Existing Matches -->
+            <div class="bg-white rounded-xl shadow-md p-6">
+                <h2 class="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                    <i data-lucide="list" class="w-6 h-6 text-navy-600"></i>
+                    All Matches
+                </h2>
+                <div id="matchesList" class="space-y-4">
+                    <!-- Matches will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Update Scores Tab -->
+        <div id="content-scores" class="tab-content hidden">
+            <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+                <h2 class="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                    <i data-lucide="edit" class="w-6 h-6 text-navy-600"></i>
+                    Update Match Score
+                </h2>
+                <form id="updateScoreForm" class="space-y-6">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Select Match</label>
+                            <select id="scoreMatchId" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy-500 focus:border-transparent" required>
+                                <option value="">Select Match</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Team A Score -->
+                    <div class="border-l-4 border-navy-500 pl-4">
+                        <h3 class="text-lg font-bold text-gray-900 mb-4">Team A Score</h3>
+                        <div class="grid md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Runs</label>
+                                <input type="number" id="teamAScore" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="156" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Wickets</label>
+                                <input type="number" id="teamAWickets" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="8" max="10" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Overs</label>
+                                <input type="text" id="teamAOvers" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="18.2" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Team B Score -->
+                    <div class="border-l-4 border-green-500 pl-4">
+                        <h3 class="text-lg font-bold text-gray-900 mb-4">Team B Score</h3>
+                        <div class="grid md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Runs</label>
+                                <input type="number" id="teamBScore" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="142" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Wickets</label>
+                                <input type="number" id="teamBWickets" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="6" max="10" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Overs</label>
+                                <input type="text" id="teamBOvers" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="17.0" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Match Result -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Match Result</label>
+                        <input type="text" id="matchResult" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="Team A won by 14 runs">
+                    </div>
+
+                    <!-- Add Commentary -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Add Commentary</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="commentaryOver" class="w-24 px-4 py-2 border border-gray-300 rounded-lg" placeholder="18.2">
+                            <input type="text" id="commentaryText" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg" placeholder="Commentary text">
+                            <select id="commentaryType" class="px-4 py-2 border border-gray-300 rounded-lg">
+                                <option value="normal">Normal</option>
+                                <option value="four">Four</option>
+                                <option value="six">Six</option>
+                                <option value="wicket">Wicket</option>
+                            </select>
+                            <button type="button" onclick="addCommentary()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                                Add
+                            </button>
+                        </div>
+                        <div id="commentaryList" class="mt-4 space-y-2">
+                            <!-- Commentary items will appear here -->
+                        </div>
+                    </div>
+
+                    <button type="submit" class="bg-navy-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-navy-700 transition flex items-center gap-2">
+                        <i data-lucide="save" class="w-5 h-5"></i>
+                        Update Score
+                    </button>
+                </form>
+            </div>
+
+            <!-- Add Batting/Bowling Stats -->
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Batting Stats -->
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <h3 class="text-lg font-bold text-gray-900 mb-4">Add Batting Stats</h3>
+                    <form id="addBattingForm" class="space-y-4">
+                        <input type="text" id="battingPlayer" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="Player Name" required>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="number" id="battingRuns" class="px-4 py-2 border border-gray-300 rounded-lg" placeholder="Runs" required>
+                            <input type="number" id="battingBalls" class="px-4 py-2 border border-gray-300 rounded-lg" placeholder="Balls" required>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="number" id="battingFours" class="px-4 py-2 border border-gray-300 rounded-lg" placeholder="4s" required>
+                            <input type="number" id="battingSixes" class="px-4 py-2 border border-gray-300 rounded-lg" placeholder="6s" required>
+                        </div>
+                        <button type="submit" class="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                            Add Batting Stats
+                        </button>
+                    </form>
+                    <div id="battingStatsList" class="mt-4 space-y-2">
+                        <!-- Batting stats will appear here -->
+                    </div>
+                </div>
+
+                <!-- Bowling Stats -->
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <h3 class="text-lg font-bold text-gray-900 mb-4">Add Bowling Stats</h3>
+                    <form id="addBowlingForm" class="space-y-4">
+                        <input type="text" id="bowlingPlayer" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="Player Name" required>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="text" id="bowlingOvers" class="px-4 py-2 border border-gray-300 rounded-lg" placeholder="Overs" required>
+                            <input type="number" id="bowlingRuns" class="px-4 py-2 border border-gray-300 rounded-lg" placeholder="Runs" required>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="number" id="bowlingWickets" class="px-4 py-2 border border-gray-300 rounded-lg" placeholder="Wickets" required>
+                            <input type="number" step="0.01" id="bowlingEcon" class="px-4 py-2 border border-gray-300 rounded-lg" placeholder="Economy" required>
+                        </div>
+                        <button type="submit" class="w-full bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
+                            Add Bowling Stats
+                        </button>
+                    </form>
+                    <div id="bowlingStatsList" class="mt-4 space-y-2">
+                        <!-- Bowling stats will appear here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Leaderboard Tab -->
+        <div id="content-leaderboard" class="tab-content hidden">
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Top Run Scorer -->
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        <span class="text-2xl">🏏</span>
+                        Top Run Scorer
+                    </h3>
+                    <form id="topScorerForm" class="space-y-4">
+                        <input type="text" id="topScorerName" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="Player Name" required>
+                        <input type="text" id="topScorerDept" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="Department" required>
+                        <input type="number" id="topScorerRuns" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="Total Runs" required>
+                        <input type="number" id="topScorerMatches" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="Matches" required>
+                        <button type="submit" class="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                            Update Top Scorer
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Top Wicket Taker -->
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        <span class="text-2xl">🎯</span>
+                        Top Wicket Taker
+                    </h3>
+                    <form id="topWicketForm" class="space-y-4">
+                        <input type="text" id="topWicketName" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="Player Name" required>
+                        <input type="text" id="topWicketDept" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="Department" required>
+                        <input type="number" id="topWicketWickets" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="Total Wickets" required>
+                        <input type="number" id="topWicketMatches" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="Matches" required>
+                        <button type="submit" class="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                            Update Top Wicket Taker
+                        </button>
+                    </form>
+                </div>
+
+                <!-- MVP -->
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        <span class="text-2xl">🏆</span>
+                        Most Valuable Player
+                    </h3>
+                    <form id="mvpForm" class="space-y-4">
+                        <input type="text" id="mvpName" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="Player Name" required>
+                        <input type="text" id="mvpDept" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="Department" required>
+                        <input type="number" id="mvpPoints" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="MVP Points" required>
+                        <input type="number" id="mvpMatches" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="Matches" required>
+                        <button type="submit" class="w-full bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
+                            Update MVP
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Points Table Tab -->
+        <div id="content-points" class="tab-content hidden">
+            <div class="bg-white rounded-xl shadow-md p-6">
+                <h2 class="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                    <i data-lucide="table" class="w-6 h-6 text-navy-600"></i>
+                    Update Points Table
+                </h2>
+                <form id="pointsTableForm" class="space-y-4">
+                    <div class="grid md:grid-cols-6 gap-4 items-end">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Team</label>
+                            <select id="pointsTeam" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
+                                <option value="">Select Team</option>
+                                <option value="Civil Engineering">Civil Engineering</option>
+                                <option value="Computer Science">Computer Science</option>
+                                <option value="Electrical Engineering">Electrical Engineering</option>
+                                <option value="Mechanical Engineering">Mechanical Engineering</option>
+                                <option value="Electronics Engineering">Electronics Engineering</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Played</label>
+                            <input type="number" id="pointsPlayed" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Won</label>
+                            <input type="number" id="pointsWon" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Lost</label>
+                            <input type="number" id="pointsLost" class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">NRR</label>
+                            <input type="text" id="pointsNRR" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="+1.45" required>
+                        </div>
+                        <button type="submit" class="bg-navy-600 text-white px-4 py-2 rounded-lg hover:bg-navy-700">
+                            Update
+                        </button>
+                    </div>
+                </form>
+
+                <div class="mt-8">
+                    <h3 class="text-lg font-bold text-gray-900 mb-4">Current Points Table</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="text-left py-3 px-4 font-semibold text-gray-700">Team</th>
+                                    <th class="text-center py-3 px-4 font-semibold text-gray-700">Played</th>
+                                    <th class="text-center py-3 px-4 font-semibold text-gray-700">Won</th>
+                                    <th class="text-center py-3 px-4 font-semibold text-gray-700">Lost</th>
+                                    <th class="text-center py-3 px-4 font-semibold text-gray-700">NRR</th>
+                                    <th class="text-center py-3 px-4 font-semibold text-gray-700">Points</th>
+                                    <th class="text-center py-3 px-4 font-semibold text-gray-700">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pointsTableBody">
+                                <!-- Points table rows will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const API_BASE_URL = window.location.hostname === 'localhost' 
+            ? 'http://localhost:5000/api/cricket'
+            : '/api/cricket';
+
+        // Local storage keys
+        const STORAGE_KEYS = {
+            matches: 'cricket_matches',
+            leaderboard: 'cricket_leaderboard',
+            pointsTable: 'cricket_points_table',
+            currentMatch: 'cricket_current_match'
+        };
+
+        // Initialize data structures
+        let matches = JSON.parse(localStorage.getItem(STORAGE_KEYS.matches) || '[]');
+        let leaderboard = JSON.parse(localStorage.getItem(STORAGE_KEYS.leaderboard) || '{"topScorer":{},"topWicket":{},"mvp":{}}');
+        let pointsTable = JSON.parse(localStorage.getItem(STORAGE_KEYS.pointsTable) || '[]');
+        let currentMatchData = {
+            batting: [],
+            bowling: [],
+            commentary: []
+        };
+
+        // Tab switching
+        function switchTab(tabName) {
+            // Hide all content
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            // Remove active class from all tabs
+            document.querySelectorAll('[id^="tab-"]').forEach(el => {
+                el.classList.remove('tab-active');
+                el.classList.add('text-gray-500', 'hover:text-gray-700');
+            });
+            // Show selected content
+            document.getElementById(`content-${tabName}`).classList.remove('hidden');
+            // Add active class to selected tab
+            const activeTab = document.getElementById(`tab-${tabName}`);
+            activeTab.classList.add('tab-active');
+            activeTab.classList.remove('text-gray-500', 'hover:text-gray-700');
+        }
+
+        // Create Match
+        document.getElementById('createMatchForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const match = {
+                match_id: document.getElementById('matchId').value,
+                league: document.getElementById('leagueName').value,
+                teamA: {
+                    name: document.getElementById('teamA').value,
+                    score: "0/0",
+                    overs: "0.0",
+                    logo: getTeamLogo(document.getElementById('teamA').value)
+                },
+                teamB: {
+                    name: document.getElementById('teamB').value,
+                    score: "0/0",
+                    overs: "0.0",
+                    logo: getTeamLogo(document.getElementById('teamB').value)
+                },
+                match_date: document.getElementById('matchDate').value,
+                match_time: document.getElementById('matchTime').value,
+                venue: document.getElementById('venue').value,
+                match_status: document.getElementById('matchStatus').value,
+                result: "",
+                batting: [],
+                bowling: [],
+                runProgress: [{over: 0, runs: 0}],
+                commentary: []
+            };
+
+            matches.push(match);
+            localStorage.setItem(STORAGE_KEYS.matches, JSON.stringify(matches));
+            
+            alert('Match created successfully!');
+            this.reset();
+            loadMatches();
+        });
+
+        // Get team logo
+        function getTeamLogo(teamName) {
+            const logos = {
+                'Civil Engineering': '🏗️',
+                'Computer Science': '💻',
+                'Electrical Engineering': '⚡',
+                'Mechanical Engineering': '⚙️',
+                'Electronics Engineering': '🔌'
+            };
+            return logos[teamName] || '🏏';
+        }
+
+        // Load matches
+        function loadMatches() {
+            const matchesList = document.getElementById('matchesList');
+            const scoreMatchSelect = document.getElementById('scoreMatchId');
+            
+            matchesList.innerHTML = '';
+            scoreMatchSelect.innerHTML = '<option value="">Select Match</option>';
+            
+            matches.forEach((match, index) => {
+                // Add to matches list
+                const matchCard = document.createElement('div');
+                matchCard.className = 'border border-gray-200 rounded-lg p-4 hover:shadow-md transition';
+                matchCard.innerHTML = `
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="font-bold text-gray-900">${match.teamA.name} vs ${match.teamB.name}</h3>
+                        <span class="px-3 py-1 rounded-full text-xs font-bold ${
+                            match.match_status === 'live' ? 'bg-red-100 text-red-700' :
+                            match.match_status === 'completed' ? 'bg-green-100 text-green-700' :
+                            'bg-blue-100 text-blue-700'
+                        }">${match.match_status.toUpperCase()}</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-2">${match.match_date} | ${match.match_time} | ${match.venue}</p>
+                    <div class="flex items-center gap-2 text-sm">
+                        <span class="font-semibold">${match.teamA.score}</span>
+                        <span class="text-gray-500">vs</span>
+                        <span class="font-semibold">${match.teamB.score}</span>
+                    </div>
+                    <div class="mt-3 flex gap-2">
+                        <button onclick="setCurrentMatch(${index})" class="text-navy-600 hover:text-navy-700 text-sm font-semibold">
+                            Set as Current
+                        </button>
+                        <button onclick="deleteMatch(${index})" class="text-red-600 hover:text-red-700 text-sm font-semibold">
+                            Delete
+                        </button>
+                    </div>
+                `;
+                matchesList.appendChild(matchCard);
+                
+                // Add to score update dropdown
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = `${match.match_id} - ${match.teamA.name} vs ${match.teamB.name}`;
+                scoreMatchSelect.appendChild(option);
+            });
+        }
+
+        // Set current match
+        function setCurrentMatch(index) {
+            const match = matches[index];
+            localStorage.setItem(STORAGE_KEYS.currentMatch, JSON.stringify(match));
+            alert('Match set as current! This will be displayed on the live scores page.');
+        }
+
+        // Delete match
+        function deleteMatch(index) {
+            if (confirm('Are you sure you want to delete this match?')) {
+                matches.splice(index, 1);
+                localStorage.setItem(STORAGE_KEYS.matches, JSON.stringify(matches));
+                loadMatches();
+            }
+        }
+
+        // Update Score Form
+        document.getElementById('updateScoreForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const matchIndex = document.getElementById('scoreMatchId').value;
+            if (!matchIndex) {
+                alert('Please select a match');
+                return;
+            }
+
+            const match = matches[matchIndex];
+            match.teamA.score = `${document.getElementById('teamAScore').value}/${document.getElementById('teamAWickets').value}`;
+            match.teamA.overs = document.getElementById('teamAOvers').value;
+            match.teamB.score = `${document.getElementById('teamBScore').value}/${document.getElementById('teamBWickets').value}`;
+            match.teamB.overs = document.getElementById('teamBOvers').value;
+            match.result = document.getElementById('matchResult').value;
+            match.batting = currentMatchData.batting;
+            match.bowling = currentMatchData.bowling;
+            match.commentary = currentMatchData.commentary;
+
+            // Update run progress
+            const teamARuns = parseInt(document.getElementById('teamAScore').value);
+            const teamAOvers = parseFloat(document.getElementById('teamAOvers').value);
+            match.runProgress.push({over: teamAOvers, runs: teamARuns});
+
+            matches[matchIndex] = match;
+            localStorage.setItem(STORAGE_KEYS.matches, JSON.stringify(matches));
+            localStorage.setItem(STORAGE_KEYS.currentMatch, JSON.stringify(match));
+            
+            alert('Score updated successfully!');
+            loadMatches();
+        });
+
+        // Add Commentary
+        function addCommentary() {
+            const over = document.getElementById('commentaryOver').value;
+            const text = document.getElementById('commentaryText').value;
+            const type = document.getElementById('commentaryType').value;
+
+            if (!over || !text) {
+                alert('Please fill in over and commentary text');
+                return;
+            }
+
+            const commentary = { over, text, type };
+            currentMatchData.commentary.unshift(commentary);
+
+            const commentaryList = document.getElementById('commentaryList');
+            const commentaryItem = document.createElement('div');
+            commentaryItem.className = `p-3 rounded-lg border-l-4 ${
+                type === 'wicket' ? 'bg-red-50 border-red-500' :
+                type === 'six' ? 'bg-purple-50 border-purple-500' :
+                type === 'four' ? 'bg-blue-50 border-blue-500' :
+                'bg-gray-50 border-gray-300'
+            }`;
+            commentaryItem.innerHTML = `
+                <div class="flex items-start gap-2">
+                    <span class="font-bold text-navy-600 text-sm">${over}</span>
+                    <p class="text-gray-800 text-sm flex-1">${text}</p>
+                </div>
+            `;
+            commentaryList.insertBefore(commentaryItem, commentaryList.firstChild);
+
+            document.getElementById('commentaryOver').value = '';
+            document.getElementById('commentaryText').value = '';
+        }
+
+        // Add Batting Stats
+        document.getElementById('addBattingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const runs = parseInt(document.getElementById('battingRuns').value);
+            const balls = parseInt(document.getElementById('battingBalls').value);
+            const sr = ((runs / balls) * 100).toFixed(2);
+
+            const batting = {
+                player: document.getElementById('battingPlayer').value,
+                r: runs,
+                b: balls,
+                fours: parseInt(document.getElementById('battingFours').value),
+                sixes: parseInt(document.getElementById('battingSixes').value),
+                sr: parseFloat(sr)
+            };
+
+            currentMatchData.batting.push(batting);
+
+            const battingList = document.getElementById('battingStatsList');
+            const battingItem = document.createElement('div');
+            battingItem.className = 'p-2 bg-blue-50 rounded text-sm';
+            battingItem.textContent = `${batting.player}: ${batting.r}(${batting.b}) - 4s: ${batting.fours}, 6s: ${batting.sixes}, SR: ${batting.sr}`;
+            battingList.appendChild(battingItem);
+
+            this.reset();
+        });
+
+        // Add Bowling Stats
+        document.getElementById('addBowlingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const bowling = {
+                player: document.getElementById('bowlingPlayer').value,
+                o: parseFloat(document.getElementById('bowlingOvers').value),
+                r: parseInt(document.getElementById('bowlingRuns').value),
+                w: parseInt(document.getElementById('bowlingWickets').value),
+                econ: parseFloat(document.getElementById('bowlingEcon').value)
+            };
+
+            currentMatchData.bowling.push(bowling);
+
+            const bowlingList = document.getElementById('bowlingStatsList');
+            const bowlingItem = document.createElement('div');
+            bowlingItem.className = 'p-2 bg-purple-50 rounded text-sm';
+            bowlingItem.textContent = `${bowling.player}: ${bowling.o}-${bowling.r}-${bowling.w} (Econ: ${bowling.econ})`;
+            bowlingList.appendChild(bowlingItem);
+
+            this.reset();
+        });
+
+        // Update Top Scorer
+        document.getElementById('topScorerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            leaderboard.topScorer = {
+                name: document.getElementById('topScorerName').value,
+                dept: document.getElementById('topScorerDept').value,
+                runs: parseInt(document.getElementById('topScorerRuns').value),
+                matches: parseInt(document.getElementById('topScorerMatches').value)
+            };
+
+            localStorage.setItem(STORAGE_KEYS.leaderboard, JSON.stringify(leaderboard));
+            alert('Top Scorer updated successfully!');
+            this.reset();
+        });
+
+        // Update Top Wicket Taker
+        document.getElementById('topWicketForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            leaderboard.topWicket = {
+                name: document.getElementById('topWicketName').value,
+                dept: document.getElementById('topWicketDept').value,
+                wickets: parseInt(document.getElementById('topWicketWickets').value),
+                matches: parseInt(document.getElementById('topWicketMatches').value)
+            };
+
+            localStorage.setItem(STORAGE_KEYS.leaderboard, JSON.stringify(leaderboard));
+            alert('Top Wicket Taker updated successfully!');
+            this.reset();
+        });
+
+        // Update MVP
+        document.getElementById('mvpForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            leaderboard.mvp = {
+                name: document.getElementById('mvpName').value,
+                dept: document.getElementById('mvpDept').value,
+                points: parseInt(document.getElementById('mvpPoints').value),
+                matches: parseInt(document.getElementById('mvpMatches').value)
+            };
+
+            localStorage.setItem(STORAGE_KEYS.leaderboard, JSON.stringify(leaderboard));
+            alert('MVP updated successfully!');
+            this.reset();
+        });
+
+        // Update Points Table
+        document.getElementById('pointsTableForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const team = document.getElementById('pointsTeam').value;
+            const played = parseInt(document.getElementById('pointsPlayed').value);
+            const won = parseInt(document.getElementById('pointsWon').value);
+            const lost = parseInt(document.getElementById('pointsLost').value);
+            const points = won * 2;
+
+            const teamData = {
+                team,
+                played,
+                won,
+                lost,
+                nrr: document.getElementById('pointsNRR').value,
+                points
+            };
+
+            const existingIndex = pointsTable.findIndex(t => t.team === team);
+            if (existingIndex >= 0) {
+                pointsTable[existingIndex] = teamData;
+            } else {
+                pointsTable.push(teamData);
+            }
+
+            // Sort by points
+            pointsTable.sort((a, b) => b.points - a.points);
+
+            localStorage.setItem(STORAGE_KEYS.pointsTable, JSON.stringify(pointsTable));
+            alert('Points table updated successfully!');
+            this.reset();
+            loadPointsTable();
+        });
+
+        // Load Points Table
+        function loadPointsTable() {
+            const tbody = document.getElementById('pointsTableBody');
+            tbody.innerHTML = '';
+
+            pointsTable.forEach((team, index) => {
+                const row = document.createElement('tr');
+                row.className = 'border-b border-gray-100 hover:bg-gray-50';
+                row.innerHTML = `
+                    <td class="py-3 px-4 font-medium text-gray-900">${team.team}</td>
+                    <td class="text-center py-3 px-4 text-gray-700">${team.played}</td>
+                    <td class="text-center py-3 px-4 text-gray-700">${team.won}</td>
+                    <td class="text-center py-3 px-4 text-gray-700">${team.lost}</td>
+                    <td class="text-center py-3 px-4 text-gray-700">${team.nrr}</td>
+                    <td class="text-center py-3 px-4 font-bold text-navy-600">${team.points}</td>
+                    <td class="text-center py-3 px-4">
+                        <button onclick="deleteTeamFromTable(${index})" class="text-red-600 hover:text-red-700 text-sm font-semibold">
+                            Delete
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Delete team from points table
+        function deleteTeamFromTable(index) {
+            if (confirm('Are you sure you want to delete this team from the points table?')) {
+                pointsTable.splice(index, 1);
+                localStorage.setItem(STORAGE_KEYS.pointsTable, JSON.stringify(pointsTable));
+                loadPointsTable();
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            lucide.createIcons();
+            loadMatches();
+            loadPointsTable();
+        });
+    </script>
+</body>
+</html>

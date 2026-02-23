@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="gcoec-logo.png">
     <title>Student Dashboard - Engineering PYQ Portal</title>
     
     <!-- Google Fonts -->
@@ -61,22 +62,36 @@
 </head>
 <body class="bg-gray-50 font-sans">
 
+    <!-- Official Institutional Header Bar -->
+    <div class="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white py-2 px-4 text-center border-b-2 border-orange-500">
+        <div class="flex items-center justify-center gap-2 text-xs sm:text-sm">
+            <span class="font-semibold">Government College of Engineering, Chandrapur</span>
+            <span class="hidden sm:inline text-gray-400">|</span>
+            <span class="hidden sm:inline text-gray-300">Official Campus Digital Platform</span>
+        </div>
+    </div>
+
     <!-- Header -->
     <header class="bg-gradient-to-r from-primary-600 to-primary-700 text-white shadow-lg">
         <div class="container mx-auto px-4 sm:px-6 py-4 sm:py-6">
             <div class="flex justify-between items-center">
                 <div class="flex-1 min-w-0">
                     <div class="flex items-center gap-3 mb-2">
-                        <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
-                            <i data-lucide="book-open" class="w-6 h-6"></i>
+                        <div class="w-14 h-14 bg-white rounded-lg flex items-center justify-center p-2 shadow-lg">
+                            <img src="gcoec-logo.png" alt="GCOEC Logo" class="w-full h-full object-contain">
                         </div>
                         <div>
-                            <h1 class="text-xl sm:text-2xl font-heading font-bold">GCOEC Classroom</h1>
+                            <h1 class="text-xl sm:text-2xl font-heading font-bold">GCOEC Campus Portal</h1>
                             <p class="text-xs sm:text-sm text-white/80" id="studentInfo">Loading...</p>
                         </div>
                     </div>
                 </div>
                 <div class="flex gap-2">
+                    <a href="announcements.html" class="relative px-3 sm:px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg transition flex items-center gap-2">
+                        <i data-lucide="bell" class="w-4 h-4"></i>
+                        <span class="hidden sm:inline">Events</span>
+                        <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                    </a>
                     <a href="student_exams.html" class="px-3 sm:px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg transition flex items-center gap-2">
                         <i data-lucide="file-text" class="w-4 h-4"></i>
                         <span class="hidden sm:inline">Exams</span>
@@ -105,7 +120,7 @@
         </div>
 
         <!-- Quick Access Cards -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             <!-- Classroom Card -->
             <a href="student_classroom.html" class="card-hover bg-white rounded-xl shadow-md p-6 border-2 border-transparent hover:border-blue-500 transition">
                 <div class="flex items-center gap-4">
@@ -132,8 +147,21 @@
                 </div>
             </a>
 
+            <!-- Announcements Card -->
+            <a href="announcements.html" class="card-hover bg-white rounded-xl shadow-md p-6 border-2 border-transparent hover:border-purple-500 transition">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                        <i data-lucide="megaphone" class="w-6 h-6 text-purple-600"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-900">Announcements</h3>
+                        <p class="text-sm text-gray-600">Events & News</p>
+                    </div>
+                </div>
+            </a>
+
             <!-- PYQ Portal Card -->
-            <a href="index.html" class="card-hover bg-white rounded-xl shadow-md p-6 border-2 border-transparent hover:border-orange-500 transition">
+            <a href="https://pyq-portal.pages.dev" target="_blank" class="card-hover bg-white rounded-xl shadow-md p-6 border-2 border-transparent hover:border-orange-500 transition">
                 <div class="flex items-center gap-4">
                     <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
                         <i data-lucide="archive" class="w-6 h-6 text-orange-600"></i>
