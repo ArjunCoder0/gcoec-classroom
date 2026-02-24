@@ -129,19 +129,42 @@
         @media (max-width: 768px) {
             .chat-container { height: 300px; }
         }
+        
+        /* Fade in animation for new messages */
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-fade-in {
+            animation: fade-in 0.3s ease-out;
+        }
     </style>
 </head>
 <body class="text-white">
 
-    <!-- Welcome Popup -->
+    <!-- Welcome Popup with Team Selection -->
     <div id="welcomePopup" class="modal active">
-        <div class="glass rounded-2xl p-8 max-w-md mx-4 text-center">
+        <div class="bg-white rounded-2xl p-8 max-w-md mx-4 text-center shadow-2xl">
             <div class="text-6xl mb-4">🎉</div>
-            <h2 class="text-3xl font-bold mb-4">Welcome to Cheer-Up Portal!</h2>
-            <p class="text-gray-300 mb-6">Support your team with positivity and enjoy the match. Only positive cheering allowed!</p>
-            <button onclick="closeWelcome()" class="bg-gradient-to-r from-blue-500 to-purple-600 px-8 py-3 rounded-lg font-bold hover:scale-105 transition">
-                Let's Go! 🚀
-            </button>
+            <h2 class="text-3xl font-bold mb-4 text-gray-900">Welcome to Cheer-Up Portal!</h2>
+            <p class="text-gray-600 mb-6">Support your team with positivity and enjoy the match. Only positive cheering allowed!</p>
+            
+            <div class="mb-6">
+                <h3 class="text-lg font-bold text-gray-900 mb-4">Choose Your Team:</h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <button onclick="selectTeam('A')" class="team-a-bg text-white px-6 py-4 rounded-xl font-bold hover:scale-105 transition">
+                        <div class="text-3xl mb-2">🔵</div>
+                        <div id="teamANameWelcome">Team A</div>
+                    </button>
+                    <button onclick="selectTeam('B')" class="team-b-bg text-white px-6 py-4 rounded-xl font-bold hover:scale-105 transition">
+                        <div class="text-3xl mb-2">🔴</div>
+                        <div id="teamBNameWelcome">Team B</div>
+                    </button>
+                </div>
+            </div>
+            
+            <p class="text-xs text-gray-500">You can still view and cheer for both teams!</p>
         </div>
     </div>
 
@@ -304,17 +327,18 @@
             </div>
         </div>
 
-        <!-- Dual Team Chat -->
+        <!-- Dual Team Chat (Both Visible, User Can Send to Their Team) -->
         <div class="grid md:grid-cols-2 gap-6 mb-6">
             <!-- Team A Chat -->
             <div class="bg-white rounded-xl shadow-md overflow-hidden">
-                <div class="team-a-bg px-4 py-3 text-white">
-                    <h3 class="font-bold">💬 Team A Supporters</h3>
+                <div class="team-a-bg px-4 py-3 text-white flex items-center justify-between">
+                    <h3 class="font-bold">💬 <span id="teamANameChat">Team A</span> Supporters</h3>
+                    <span class="text-xs bg-white/20 px-2 py-1 rounded">Live</span>
                 </div>
                 <div id="chatA" class="chat-container p-4 space-y-2 bg-gray-50">
-                    <!-- Messages will appear here -->
+                    <p class="text-center text-gray-400 text-sm py-4">No messages yet. Be the first to cheer!</p>
                 </div>
-                <div class="p-4 border-t border-gray-200">
+                <div id="chatAInput" class="p-4 border-t border-gray-200" style="display: none;">
                     <div class="flex gap-2 mb-2">
                         <input type="text" id="nameA" placeholder="Your name (optional)" class="flex-1 bg-gray-100 px-3 py-2 rounded-lg text-sm text-gray-900 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
@@ -325,17 +349,21 @@
                         </button>
                     </div>
                 </div>
+                <div id="chatALocked" class="p-4 border-t border-gray-200 bg-gray-100 text-center">
+                    <p class="text-sm text-gray-600">🔒 You're supporting <span id="teamBNameLockA">Team B</span>. View only.</p>
+                </div>
             </div>
 
             <!-- Team B Chat -->
             <div class="bg-white rounded-xl shadow-md overflow-hidden">
-                <div class="team-b-bg px-4 py-3 text-white">
-                    <h3 class="font-bold">💬 Team B Supporters</h3>
+                <div class="team-b-bg px-4 py-3 text-white flex items-center justify-between">
+                    <h3 class="font-bold">💬 <span id="teamBNameChat">Team B</span> Supporters</h3>
+                    <span class="text-xs bg-white/20 px-2 py-1 rounded">Live</span>
                 </div>
                 <div id="chatB" class="chat-container p-4 space-y-2 bg-gray-50">
-                    <!-- Messages will appear here -->
+                    <p class="text-center text-gray-400 text-sm py-4">No messages yet. Be the first to cheer!</p>
                 </div>
-                <div class="p-4 border-t border-gray-200">
+                <div id="chatBInput" class="p-4 border-t border-gray-200" style="display: none;">
                     <div class="flex gap-2 mb-2">
                         <input type="text" id="nameB" placeholder="Your name (optional)" class="flex-1 bg-gray-100 px-3 py-2 rounded-lg text-sm text-gray-900 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500">
                     </div>
@@ -345,6 +373,9 @@
                             Send
                         </button>
                     </div>
+                </div>
+                <div id="chatBLocked" class="p-4 border-t border-gray-200 bg-gray-100 text-center">
+                    <p class="text-sm text-gray-600">🔒 You're supporting <span id="teamANameLockB">Team A</span>. View only.</p>
                 </div>
             </div>
         </div>
@@ -428,7 +459,8 @@
             name: '',
             points: 0,
             rank: 'Bronze Fan',
-            lastMessageTime: 0
+            lastMessageTime: 0,
+            selectedTeam: null  // 'A' or 'B'
         };
 
         let cheerData = {
@@ -444,6 +476,7 @@
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
+            checkTeamSelection();
             loadInitialData();
             
             // Enter key support
@@ -454,13 +487,18 @@
                 if (e.key === 'Enter') sendMessage('B');
             });
 
-            // Auto-refresh data every 5 seconds
-            setInterval(loadCheerStats, 5000);
+            // Auto-refresh data every 3 seconds for live sync
+            setInterval(loadCheerStats, 3000);
             setInterval(loadLeaderboard, 10000);
+            setInterval(() => {
+                loadMessages('A');
+                loadMessages('B');
+            }, 3000);  // Refresh messages every 3 seconds for live chat
         });
 
         // Load initial data from backend
         async function loadInitialData() {
+            await loadSettings();
             await loadCheerStats();
             await loadLeaderboard();
             await loadMessages('A');
@@ -489,10 +527,21 @@
                 const data = await response.json();
                 if (data.success) {
                     const chatContainer = document.getElementById('chat' + team);
-                    chatContainer.innerHTML = '';
-                    data.messages.forEach(msg => {
-                        addMessageToChat(team, msg);
-                    });
+                    const wasAtBottom = chatContainer.scrollHeight - chatContainer.scrollTop === chatContainer.clientHeight;
+                    
+                    if (data.messages.length === 0) {
+                        chatContainer.innerHTML = '<p class="text-center text-gray-400 text-sm py-4">No messages yet. Be the first to cheer!</p>';
+                    } else {
+                        chatContainer.innerHTML = '';
+                        data.messages.forEach(msg => {
+                            addMessageToChat(team, msg, false);
+                        });
+                        
+                        // Auto-scroll to bottom if user was already at bottom
+                        if (wasAtBottom) {
+                            chatContainer.scrollTop = chatContainer.scrollHeight;
+                        }
+                    }
                 }
             } catch (error) {
                 console.error('Error loading messages:', error);
@@ -513,9 +562,35 @@
             }
         }
 
-        // Close Welcome Popup
-        function closeWelcome() {
+        // Select Team
+        function selectTeam(team) {
+            userData.selectedTeam = team;
+            localStorage.setItem('cheerup_selected_team', team);
             document.getElementById('welcomePopup').classList.remove('active');
+            
+            // Show/hide chat inputs based on selected team
+            if (team === 'A') {
+                document.getElementById('chatAInput').style.display = 'block';
+                document.getElementById('chatALocked').style.display = 'none';
+                document.getElementById('chatBInput').style.display = 'none';
+                document.getElementById('chatBLocked').style.display = 'block';
+            } else {
+                document.getElementById('chatBInput').style.display = 'block';
+                document.getElementById('chatBLocked').style.display = 'none';
+                document.getElementById('chatAInput').style.display = 'none';
+                document.getElementById('chatALocked').style.display = 'block';
+            }
+            
+            // Update team names in locked messages
+            loadSettings();
+        }
+        
+        // Check if user already selected a team
+        function checkTeamSelection() {
+            const savedTeam = localStorage.getItem('cheerup_selected_team');
+            if (savedTeam) {
+                selectTeam(savedTeam);
+            }
         }
 
         // Cheer Function
@@ -621,10 +696,17 @@
         }
 
         // Add message to chat UI
-        function addMessageToChat(team, msg) {
+        function addMessageToChat(team, msg, autoScroll = true) {
             const chatContainer = document.getElementById('chat' + team);
+            
+            // Remove "no messages" placeholder if exists
+            const placeholder = chatContainer.querySelector('p.text-center');
+            if (placeholder) {
+                placeholder.remove();
+            }
+            
             const messageDiv = document.createElement('div');
-            messageDiv.className = 'bg-white p-3 rounded-lg shadow-sm border border-gray-200';
+            messageDiv.className = 'bg-white p-3 rounded-lg shadow-sm border border-gray-200 animate-fade-in';
             messageDiv.innerHTML = `
                 <div class="flex justify-between items-start mb-1">
                     <span class="font-bold text-sm text-gray-900">${escapeHtml(msg.name)}</span>
@@ -634,7 +716,39 @@
             `;
             
             chatContainer.appendChild(messageDiv);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
+            
+            if (autoScroll) {
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+        }
+        
+        // Load portal settings (team names, stream URL)
+        async function loadSettings() {
+            try {
+                const response = await fetch(`${API_URL}/settings`);
+                const data = await response.json();
+                if (data.success) {
+                    const settings = data.settings;
+                    
+                    // Update team names everywhere
+                    document.getElementById('teamANameWelcome').textContent = settings.team_a_name;
+                    document.getElementById('teamBNameWelcome').textContent = settings.team_b_name;
+                    document.getElementById('teamANameChat').textContent = settings.team_a_name;
+                    document.getElementById('teamBNameChat').textContent = settings.team_b_name;
+                    document.getElementById('teamANameLockB').textContent = settings.team_a_name;
+                    document.getElementById('teamBNameLockA').textContent = settings.team_b_name;
+                    
+                    // Update stream if needed
+                    const iframe = document.getElementById('liveStream');
+                    const currentSrc = iframe.src;
+                    const newSrc = `https://www.youtube.com/embed/${settings.youtube_id}?autoplay=1&mute=1`;
+                    if (!currentSrc.includes(settings.youtube_id)) {
+                        iframe.src = newSrc;
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading settings:', error);
+            }
         }
 
         // Send Reaction

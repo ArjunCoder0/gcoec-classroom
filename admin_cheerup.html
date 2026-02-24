@@ -277,8 +277,26 @@
                 return;
             }
             
-            localStorage.setItem('cheerup_youtube_id', youtubeId);
-            alert('✅ Stream updated! Refresh the portal to see changes.');
+            fetch(`${API_URL}/admin/update-stream`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    youtube_id: youtubeId,
+                    stream_title: 'Live Match'
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    alert('✅ Stream updated! All users will see the new stream.');
+                } else {
+                    alert('❌ Failed to update stream: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('❌ Failed to update stream');
+            });
         }
 
         function updateTeams() {
@@ -290,9 +308,26 @@
                 return;
             }
             
-            localStorage.setItem('cheerup_team_a', teamA);
-            localStorage.setItem('cheerup_team_b', teamB);
-            alert('✅ Team names updated! Refresh the portal to see changes.');
+            fetch(`${API_URL}/admin/update-teams`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    team_a_name: teamA,
+                    team_b_name: teamB
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    alert('✅ Team names updated! All users will see the new names.');
+                } else {
+                    alert('❌ Failed to update teams: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('❌ Failed to update teams');
+            });
         }
     </script>
 </body>
