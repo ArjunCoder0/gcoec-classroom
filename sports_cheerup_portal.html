@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="gcoec-logo.png">
+    <title>Sports Cheer-Up Portal - GCOEC Live Match</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: { 500: '#0B3D91', 600: '#093478', 700: '#072b5f', 800: '#052246', 900: '#03192d' },
+                        gold: { 500: '#f59e0b', 600: '#d97706' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        
+        /* Team Colors */
+        .team-a-bg { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); }
+        .team-b-bg { background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%); }
+        .team-a-border { border-color: #3b82f6; }
+        .team-b-border { border-color: #ef4444; }
+        .team-a-text { color: #3b82f6; }
+        .team-b-text { color: #ef4444; }
+        
+        /* Chat Scroll */
+        .chat-container {
+            height: 400px;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+        
+        .chat-container::-webkit-scrollbar { width: 6px; }
+        .chat-container::-webkit-scrollbar-track { background: #f1f1f1; }
+        .chat-container::-webkit-scrollbar-thumb { background: #888; border-radius: 3px; }
+        .chat-container::-webkit-scrollbar-thumb:hover { background: #555; }
+        
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.8); }
+        }
+        
+        .floating-reaction {
+            position: fixed;
+            animation: floatUp 3s ease-out forwards;
+            pointer-events: none;
+            font-size: 2rem;
+            z-index: 9999;
+        }
+        
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-200px) scale(1.5); }
+        }
+        
+        /* Cheer Button Effects */
+        .cheer-btn {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cheer-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .cheer-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .cheer-btn:active::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        /* Progress Bar Animation */
+        .progress-bar {
+            transition: width 0.5s ease;
+        }
+        
+        /* Badge Styles */
+        .badge-bronze { background: linear-gradient(135deg, #cd7f32 0%, #8b5a2b 100%); }
+        .badge-silver { background: linear-gradient(135deg, #c0c0c0 0%, #808080 100%); }
+        .badge-gold { background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%); }
+        .badge-super { background: linear-gradient(135deg, #9333ea 0%, #6b21a8 100%); }
+        
+        /* Meme Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.active { display: flex; }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .chat-container { height: 300px; }
+        }
+    </style>
+</head>
+<body class="text-white">
+
+    <!-- Welcome Popup -->
+    <div id="welcomePopup" class="modal active">
+        <div class="glass rounded-2xl p-8 max-w-md mx-4 text-center">
+            <div class="text-6xl mb-4">🎉</div>
+            <h2 class="text-3xl font-bold mb-4">Welcome to Cheer-Up Portal!</h2>
+            <p class="text-gray-300 mb-6">Support your team with positivity and enjoy the match. Only positive cheering allowed!</p>
+            <button onclick="closeWelcome()" class="bg-gradient-to-r from-blue-500 to-purple-600 px-8 py-3 rounded-lg font-bold hover:scale-105 transition">
+                Let's Go! 🚀
+            </button>
+        </div>
+    </div>
+
+    <!-- Official Header Bar -->
+    <div class="bg-navy-900 text-white py-1.5 px-4 border-b-2 border-gold-500">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-1.5 text-[11px]">
+            <div class="flex items-center gap-3">
+                <span class="font-semibold tracking-wide">Government College of Engineering, Chandrapur</span>
+                <span class="hidden md:inline text-gray-400">|</span>
+                <span class="hidden md:inline text-gray-300">Official Sports Cheer-Up Portal</span>
+            </div>
+            <div class="flex items-center gap-3 text-gray-300">
+                <span class="hidden sm:inline">GCOEC Premier League</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <img src="gcoec-logo.png" alt="GCOEC Logo" class="w-12 h-12 object-contain">
+                    <div>
+                        <h1 class="text-xl font-bold text-navy-900">GCOEC Cheer-Up Portal</h1>
+                        <p class="text-xs text-gray-600">Live Match Support System</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="bg-gray-100 px-4 py-2 rounded-lg">
+                        <span class="text-xs text-gray-600">Your Points:</span>
+                        <span id="userPoints" class="text-xl font-bold ml-2 text-navy-600">0</span>
+                    </div>
+                    <div id="userBadge" class="badge-bronze px-3 py-1 rounded-full text-xs font-bold text-white">
+                        🥉 Bronze Fan
+                    </div>
+                    <a href="index.html" class="text-navy-600 hover:text-navy-700 font-semibold text-sm hidden md:flex items-center gap-1">
+                        <span>← Back to Portal</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Positive Reminder Banner -->
+    <div class="bg-gradient-to-r from-green-600 to-emerald-600 py-3 text-center text-white">
+        <p class="font-semibold">✨ Support your team with respect. No hate. Only positive cheering. ✨</p>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 py-6">
+        
+        <!-- Live Match Stream -->
+        <div class="bg-white rounded-xl shadow-md overflow-hidden mb-6">
+            <div class="bg-gradient-to-r from-red-600 to-pink-600 px-4 py-3 flex items-center justify-between text-white">
+                <div class="flex items-center gap-2">
+                    <div class="w-3 h-3 bg-white rounded-full animate-pulse"></div>
+                    <span class="font-bold">LIVE MATCH</span>
+                </div>
+                <span class="text-sm">🔥 <span id="viewerCount">1,234</span> watching</span>
+            </div>
+            <div class="relative bg-black" style="padding-bottom: 56.25%;">
+                <iframe 
+                    id="liveStream"
+                    class="absolute top-0 left-0 w-full h-full"
+                    src="https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=1&mute=1"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+
+        <!-- Live Cheer Meter -->
+        <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+            <h3 class="text-2xl font-bold mb-4 text-center text-gray-900">🔥 Live Cheer Meter</h3>
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div class="text-center">
+                    <div class="text-3xl font-bold team-a-text" id="teamAScore">0</div>
+                    <div class="text-sm text-gray-400">Team A Cheers</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold team-b-text" id="teamBScore">0</div>
+                    <div class="text-sm text-gray-400">Team B Cheers</div>
+                </div>
+            </div>
+            <div class="space-y-3">
+                <div>
+                    <div class="flex justify-between text-sm mb-1">
+                        <span class="team-a-text font-bold">Team A</span>
+                        <span id="teamAPercent">50%</span>
+                    </div>
+                    <div class="h-4 bg-gray-700 rounded-full overflow-hidden">
+                        <div id="teamABar" class="h-full team-a-bg progress-bar" style="width: 50%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between text-sm mb-1">
+                        <span class="team-b-text font-bold">Team B</span>
+                        <span id="teamBPercent">50%</span>
+                    </div>
+                    <div class="h-4 bg-gray-700 rounded-full overflow-hidden">
+                        <div id="teamBBar" class="h-full team-b-bg progress-bar" style="width: 50%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cheer Buttons Grid -->
+        <div class="grid md:grid-cols-2 gap-6 mb-6">
+            <!-- Team A Cheer Controls -->
+            <div class="bg-white rounded-xl shadow-md p-6 team-a-border border-2">
+                <h3 class="text-xl font-bold mb-4 team-a-text">Team A Support</h3>
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="cheer('A', 'fire')" class="cheer-btn team-a-bg rounded-xl py-4 font-bold hover:scale-105 transition">
+                        🔥 Cheer
+                    </button>
+                    <button onclick="cheer('A', 'clap')" class="cheer-btn team-a-bg rounded-xl py-4 font-bold hover:scale-105 transition">
+                        👏 Clap
+                    </button>
+                    <button onclick="cheer('A', 'horn')" class="cheer-btn team-a-bg rounded-xl py-4 font-bold hover:scale-105 transition">
+                        🎺 Horn
+                    </button>
+                    <button onclick="cheer('A', 'confetti')" class="cheer-btn team-a-bg rounded-xl py-4 font-bold hover:scale-105 transition">
+                        🎉 Confetti
+                    </button>
+                </div>
+            </div>
+
+            <!-- Team B Cheer Controls -->
+            <div class="bg-white rounded-xl shadow-md p-6 team-b-border border-2">
+                <h3 class="text-xl font-bold mb-4 team-b-text">Team B Support</h3>
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="cheer('B', 'fire')" class="cheer-btn team-b-bg rounded-xl py-4 font-bold hover:scale-105 transition">
+                        🔥 Cheer
+                    </button>
+                    <button onclick="cheer('B', 'clap')" class="cheer-btn team-b-bg rounded-xl py-4 font-bold hover:scale-105 transition">
+                        👏 Clap
+                    </button>
+                    <button onclick="cheer('B', 'horn')" class="cheer-btn team-b-bg rounded-xl py-4 font-bold hover:scale-105 transition">
+                        🎺 Horn
+                    </button>
+                    <button onclick="cheer('B', 'confetti')" class="cheer-btn team-b-bg rounded-xl py-4 font-bold hover:scale-105 transition">
+                        🎉 Confetti
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Reactions -->
+        <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+            <h3 class="text-xl font-bold mb-4 text-gray-900">⚡ Quick Reactions</h3>
+            <div class="flex flex-wrap gap-3">
+                <button onclick="sendReaction('🤣')" class="bg-gray-100 hover:bg-gray-200 px-6 py-3 rounded-lg hover:scale-110 transition text-2xl">🤣 LOL</button>
+                <button onclick="sendReaction('😱')" class="bg-gray-100 hover:bg-gray-200 px-6 py-3 rounded-lg hover:scale-110 transition text-2xl">😱 OMG</button>
+                <button onclick="sendReaction('💥')" class="bg-gray-100 hover:bg-gray-200 px-6 py-3 rounded-lg hover:scale-110 transition text-2xl">💥 Shot</button>
+                <button onclick="sendReaction('👑')" class="bg-gray-100 hover:bg-gray-200 px-6 py-3 rounded-lg hover:scale-110 transition text-2xl">👑 King</button>
+                <button onclick="showMeme()" class="bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-6 py-3 rounded-lg hover:scale-110 transition font-bold">
+                    😂 Drop Meme
+                </button>
+            </div>
+        </div>
+
+        <!-- Dual Team Chat -->
+        <div class="grid md:grid-cols-2 gap-6 mb-6">
+            <!-- Team A Chat -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <div class="team-a-bg px-4 py-3 text-white">
+                    <h3 class="font-bold">💬 Team A Supporters</h3>
+                </div>
+                <div id="chatA" class="chat-container p-4 space-y-2 bg-gray-50">
+                    <!-- Messages will appear here -->
+                </div>
+                <div class="p-4 border-t border-gray-200">
+                    <div class="flex gap-2 mb-2">
+                        <input type="text" id="nameA" placeholder="Your name (optional)" class="flex-1 bg-gray-100 px-3 py-2 rounded-lg text-sm text-gray-900 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div class="flex gap-2">
+                        <input type="text" id="messageA" placeholder="Cheer for Team A..." class="flex-1 bg-gray-100 px-4 py-3 rounded-lg text-gray-900 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" maxlength="150">
+                        <button onclick="sendMessage('A')" class="team-a-bg px-6 py-3 rounded-lg font-bold hover:scale-105 transition text-white">
+                            Send
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Team B Chat -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <div class="team-b-bg px-4 py-3 text-white">
+                    <h3 class="font-bold">💬 Team B Supporters</h3>
+                </div>
+                <div id="chatB" class="chat-container p-4 space-y-2 bg-gray-50">
+                    <!-- Messages will appear here -->
+                </div>
+                <div class="p-4 border-t border-gray-200">
+                    <div class="flex gap-2 mb-2">
+                        <input type="text" id="nameB" placeholder="Your name (optional)" class="flex-1 bg-gray-100 px-3 py-2 rounded-lg text-sm text-gray-900 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500">
+                    </div>
+                    <div class="flex gap-2">
+                        <input type="text" id="messageB" placeholder="Cheer for Team B..." class="flex-1 bg-gray-100 px-4 py-3 rounded-lg text-gray-900 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500" maxlength="150">
+                        <button onclick="sendMessage('B')" class="team-b-bg px-6 py-3 rounded-lg font-bold hover:scale-105 transition text-white">
+                            Send
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Prediction Game -->
+        <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+            <h3 class="text-2xl font-bold mb-4 text-gray-900">🎮 Mini Prediction Game</h3>
+            <div class="grid md:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-sm mb-2 text-gray-700 font-semibold">Next Ball Run:</label>
+                    <select id="runPrediction" class="w-full bg-gray-100 px-4 py-3 rounded-lg border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="6">6</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm mb-2 text-gray-700 font-semibold">Wicket?</label>
+                    <select id="wicketPrediction" class="w-full bg-gray-100 px-4 py-3 rounded-lg border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                        <option value="no">No</option>
+                        <option value="yes">Yes</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm mb-2 text-gray-700 font-semibold">Match Winner:</label>
+                    <select id="winnerPrediction" class="w-full bg-gray-100 px-4 py-3 rounded-lg border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                        <option value="A">Team A</option>
+                        <option value="B">Team B</option>
+                    </select>
+                </div>
+            </div>
+            <button onclick="submitPrediction()" class="mt-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-3 rounded-lg font-bold hover:scale-105 transition w-full">
+                Submit Prediction (+10 Points if Correct!)
+            </button>
+        </div>
+
+        <!-- Leaderboard -->
+        <div class="bg-white rounded-xl shadow-md p-6">
+            <h3 class="text-2xl font-bold mb-4 text-gray-900">🏆 Top Supporters</h3>
+            <div class="space-y-3" id="leaderboard">
+                <!-- Leaderboard will be populated here -->
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-navy-900 text-white py-8 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-sm text-gray-300">© 2026 Government College of Engineering, Chandrapur - Sports Department</p>
+            <p class="text-xs text-gray-400 mt-2">Official GCOEC Cheer-Up Portal</p>
+        </div>
+    </footer>
+
+    <!-- Meme Modal -->
+    <div id="memeModal" class="modal">
+        <div class="glass rounded-2xl p-6 max-w-lg mx-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-2xl font-bold">😂 Random Sports Meme</h3>
+                <button onclick="closeMeme()" class="text-2xl">&times;</button>
+            </div>
+            <img id="memeImage" src="" alt="Meme" class="w-full rounded-lg mb-4">
+            <button onclick="closeMeme()" class="w-full bg-gradient-to-r from-blue-500 to-purple-600 px-6 py-3 rounded-lg font-bold">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // API Configuration
+        const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:5000/api/cheerup'
+            : 'https://pyq-automation-system.onrender.com/api/cheerup';
+
+        // State Management
+        let userData = {
+            user_id: 'user_' + Math.random().toString(36).substr(2, 9),
+            name: '',
+            points: 0,
+            rank: 'Bronze Fan',
+            lastMessageTime: 0
+        };
+
+        let cheerData = {
+            teamA: 0,
+            teamB: 0
+        };
+
+        let leaderboardData = [];
+
+        // Profanity Filter
+        const bannedWords = ['hate', 'stupid', 'idiot', 'loser', 'worst', 'sucks', 'bad', 'terrible'];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            loadInitialData();
+            
+            // Enter key support
+            document.getElementById('messageA').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') sendMessage('A');
+            });
+            document.getElementById('messageB').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') sendMessage('B');
+            });
+
+            // Auto-refresh data every 5 seconds
+            setInterval(loadCheerStats, 5000);
+            setInterval(loadLeaderboard, 10000);
+        });
+
+        // Load initial data from backend
+        async function loadInitialData() {
+            await loadCheerStats();
+            await loadLeaderboard();
+            await loadMessages('A');
+            await loadMessages('B');
+        }
+
+        // Load cheer statistics
+        async function loadCheerStats() {
+            try {
+                const response = await fetch(`${API_URL}/stats`);
+                const data = await response.json();
+                if (data.success) {
+                    cheerData.teamA = data.cheer_counts.A;
+                    cheerData.teamB = data.cheer_counts.B;
+                    updateCheerMeter();
+                }
+            } catch (error) {
+                console.error('Error loading cheer stats:', error);
+            }
+        }
+
+        // Load messages for a team
+        async function loadMessages(team) {
+            try {
+                const response = await fetch(`${API_URL}/messages/${team}`);
+                const data = await response.json();
+                if (data.success) {
+                    const chatContainer = document.getElementById('chat' + team);
+                    chatContainer.innerHTML = '';
+                    data.messages.forEach(msg => {
+                        addMessageToChat(team, msg);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading messages:', error);
+            }
+        }
+
+        // Load leaderboard
+        async function loadLeaderboard() {
+            try {
+                const response = await fetch(`${API_URL}/leaderboard`);
+                const data = await response.json();
+                if (data.success) {
+                    leaderboardData = data.leaderboard;
+                    updateLeaderboard();
+                }
+            } catch (error) {
+                console.error('Error loading leaderboard:', error);
+            }
+        }
+
+        // Close Welcome Popup
+        function closeWelcome() {
+            document.getElementById('welcomePopup').classList.remove('active');
+        }
+
+        // Cheer Function
+        async function cheer(team, type) {
+            const icons = { fire: '🔥', clap: '👏', horn: '🎺', confetti: '🎉' };
+            
+            try {
+                const response = await fetch(`${API_URL}/cheer`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        team: team,
+                        type: type,
+                        user_id: userData.user_id
+                    })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    cheerData.teamA = data.cheer_counts.A;
+                    cheerData.teamB = data.cheer_counts.B;
+                    userData.points = data.points;
+                    updatePoints();
+                    updateCheerMeter();
+                    createFloatingReaction(icons[type]);
+                }
+            } catch (error) {
+                console.error('Error sending cheer:', error);
+                // Fallback to local update
+                if (team === 'A') cheerData.teamA += 1;
+                else cheerData.teamB += 1;
+                userData.points += 1;
+                updatePoints();
+                updateCheerMeter();
+                createFloatingReaction(icons[type]);
+            }
+        }
+
+        // Update Cheer Meter
+        function updateCheerMeter() {
+            const total = cheerData.teamA + cheerData.teamB || 1;
+            const percentA = Math.round((cheerData.teamA / total) * 100);
+            const percentB = Math.round((cheerData.teamB / total) * 100);
+            
+            document.getElementById('teamAScore').textContent = cheerData.teamA;
+            document.getElementById('teamBScore').textContent = cheerData.teamB;
+            document.getElementById('teamAPercent').textContent = percentA + '%';
+            document.getElementById('teamBPercent').textContent = percentB + '%';
+            document.getElementById('teamABar').style.width = percentA + '%';
+            document.getElementById('teamBBar').style.width = percentB + '%';
+        }
+
+        // Send Message
+        async function sendMessage(team) {
+            const now = Date.now();
+            if (now - userData.lastMessageTime < 3000) {
+                alert('⏱️ Please wait 3 seconds between messages (spam protection)');
+                return;
+            }
+            
+            const messageInput = document.getElementById('message' + team);
+            const nameInput = document.getElementById('name' + team);
+            const message = messageInput.value.trim();
+            const name = nameInput.value.trim() || 'Anonymous Supporter';
+            
+            if (!message) return;
+            
+            // Profanity check
+            const lowerMessage = message.toLowerCase();
+            for (let word of bannedWords) {
+                if (lowerMessage.includes(word)) {
+                    alert('⚠️ Only positive cheering allowed. Please be respectful!');
+                    return;
+                }
+            }
+            
+            try {
+                const response = await fetch(`${API_URL}/message`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        team: team,
+                        name: name,
+                        message: message,
+                        user_id: userData.user_id
+                    })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    addMessageToChat(team, data.message);
+                    userData.points = data.points;
+                    updatePoints();
+                    messageInput.value = '';
+                    userData.lastMessageTime = now;
+                } else {
+                    alert('⚠️ ' + data.error);
+                }
+            } catch (error) {
+                console.error('Error sending message:', error);
+                alert('⚠️ Failed to send message. Please try again.');
+            }
+        }
+
+        // Add message to chat UI
+        function addMessageToChat(team, msg) {
+            const chatContainer = document.getElementById('chat' + team);
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'bg-white p-3 rounded-lg shadow-sm border border-gray-200';
+            messageDiv.innerHTML = `
+                <div class="flex justify-between items-start mb-1">
+                    <span class="font-bold text-sm text-gray-900">${escapeHtml(msg.name)}</span>
+                    <span class="text-xs text-gray-500">${msg.time}</span>
+                </div>
+                <p class="text-sm text-gray-700">${escapeHtml(msg.message)}</p>
+            `;
+            
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        // Send Reaction
+        async function sendReaction(emoji) {
+            createFloatingReaction(emoji);
+            
+            try {
+                const response = await fetch(`${API_URL}/reaction`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        emoji: emoji,
+                        user_id: userData.user_id
+                    })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    userData.points = data.points;
+                    updatePoints();
+                }
+            } catch (error) {
+                console.error('Error sending reaction:', error);
+                userData.points += 1;
+                updatePoints();
+            }
+        }
+
+        // Create Floating Reaction
+        function createFloatingReaction(emoji) {
+            const reaction = document.createElement('div');
+            reaction.className = 'floating-reaction';
+            reaction.textContent = emoji;
+            reaction.style.left = Math.random() * window.innerWidth + 'px';
+            reaction.style.top = window.innerHeight - 100 + 'px';
+            document.body.appendChild(reaction);
+            
+            setTimeout(() => reaction.remove(), 3000);
+        }
+
+        // Show Meme
+        function showMeme() {
+            const memes = [
+                'https://i.imgflip.com/30b1gx.jpg',
+                'https://i.imgflip.com/1bij.jpg',
+                'https://i.imgflip.com/1g8my4.jpg'
+            ];
+            
+            const randomMeme = memes[Math.floor(Math.random() * memes.length)];
+            document.getElementById('memeImage').src = randomMeme;
+            document.getElementById('memeModal').classList.add('active');
+            userData.points += 1;
+            updatePoints();
+        }
+
+        function closeMeme() {
+            document.getElementById('memeModal').classList.remove('active');
+        }
+
+        // Submit Prediction
+        async function submitPrediction() {
+            const run = document.getElementById('runPrediction').value;
+            const wicket = document.getElementById('wicketPrediction').value;
+            const winner = document.getElementById('winnerPrediction').value;
+            
+            try {
+                const response = await fetch(`${API_URL}/prediction`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        run: run,
+                        wicket: wicket,
+                        winner: winner,
+                        user_id: userData.user_id
+                    })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    userData.points = data.points;
+                    updatePoints();
+                    alert(data.correct ? '🎉 Correct Prediction! +10 Points' : '❌ Wrong Prediction. Better luck next time!');
+                }
+            } catch (error) {
+                console.error('Error submitting prediction:', error);
+                alert('⚠️ Failed to submit prediction. Please try again.');
+            }
+        }
+
+        // Update Points and Badge
+        function updatePoints() {
+            document.getElementById('userPoints').textContent = userData.points;
+            
+            let badge = '🥉 Bronze Fan';
+            let badgeClass = 'badge-bronze';
+            
+            if (userData.points >= 300) {
+                badge = '👑 Super Supporter';
+                badgeClass = 'badge-super';
+            } else if (userData.points >= 200) {
+                badge = '🥇 Gold Fan';
+                badgeClass = 'badge-gold';
+            } else if (userData.points >= 100) {
+                badge = '🥈 Silver Fan';
+                badgeClass = 'badge-silver';
+            }
+            
+            const badgeEl = document.getElementById('userBadge');
+            badgeEl.textContent = badge;
+            badgeEl.className = `${badgeClass} px-3 py-1 rounded-full text-xs font-bold`;
+        }
+
+        // Update Leaderboard
+        function updateLeaderboard() {
+            const container = document.getElementById('leaderboard');
+            if (leaderboardData.length === 0) {
+                container.innerHTML = '<p class="text-center text-gray-500 py-4">No supporters yet. Be the first!</p>';
+                return;
+            }
+            container.innerHTML = leaderboardData.map((user, index) => `
+                <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-between border border-gray-200">
+                    <div class="flex items-center gap-3">
+                        <div class="text-2xl font-bold ${index === 0 ? 'text-yellow-500' : index === 1 ? 'text-gray-400' : index === 2 ? 'text-orange-500' : 'text-gray-600'}">
+                            ${index + 1}
+                        </div>
+                        <div>
+                            <div class="font-bold text-gray-900">${user.user_id.substring(0, 10)}...</div>
+                            <div class="text-xs text-gray-600">${user.badge}</div>
+                        </div>
+                    </div>
+                    <div class="text-xl font-bold text-navy-600">${user.points}</div>
+                </div>
+            `).join('');
+        }
+
+        // Utility
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Simulate viewer count
+        setInterval(() => {
+            const count = 1200 + Math.floor(Math.random() * 100);
+            document.getElementById('viewerCount').textContent = count.toLocaleString();
+        }, 5000);
+    </script>
+</body>
+</html>
