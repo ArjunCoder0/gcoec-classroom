@@ -215,7 +215,7 @@
                                             <td className="text-center py-3 px-4 text-gray-700">{player.b}</td>
                                             <td className="text-center py-3 px-4 text-gray-700">{player.fours}</td>
                                             <td className="text-center py-3 px-4 text-gray-700">{player.sixes}</td>
-                                            <td className="text-center py-3 px-4 text-gray-700">{player.sr.toFixed(2)}</td>
+                                            <td className="text-center py-3 px-4 text-gray-700">{typeof player.sr === 'number' ? player.sr.toFixed(2) : player.sr || '0.00'}</td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -241,7 +241,7 @@
                                             <td className="text-center py-3 px-4 text-gray-700">{player.o}</td>
                                             <td className="text-center py-3 px-4 text-gray-700">{player.r}</td>
                                             <td className="text-center py-3 px-4 text-gray-700">{player.w}</td>
-                                            <td className="text-center py-3 px-4 text-gray-700">{player.econ.toFixed(2)}</td>
+                                            <td className="text-center py-3 px-4 text-gray-700">{typeof player.econ === 'number' ? player.econ.toFixed(2) : player.econ || '0.00'}</td>
                                         </tr>
                                     ))}
                                 </tbody>
