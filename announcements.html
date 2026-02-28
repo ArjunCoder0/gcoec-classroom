@@ -240,11 +240,51 @@
     <script>
         let allEvents = [];
         let currentFilter = 'all';
+        let specificEventId = null; // Track if we're showing a specific event
 
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
-            loadEvents();
+            
+            // Check if we have a specific event ID in URL
+            const urlParams = new URLSearchParams(window.location.search);
+            specificEventId = urlParams.get('event');
+            
+            if (specificEventId) {
+                // Load and show only this specific event
+                loadSpecificEvent(specificEventId);
+            } else {
+                // Load all events normally
+                loadEvents();
+            }
         });
+
+        async function loadSpecificEvent(eventId) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/events/${eventId}`);
+                const data = await response.json();
+
+                document.getElementById('loadingState').classList.add('hidden');
+
+                if (data.success && data.event) {
+                    // Hide filter bar when showing specific event
+                    document.querySelector('.bg-white.rounded-xl.shadow-sm.p-4.mb-6').style.display = 'none';
+                    
+                    allEvents = [data.event];
+                    displayEvents([data.event]);
+                    
+                    // Auto-open registration modal after a short delay
+                    setTimeout(() => {
+                        openRegistrationModal(eventId);
+                    }, 500);
+                } else {
+                    document.getElementById('emptyState').classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error('Error loading event:', error);
+                document.getElementById('loadingState').classList.add('hidden');
+                document.getElementById('emptyState').classList.remove('hidden');
+            }
+        }
 
         async function loadEvents() {
             try {
